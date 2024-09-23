@@ -6,7 +6,6 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import Header from '../../components/header';
 import Carrosel from '../../components/carrosel';
 import CardServico from '../../components/cardServico';
-import CardSobre from '../../components/cardSobre';
 
 export default function Home() {
   return (
@@ -17,7 +16,7 @@ export default function Home() {
         <Text style={styles.contentText}>Bem vindo a Rota Car!</Text>
       </View>
       <CardServico />
-      <CardSobre />
+
     </SafeAreaView>
   );
 }
