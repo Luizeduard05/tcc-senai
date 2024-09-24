@@ -1,0 +1,19 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+<<<<<<< HEAD:web/package.json
+    "ejs": "^3.1.10",
+=======
+>>>>>>> main:api/package.json
+    "express": "^4.21.0",
+    "express-ejs-layouts": "^2.5.1"
+  }
+}
