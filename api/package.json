@@ -7,9 +7,11 @@
   },
   "author": "",
   "license": "ISC",
+  "type": "module",
   "description": "",
   "dependencies": {
     "express": "^4.21.0",
-    "express-ejs-layouts": "^2.5.1"
+    "express-ejs-layouts": "^2.5.1",
+    "mysql2": "^3.11.3"
   }
 }
