@@ -26,4 +26,4 @@ class agendamento{
     set Tbl_ordem_de_serviço_tbl_veiculo_tbl_pessoa_id(value){this.tbl_ordem_de_serviço_tbl_veiculo_tbl_pessoa_id = value;}
 }
 
-module.exports = agendamento;
+export default agendamento;

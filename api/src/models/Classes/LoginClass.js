@@ -22,4 +22,4 @@ class Login{
     set Tbl_pessoa_id(value){this.tbl_pessoa_id;}
 }
 
-module.exports = Login;
+export default  Login;

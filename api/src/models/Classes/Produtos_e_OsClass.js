@@ -18,4 +18,4 @@ class Produtos_e_Os{
     set Tbl_ordem_de_serviço_tbl_veiculo_tbl_pessoa_id(value){this.tbl_ordem_de_serviço_tbl_veiculo_tbl_pessoa_id=value;}
 }
 
-module.exports = Produtos_e_Os;
+export default  Produtos_e_Os;
