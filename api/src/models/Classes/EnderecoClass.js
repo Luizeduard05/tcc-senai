@@ -52,18 +52,29 @@ class Endereco {
         }
     };
 
-    deleteRegistroEnd = async (idEndereco) => {
+    static deleteRegistroEnd = async (idEndereco) => {
 
         const con = await conectarBancoDeDados();
         //lógica para inserir os dados nas tabelas correspondentes no seu banco de dados
         try {
             //métodos para inserir os dados
-            const person = await con.query(`delete from tbl_endereco where id=?`,
+            const person = await con.query(`delete from tbl_endereco where tbl_pessoa_id = ?`,
                 [idEndereco]);
             return person;
             // return { message: 'Usuário registrado com sucesso!', result: true };
         } catch (error) {
             throw new Error(`Erro ao registrar: ${error.message}`);
+        }
+    };
+
+    static selectRegistroEndereço = async (idPessoa) => {
+        const con = await conectarBancoDeDados()
+        try{
+            const [rows] = await con.query(`select * from tbl_endereco where id=?`,
+                [idPessoa]);
+                return rows;
+        }catch (error) {
+            throw new Error(`Erro ao selecionar: ${error.message}`);
         }
     };
 
