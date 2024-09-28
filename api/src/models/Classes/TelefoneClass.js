@@ -17,29 +17,44 @@ class Telefone {
 
     //Remover mascara (caracteres) 
     cleanMaskTel(value) {
-        console.log(value)
         if (value != null) {
             let newValue = value.replace(/[() -]/g, '');
-            console.log('telefone', newValue)
             this.telefone = newValue;
-
         }
     }
 
-    novoRegistroTel= async (idPessoa) => {
-
+    novoRegistroTel = async (idPessoa) => {
         const con = await conectarBancoDeDados();
         //lógica para inserir os dados nas tabelas correspondentes no seu banco de dados
         try {
             //métodos para inserir os dados
             const telefone = await con.query(`insert into tbl_telefone (telefone, tbl_pessoa_id) values (?,?)`,
                 [this.telefone, idPessoa]);
-    
-            return telefone;
+            return telefone[0].insertId;
         } catch (error) {
             throw new Error(`Erro ao registrar: ${error.message}`);
         }
     };
+    deleteRegistroTel = async (idTel) => {
+        const con = await conectarBancoDeDados();
+        //lógica para inserir os dados nas tabelas correspondentes no seu banco de dados
+        try {
+            //métodos para inserir os dados
+            const person = await con.query(`delete from tbl_telefone where id=?`,
+                [idTel]);
+            return person;
+            // return { message: 'Usuário registrado com sucesso!', result: true };
+        } catch (error) {
+            throw new Error(`Erro ao registrar: ${error.message}`);
+        }
+    };
+
+    validarCampos() {
+        return (
+            this.telefone
+        );
+    }
+
 }
 
 export default Telefone;

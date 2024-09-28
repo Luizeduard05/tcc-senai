@@ -37,8 +37,8 @@ class Pessoa {
             throw new Error(`Erro ao registrar: ${error.message}`);
         }
     };
-    deleteRegistroPessoa = async (idPessoa) => {
 
+    deleteRegistroPessoa = async (idPessoa) => {
         const con = await conectarBancoDeDados();
         //lógica para inserir os dados nas tabelas correspondentes no seu banco de dados
         try {
@@ -52,19 +52,23 @@ class Pessoa {
         }
     };
 
-    validarCampos() {
+    static selectRegistroPessoa = async (idPessoa) => {
+        const con = await conectarBancoDeDados()
+        try{
+            const person = await con.query(`select * from tbl_pessoa where id=?`,
+                [idPessoa]);
+                return person;
+        }catch (error) {
+            throw new Error(`Erro ao selecionar: ${error.message}`);
+        }
+    };
 
+    validarCampos() {
         return (
             this.nome &&
             this.cpf &&
             this.email &&
-            this.tipo &&
-            this.logradouro &&
-            this.bairro &&
-            this.estado &&
-            this.numero &&
-            this.complemento &&
-            this.cep
+            this.tipo 
         );
     }
 
