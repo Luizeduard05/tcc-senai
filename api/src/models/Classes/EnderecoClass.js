@@ -44,8 +44,8 @@ class Endereco {
         try {
             //métodos para inserir os dados    
             const endereco = await con.query(`insert into tbl_endereco (logradouro, bairro, estado, numero, complemento, cep, tbl_pessoa_id) VALUES (?,?,?,?,?,?,?)`,
-                [this.logradouro, this.bairro, this.estado, this.numero, this.complemento, this.cep, idPessoa]);    
-    
+                [this.logradouro, this.bairro, this.estado, this.numero, this.complemento, this.cep, idPessoa]);
+
             return endereco[0].insertId;
         } catch (error) {
             throw new Error(`Erro ao registrar: ${error.message}`);
@@ -66,6 +66,19 @@ class Endereco {
             throw new Error(`Erro ao registrar: ${error.message}`);
         }
     };
+
+    validarCampos() {
+        return (
+            this.logradouro &&
+            this.bairro &&
+            this.estado &&
+            this.numero &&
+            this.complemento &&
+            this.cep
+        );
+    }
+
+   
 
 }
 
