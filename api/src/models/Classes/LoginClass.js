@@ -37,6 +37,30 @@ class Login{
         }
     };
 
+    static selectRegistroLogin = async (idPessoa) => {
+        const con = await conectarBancoDeDados()
+        try{
+            const [rows] = await con.query(`select * from tbl_login where id=?`,
+                [idPessoa]);
+                return rows;
+        }catch (error) {
+            throw new Error(`Erro ao selecionar: ${error.message}`);
+        }
+    };
+
+    static deleteRegistroLog = async (idLogin) => {
+        const con = await conectarBancoDeDados();
+        //lógica para inserir os dados nas tabelas correspondentes no seu banco de dados
+        try {
+            //métodos para inserir os dados
+            const person = await con.query(`delete from tbl_login where tbl_pessoa_id = ?`,
+                [idLogin]);
+            return person;
+        } catch (error) {
+            throw new Error(`Erro ao registrar: ${error.message}`);
+        }
+    };
+
     validarCampos() {
         return (
             this.perfil &&

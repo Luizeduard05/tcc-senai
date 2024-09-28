@@ -23,8 +23,9 @@ class Pessoa {
     get Tipo() { return this.tipo; }
     set Tipo(value) { this.tipo = value; }
 
-    novoRegistroPessoa = async () => {
 
+
+    novoRegistroPessoa = async () => {
         const con = await conectarBancoDeDados();
         //lógica para inserir os dados nas tabelas correspondentes no seu banco de dados
         try {
@@ -42,11 +43,10 @@ class Pessoa {
         const con = await conectarBancoDeDados();
         //lógica para inserir os dados nas tabelas correspondentes no seu banco de dados
         try {
-            //métodos para inserir os dados
+            //métodos para deletar os dados
             const person = await con.query(`delete from tbl_pessoa where id=?`,
                 [idPessoa]);
             return person;
-            // return { message: 'Usuário registrado com sucesso!', result: true };
         } catch (error) {
             throw new Error(`Erro ao registrar: ${error.message}`);
         }
@@ -55,9 +55,9 @@ class Pessoa {
     static selectRegistroPessoa = async (idPessoa) => {
         const con = await conectarBancoDeDados()
         try{
-            const person = await con.query(`select * from tbl_pessoa where id=?`,
+            const [rows] = await con.query(`select * from tbl_pessoa where id=?`,
                 [idPessoa]);
-                return person;
+                return rows;
         }catch (error) {
             throw new Error(`Erro ao selecionar: ${error.message}`);
         }
