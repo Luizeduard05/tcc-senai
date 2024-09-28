@@ -1,14 +1,21 @@
 import { Text, View, Platform, StyleSheet, StatusBar, Pressable, Image } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from 'expo-linear-gradient';
 
 import carro1 from '../../assets/carro1.png';
 import carro2 from '../../assets/carro2.png'; 
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 export default function Intranet() {
+    const navigation = useNavigation();
+    // const useRoute = useRoute()
+
+    const navegaLogin = () => {
+        navigation.navigate('Login')
+    }
+
     return (
         <LinearGradient 
-            colors={['#000000', '#434343']} 
+            colors={['#000000', 'rgba(0, 0, 0, 0.5)']} 
             style={styles.androidSafeArea} 
         >
             <View style={styles.container}>
@@ -20,7 +27,7 @@ export default function Intranet() {
                         <Text style={styles.textButton}>Cadastrar</Text>
                     </Pressable>
 
-                    <Pressable style={styles.button}>
+                    <Pressable style={styles.button} onPress={navegaLogin}>
                         <Text style={styles.textButton}>Login</Text>
                     </Pressable>
                 </View>
@@ -50,29 +57,34 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "flex-start",
-        paddingTop: 100,
+        paddingTop: 175,
     },
     title: {
         color: "#FFF",
-        fontWeight: "900",
+        // fontWeight: "900",
+        fontSize: 20,
         marginBottom: 40, 
     },
     button: {
         backgroundColor: "#FF0032",
-        width: 160,
-        height: 40,  
+        width: 170,
+        height: 50,  
         justifyContent: "center",
         alignItems: "center", 
         marginHorizontal: 20, 
         borderRadius: 30,
+        
     },
     textButton: {
         color: "#fff",
+        fontSize: 15,
+        fontWeight: "bold",
     },
     alinhaLateral: {
         flexDirection: "row",
         justifyContent: "space-between",
         marginTop: 100, 
+        padding: 5
     },
     carrosContainer: {
         flexDirection: "row", 
@@ -80,9 +92,9 @@ const styles = StyleSheet.create({
         marginTop: 150,
     },
     carImage: {
-        width: 150, 
-        height: 100, 
+        width: 200, 
+        height: 125, 
         resizeMode: "contain", 
-        marginHorizontal: 15, 
+        marginHorizontal: 5, 
     },
 });
