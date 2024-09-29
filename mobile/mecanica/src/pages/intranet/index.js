@@ -13,6 +13,10 @@ export default function Intranet() {
         navigation.navigate('Login')
     }
 
+    const navegaHome = () => {
+        navigation.navigate('Home')
+    }
+
     return (
         <LinearGradient 
             colors={['#000000', 'rgba(0, 0, 0, 0.5)']} 
@@ -27,7 +31,7 @@ export default function Intranet() {
                         <Text style={styles.textButton}>Cadastrar</Text>
                     </Pressable>
 
-                    <Pressable style={styles.button} onPress={navegaLogin}>
+                    <Pressable style={styles.button} onPress={navegaHome}>
                         <Text style={styles.textButton}>Login</Text>
                     </Pressable>
                 </View>
@@ -61,7 +65,6 @@ const styles = StyleSheet.create({
     },
     title: {
         color: "#FFF",
-        // fontWeight: "900",
         fontSize: 20,
         marginBottom: 40, 
     },

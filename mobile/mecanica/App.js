@@ -1,9 +1,9 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider} from 'react-native-safe-area-context';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Intranet from './src/pages/intranet';
-import { StyleSheet, Platform, StatusBar } from 'react-native';
 import Login from './src/pages/login';
+import Home from './src/pages/home';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +25,14 @@ export default function App() {
             component={Login}
             options={{
               title: 'Login',
+              headerShown: false
+            }}
+          />
+          <Stack.Screen 
+            name='Home'
+            component={Home}
+            options={{
+              title: 'Home',
               headerShown: false
             }}
           />
