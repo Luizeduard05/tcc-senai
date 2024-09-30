@@ -14,7 +14,7 @@ export default function Intranet() {
     }
 
     const navegaHome = () => {
-        navigation.navigate('Home')
+        navigation.navigate("Drawer")
     }
 
     return (

@@ -1,11 +1,33 @@
+import 'react-native-gesture-handler';
+import React from 'react';
+
+
 import { NavigationContainer } from '@react-navigation/native';
-import { SafeAreaProvider} from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer'; 
+
+
 import Intranet from './src/pages/intranet';
 import Login from './src/pages/login';
 import Home from './src/pages/home';
+import Sobre from './src/pages/sobre';
+import Historico from './src/pages/historico';
+import Agendamentos from './src/pages/agendamentos';
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
+
+function DrawerNavigation() {
+  return (
+    <Drawer.Navigator initialRouteName="Home">
+      <Drawer.Screen name="Home" component={Home} />
+      <Drawer.Screen name="Sobre nós" component={Sobre} />
+      <Drawer.Screen name="Histórico" component={Historico} />
+      <Drawer.Screen name="Agendamentos" component={Agendamentos} />
+    </Drawer.Navigator>
+  );
+}
 
 export default function App() {
   return (
@@ -29,10 +51,9 @@ export default function App() {
             }}
           />
           <Stack.Screen 
-            name='Home'
-            component={Home}
+            name='Drawer'
+            component={DrawerNavigation}
             options={{
-              title: 'Home',
               headerShown: false
             }}
           />
