@@ -14,6 +14,7 @@ import Home from './src/pages/home';
 import Sobre from './src/pages/sobre';
 import Historico from './src/pages/historico';
 import Agendamentos from './src/pages/agendamentos';
+import CadastroUser from './src/pages/cadastroUser';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -37,7 +38,6 @@ function DrawerNavigation() {
         headerTintColor: '#fff', 
       }} />
       <Drawer.Screen name="Sobre nós" component={Sobre}  options={{
-        title: 'Histórico',
         headerStyle: {
           backgroundColor: '#000', 
         },
@@ -45,6 +45,9 @@ function DrawerNavigation() {
       }}  />
       <Drawer.Screen name="Histórico" component={Historico} />
       <Drawer.Screen name="Agendamentos" component={Agendamentos} />
+      <Drawer.Screen name="Sair" component={Intranet} options={{
+        headerShown: false
+      }} />
     </Drawer.Navigator>
   );
 }
@@ -67,6 +70,14 @@ export default function App() {
             component={Login}
             options={{
               title: 'Login',
+              headerShown: false
+            }}
+          />
+          <Stack.Screen
+            name='CadastroUser'
+            component={CadastroUser}
+            options={{
+              title: 'Cadastrar-se',
               headerShown: false
             }}
           />
