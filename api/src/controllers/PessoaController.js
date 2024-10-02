@@ -54,20 +54,13 @@ const pessoaControllers = {
     try {
       const id = req.params.id;
       console.log(`Buscando usuário com ID: ${id}`);
-      const [person, tel, end, login] = await Promise.all([
-        Pessoa.selectRegistroPessoa(id),
-        Telefone.selectRegistroTelefone(id),
-        Endereco.selectRegistroEndereço(id),
-        Login.selectRegistroLogin(id)
-      ]);
-      console.log(`Resultados da busca:`, { person, tel, end, login });
-      if (person && person.length > 0) {
+      // Chamando o método da classe Pessoa
+      const result = await Pessoa.selectRegistroPessoa(id);
+      // Verifica se a consulta retornou dados
+      if (result.length > 0) {
         return res.json({
           selectMessage: `Usuário localizado`,
-          person: person[0],
-          telefone: tel[0],
-          endereco: end[0],
-          login: login[0]
+          person: result[0] // Primeiro registro retornado da consulta
         });
       } else {
         return res.json({ selectMessage: `Usuário não encontrado` });
