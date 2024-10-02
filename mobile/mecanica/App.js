@@ -5,7 +5,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer'; 
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 
 import Intranet from './src/pages/intranet';
@@ -20,9 +20,29 @@ const Drawer = createDrawerNavigator();
 
 function DrawerNavigation() {
   return (
-    <Drawer.Navigator initialRouteName="Home">
-      <Drawer.Screen name="Home" component={Home} />
-      <Drawer.Screen name="Sobre nós" component={Sobre} />
+    <Drawer.Navigator initialRouteName="Home" screenOptions={{
+      drawerStyle: {
+        backgroundColor: 'black',
+      },
+      drawerLabelStyle: {
+        color: '#fff',
+      }
+    }}>
+      <Drawer.Screen name="Home" component={Home} options={{
+        title: 'Home',
+        headerTitle: "",
+        headerStyle: {
+          backgroundColor: '#000', 
+        },
+        headerTintColor: '#fff', 
+      }} />
+      <Drawer.Screen name="Sobre nós" component={Sobre}  options={{
+        title: 'Histórico',
+        headerStyle: {
+          backgroundColor: '#000', 
+        },
+        headerTintColor: '#fff', 
+      }}  />
       <Drawer.Screen name="Histórico" component={Historico} />
       <Drawer.Screen name="Agendamentos" component={Agendamentos} />
     </Drawer.Navigator>
@@ -34,7 +54,7 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen 
+          <Stack.Screen
             name='Inicio'
             component={Intranet}
             options={{
@@ -42,7 +62,7 @@ export default function App() {
               headerShown: false
             }}
           />
-          <Stack.Screen 
+          <Stack.Screen
             name='Login'
             component={Login}
             options={{
@@ -50,7 +70,7 @@ export default function App() {
               headerShown: false
             }}
           />
-          <Stack.Screen 
+          <Stack.Screen
             name='Drawer'
             component={DrawerNavigation}
             options={{

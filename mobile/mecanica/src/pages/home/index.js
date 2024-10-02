@@ -1,9 +1,11 @@
 import { LinearGradient } from "expo-linear-gradient"; 
-import { View, Text, Image, StyleSheet, Platform, StatusBar } from "react-native"; 
+import { View, Text, Image, StyleSheet, Platform, StatusBar, TouchableOpacity } from "react-native"; 
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
 import carro3 from '../../assets/carro3.png'; 
+import { useNavigation } from "@react-navigation/native";
 
 export default function Home() { 
+    const navigation = useNavigation()
     return ( 
         <LinearGradient 
             colors={['#000000', 'rgba(0, 0, 0, 0.5)']} 
@@ -23,20 +25,26 @@ export default function Home() {
 
                 {/* Seção dos ícones */} 
                 <View style={styles.iconSection}> 
-                    <View style={styles.iconContainer}> 
+                    <TouchableOpacity 
+                        style={styles.iconContainer} 
+                        onPress={() => navigation.navigate('Agendamentos')} 
+                    > 
                         <View style={styles.menuLine} /> 
                         <Icon name="event" color="#ccc" size={30} style={styles.icon} /> 
                         <Text style={styles.iconText}>Agendamentos</Text> 
-                    </View> 
+                    </TouchableOpacity> 
 
                     {/* Linha de divisão entre os ícones */}
                     <View style={styles.divider} /> 
 
-                    <View style={styles.iconContainer}> 
+                    <TouchableOpacity 
+                        style={styles.iconContainer} 
+                        onPress={() => navigation.navigate('Histórico')} 
+                    > 
                         <View style={styles.menuLine} /> 
                         <Icon name="table-chart" color="#ccc" size={30} style={styles.icon} /> 
                         <Text style={styles.iconText}>Histórico</Text> 
-                    </View> 
+                    </TouchableOpacity> 
                 </View> 
             </LinearGradient> 
         </LinearGradient> 
