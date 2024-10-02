@@ -53,13 +53,37 @@ class Pessoa {
     };
 
     static selectRegistroPessoa = async (idPessoa) => {
-        const con = await conectarBancoDeDados()
-        try{
-            const [rows] = await con.query(`select * from tbl_pessoa where id=?`,
-                [idPessoa]);
-                return rows;
-        }catch (error) {
+        const con = await conectarBancoDeDados();
+        try {
+            const query = `
+            SELECT 
+              p.id AS pessoa_id, 
+              p.nome, 
+              p.cpf, 
+              p.email, 
+              p.tipo,
+              e.logradouro, 
+              e.bairro, 
+              e.estado, 
+              e.numero, 
+              e.complemento, 
+              e.cep,
+              t.telefone,
+              l.perfil, 
+              l.login, 
+              l.senha
+            FROM tbl_pessoa p
+            INNER JOIN tbl_endereco e ON p.id = e.tbl_pessoa_id
+            INNER JOIN tbl_telefone t ON p.id = t.tbl_pessoa_id
+            INNER JOIN tbl_login l ON p.id = l.tbl_pessoa_id
+            WHERE p.id = ?;
+          `;
+            const [rows] = await con.query(query, [idPessoa]);
+            return rows;
+        } catch (error) {
             throw new Error(`Erro ao selecionar: ${error.message}`);
+        } finally {
+            await con.release(); // Fechar a conexão após a execução
         }
     };
 
@@ -68,7 +92,7 @@ class Pessoa {
             this.nome &&
             this.cpf &&
             this.email &&
-            this.tipo 
+            this.tipo
         );
     }
 
