@@ -1,4 +1,5 @@
 import conectarBancoDeDados from '../../config/db.js';
+import bcrypt from 'bcryptjs';
 
 class Login{
     constructor(pLog){
@@ -21,32 +22,31 @@ class Login{
     set Senha(value){this.senha=value;}
 
     get Tbl_pessoa_id(){return this.tbl_pessoa_id;}
-    set Tbl_pessoa_id(value){this.tbl_pessoa_id;}
+    set Tbl_pessoa_id(value){this.tbl_pessoa_id = value;}
 
     novoRegistroLogin = async (idPessoa) => {
         const con = await conectarBancoDeDados();
         //lógica para inserir os dados nas tabelas correspondentes no seu banco de dados
         try {
-            //métodos para inserir os dados
+            const hashedPassword = await bcrypt.hash(this.senha, 10); // Criptografa a senha
             const login = await con.query(`insert into tbl_login (perfil, login, senha, tbl_pessoa_id) values (?,?,?,?)`,
-                [this.perfil, this.login, this.senha, idPessoa]);
+                [this.perfil, this.login, hashedPassword, idPessoa]);
             return login[0].insertId;
-            // return { message: 'Usuário registrado com sucesso!', result: true };
         } catch (error) {
             throw new Error(`Erro ao registrar: ${error.message}`);
         }
     };
 
-    static selectRegistroLogin = async (idPessoa) => {
-        const con = await conectarBancoDeDados()
-        try{
-            const [rows] = await con.query(`select * from tbl_login where tbl_pessoa_id=?`,
-                [idPessoa]);
-                return rows;
-        }catch (error) {
-            throw new Error(`Erro ao selecionar: ${error.message}`);
-        }
-    };
+    // static selectRegistroLogin = async (idPessoa) => {
+    //     const con = await conectarBancoDeDados()
+    //     try{
+    //         const [rows] = await con.query(`select * from tbl_login where tbl_pessoa_id=?`,
+    //             [idPessoa]);
+    //             return rows;
+    //     }catch (error) {
+    //         throw new Error(`Erro ao selecionar: ${error.message}`);
+    //     }
+    // };
 
     static deleteRegistroLog = async (idLogin) => {
         const con = await conectarBancoDeDados();
@@ -60,6 +60,16 @@ class Login{
             throw new Error(`Erro ao registrar: ${error.message}`);
         }
     };
+
+    static selecionarUsuarioPorLogin = async (login) => {
+        const con = await conectarBancoDeDados();
+        try {
+            const [rows] = await con.query(`select * from tbl_login where login=?`, [login]);
+            return rows;
+        } catch (error) {
+            throw new Error(`Erro ao selecionar: ${error.message}`);
+        }
+    }
 
     validarCampos() {
         return (
