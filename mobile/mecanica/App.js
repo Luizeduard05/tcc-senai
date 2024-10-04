@@ -33,18 +33,16 @@ function DrawerNavigation() {
         title: 'Home',
         headerTitle: "",
         headerStyle: {
-          backgroundColor: '#000', 
+          backgroundColor: '#000',
         },
-        headerTintColor: '#fff', 
+        headerTintColor: '#fff',
       }} />
-      <Drawer.Screen name="Sobre nós" component={Sobre}  options={{
+      <Drawer.Screen name="Sobre nós" component={Sobre} options={{
         headerStyle: {
-          backgroundColor: '#000', 
+          backgroundColor: '#000',
         },
-        headerTintColor: '#fff', 
-      }}  />
-      <Drawer.Screen name="Histórico" component={Historico} />
-      <Drawer.Screen name="Agendamentos" component={Agendamentos} />
+        headerTintColor: '#fff',
+      }} />
       <Drawer.Screen name="Sair" component={Intranet} options={{
         headerShown: false
       }} />
@@ -86,6 +84,28 @@ export default function App() {
             component={DrawerNavigation}
             options={{
               headerShown: false
+            }}
+          />
+          <Stack.Screen
+            name='Historico'
+            component={Historico}
+            options={{
+              title: 'Histórico',
+              headerStyle: {
+                backgroundColor: '#000',
+              },
+              headerTintColor: '#fff',
+            }}
+          />
+          <Stack.Screen
+            name='Agendamentos'
+            component={Agendamentos}
+            options={{
+              title: 'Agendamentos',
+              headerStyle: {
+                backgroundColor: '#000',
+              },
+              headerTintColor: '#fff',
             }}
           />
         </Stack.Navigator>
