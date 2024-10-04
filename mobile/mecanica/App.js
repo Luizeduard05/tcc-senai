@@ -5,7 +5,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer'; 
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 
 import Intranet from './src/pages/intranet';
@@ -14,17 +14,40 @@ import Home from './src/pages/home';
 import Sobre from './src/pages/sobre';
 import Historico from './src/pages/historico';
 import Agendamentos from './src/pages/agendamentos';
+import CadastroUser from './src/pages/cadastroUser';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function DrawerNavigation() {
   return (
-    <Drawer.Navigator initialRouteName="Home">
-      <Drawer.Screen name="Home" component={Home} />
-      <Drawer.Screen name="Sobre nós" component={Sobre} />
+    <Drawer.Navigator initialRouteName="Home" screenOptions={{
+      drawerStyle: {
+        backgroundColor: 'black',
+      },
+      drawerLabelStyle: {
+        color: '#fff',
+      }
+    }}>
+      <Drawer.Screen name="Home" component={Home} options={{
+        title: 'Home',
+        headerTitle: "",
+        headerStyle: {
+          backgroundColor: '#000', 
+        },
+        headerTintColor: '#fff', 
+      }} />
+      <Drawer.Screen name="Sobre nós" component={Sobre}  options={{
+        headerStyle: {
+          backgroundColor: '#000', 
+        },
+        headerTintColor: '#fff', 
+      }}  />
       <Drawer.Screen name="Histórico" component={Historico} />
       <Drawer.Screen name="Agendamentos" component={Agendamentos} />
+      <Drawer.Screen name="Sair" component={Intranet} options={{
+        headerShown: false
+      }} />
     </Drawer.Navigator>
   );
 }
@@ -34,7 +57,7 @@ export default function App() {
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen 
+          <Stack.Screen
             name='Inicio'
             component={Intranet}
             options={{
@@ -42,7 +65,7 @@ export default function App() {
               headerShown: false
             }}
           />
-          <Stack.Screen 
+          <Stack.Screen
             name='Login'
             component={Login}
             options={{
@@ -50,7 +73,15 @@ export default function App() {
               headerShown: false
             }}
           />
-          <Stack.Screen 
+          <Stack.Screen
+            name='CadastroUser'
+            component={CadastroUser}
+            options={{
+              title: 'Cadastrar-se',
+              headerShown: false
+            }}
+          />
+          <Stack.Screen
             name='Drawer'
             component={DrawerNavigation}
             options={{

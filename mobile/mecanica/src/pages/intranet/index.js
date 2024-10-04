@@ -12,10 +12,11 @@ export default function Intranet() {
     const navegaLogin = () => {
         navigation.navigate('Login')
     }
-
-    const navegaHome = () => {
-        navigation.navigate("Drawer")
+    const navegaCadastroUser = () => {
+        navigation.navigate("CadastroUser")
     }
+
+
 
     return (
         <LinearGradient 
@@ -27,11 +28,11 @@ export default function Intranet() {
 
                 {/* Botões */}
                 <View style={styles.alinhaLateral}>
-                    <Pressable style={styles.button}>
+                    <Pressable style={styles.button} onPress={navegaCadastroUser}>
                         <Text style={styles.textButton}>Cadastrar</Text>
                     </Pressable>
 
-                    <Pressable style={styles.button} onPress={navegaHome}>
+                    <Pressable style={styles.button} onPress={navegaLogin}>
                         <Text style={styles.textButton}>Login</Text>
                     </Pressable>
                 </View>
