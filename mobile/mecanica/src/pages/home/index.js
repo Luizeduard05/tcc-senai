@@ -39,7 +39,7 @@ export default function Home() {
 
                     <TouchableOpacity 
                         style={styles.iconContainer} 
-                        onPress={() => navigation.navigate('Histórico')} 
+                        onPress={() => navigation.navigate('Historico')} 
                     > 
                         <View style={styles.menuLine} /> 
                         <Icon name="table-chart" color="#ccc" size={30} style={styles.icon} /> 
