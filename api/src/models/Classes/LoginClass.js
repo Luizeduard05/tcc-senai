@@ -37,16 +37,16 @@ class Login{
         }
     };
 
-    // static selectRegistroLogin = async (idPessoa) => {
-    //     const con = await conectarBancoDeDados()
-    //     try{
-    //         const [rows] = await con.query(`select * from tbl_login where tbl_pessoa_id=?`,
-    //             [idPessoa]);
-    //             return rows;
-    //     }catch (error) {
-    //         throw new Error(`Erro ao selecionar: ${error.message}`);
-    //     }
-    // };
+    static selectRegistroLogin = async (idPessoa) => {
+        const con = await conectarBancoDeDados()
+        try{
+            const [rows] = await con.query(`select * from tbl_login where tbl_pessoa_id=?`,
+                [idPessoa]);
+                return rows;
+        }catch (error) {
+            throw new Error(`Erro ao selecionar: ${error.message}`);
+        }
+    };
 
     static deleteRegistroLog = async (idLogin) => {
         const con = await conectarBancoDeDados();

@@ -69,13 +69,18 @@ class Pessoa {
               e.complemento, 
               e.cep,
               t.telefone,
-              l.perfil, 
-              l.login, 
-              l.senha
+              l.perfil,
+              l.login,
+              l.senha,
+              v.placa,
+              v.marca,
+              v.ano,
+              v.modelo
             FROM tbl_pessoa p
             INNER JOIN tbl_endereco e ON p.id = e.tbl_pessoa_id
             INNER JOIN tbl_telefone t ON p.id = t.tbl_pessoa_id
             INNER JOIN tbl_login l ON p.id = l.tbl_pessoa_id
+            INNER JOIN tbl_veiculo v ON p.id = v.tbl_pessoa_id
             WHERE p.id = ?;
           `;
             const [rows] = await con.query(query, [idPessoa]);

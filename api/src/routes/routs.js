@@ -24,6 +24,7 @@ const autenticarToken = (req, res, next) => {
 // Rotas
 router.post('/usuarios', pessoaControllers.registroDeUsuario);
 router.post('/login', pessoaControllers.loginUsuario);
+router.post('/veiculos/:idPessoa', pessoaControllers.registroDeVeiculo);
 router.delete('/usuarios/:id', autenticarToken, pessoaControllers.deletarUsuario);
 router.get('/usuarios/:id', autenticarToken, pessoaControllers.selecionarUsuario); 
 
