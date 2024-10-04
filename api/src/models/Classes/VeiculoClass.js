@@ -27,7 +27,7 @@ class Veiculo {
     get Tbl_pessoa_id() { return this.tbl_pessoa_id; }
     set Tbl_pessoa_id(value) { this.tbl_pessoa_id = value; }
 
-    novoRegistroVeiculo = async () => {
+    novoRegistroVeiculo = async (idPessoa) => {
         const con = await conectarBancoDeDados();
         //lógica para inserir os dados nas tabelas correspondentes no seu banco de dados
         try {
