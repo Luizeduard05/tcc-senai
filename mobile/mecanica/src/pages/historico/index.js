@@ -43,6 +43,8 @@ const styles = StyleSheet.create({
         width: '100%',
         marginTop: 10,
         position: 'relative',
+        // Sombras para Android
+        elevation: 5, // Controla a intensidade da sombra
     },
     textVeiculo: {
         fontWeight: "bold",
@@ -66,7 +68,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: "red",
-        // borderRadius: 19,
+        borderRadius: 5,
         paddingHorizontal: 10,
     }
-})
+});

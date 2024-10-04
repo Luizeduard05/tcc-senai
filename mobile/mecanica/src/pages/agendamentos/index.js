@@ -87,8 +87,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 1,
         bottom: 1,
-        left: 0, // posição no canto esquerdo
-        width: 7, // largura da linha
+        left: 0, 
+        width: 7, 
         backgroundColor: "red",
         borderRadius: 10,
     }
