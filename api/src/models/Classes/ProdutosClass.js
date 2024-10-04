@@ -18,4 +18,4 @@ class Produtos{
     set Valor(value){this.valor = value;}
 }
 
-module.exports = Produtos;
+export default  Produtos;

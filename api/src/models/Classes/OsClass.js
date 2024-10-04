@@ -23,4 +23,4 @@ class os{
     set Tbl_vaiculo_tbl_pessoa_id(value){this.tbl_vaiculo_tbl_pessoa_id = value;}
 }
 
-module.exports = os;
+export default os;

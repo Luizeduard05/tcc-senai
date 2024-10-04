@@ -26,4 +26,4 @@ class Veiculo {
     set Tbl_pessoa_id(value) { this.tbl_pessoa_id = value; }
 }
 
-module.exports = Veiculo;
+export default Veiculo;

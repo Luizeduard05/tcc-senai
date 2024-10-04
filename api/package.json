@@ -7,10 +7,10 @@
   },
   "author": "",
   "license": "ISC",
+  "type": "module",
   "description": "",
   "dependencies": {
     "express": "^4.21.0",
-    "express-ejs-layouts": "^2.5.1",
-    "web": "file:"
+    "express-ejs-layouts": "^2.5.1"
   }
 }
