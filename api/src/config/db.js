@@ -1,4 +1,3 @@
-
 import { createPool } from 'mysql2/promise';
 
 let pool = null;
@@ -12,7 +11,6 @@ async function criarPoolDeConexoes() {
             user: 'root',
             password: '1234',
             waitForConnections: true,
-            // connectionLimit: 10,
             multipleStatements: true
         });
     }

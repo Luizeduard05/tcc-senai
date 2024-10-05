@@ -2,31 +2,25 @@ import Pessoa from "../models/Classes/PessoaClass.js";
 import Telefone from "../models/Classes/TelefoneClass.js";
 import Endereco from '../models/Classes/EnderecoClass.js';
 import Login from "../models/Classes/LoginClass.js";
-import Veiculo from "../models/Classes/VeiculoClass.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
-import e from "express";
 
 
 const pessoaControllers = {
 
-  //Cadastro de usuarios
-  registroDeUsuario: async (req, res) => {
+  //Cadastro de usuarios ADM
+  registroDeAdm: async (req, res) => {
     try {
-      // Desestruturação dos dados do corpo da requisição
       const { nome, cpf, email, tipo, logradouro, bairro, estado, numero, complemento, cep, telefone, senha } = req.body;
-      // Definir perfil igual ao tipo e login igual ao email
-      const perfil = tipo;
-      const login = email;
+
       const personObj = new Pessoa({ id: null, nome, cpf, email, tipo });
       const enderecoObj = new Endereco({ id: null, logradouro, bairro, estado, numero, complemento, cep });
       const telefoneObj = new Telefone({ id: null, telefone });
-      const loginObj = new Login({ id: null,perfil, login, senha});
-      // Validação de campos
+      const loginObj = new Login({ id: null, perfil: tipo, login: email, senha });
+
       if (!personObj.validarCampos() || !enderecoObj.validarCampos() || !telefoneObj.validarCampos() || !loginObj.validarCampos()) {
-        console.log(`O arquivo informado possui informações faltantes`);
-        return res.json({ message: `O arquivo informado possui informações faltantes` });
+        return res.json({ message: 'O arquivo informado possui informações faltantes' });
       }
       const idPessoa = await personObj.novoRegistroPessoa();
       if (idPessoa != null && idPessoa > 0) {
@@ -54,45 +48,23 @@ const pessoaControllers = {
       }
     } catch (e) {
       console.error(e);
-      return res.json({ cadastroMessage: `Usuário não foi registrado, motivo: ${e.message}` });
+      return res.status(500).json({ cadastroMessage: `Usuário não foi registrado, motivo: ${e.message}` });
     }
   },
 
-  //Cadastro de veiculos
-  registroDeVeiculo: async (req, res) => {
-    try {
-      const idPessoa = req.params.idPessoa;
-      const { placa, marca, modelo, ano } = req.body;
-      const veiculoObj = new Veiculo({ id: null, placa, marca, modelo, ano, idPessoa });
-      // Validação de campos
-      if (!veiculoObj.validarCampos()) {
-        console.log(`O arquivo informado possui informações faltantes`);
-        return res.json({ message: `O arquivo informado possui informações faltantes` });
-      }
 
-      // Passando o idPessoa como parâmetro para o método
-      const idVeiculo = await veiculoObj.novoRegistroVeiculo(idPessoa);
-      res.json({ message: "Veículo registrado com sucesso!", idVeiculo });
 
-    } catch (e) {
-      return res.json({ cadastroMessage: `Veiculo não foi registrado, motivo: ${e.message}` });
-    }
-  },
-
-  //Trazer usuario pra tela atraves do Id da tbl_pessoa
   selecionarUsuario: async (req, res) => {
     try {
-      const id = req.params.id; // O ID do usuário a ser buscado
+      const id = req.params.id;
       console.log(`Buscando usuário com ID: ${id}`);
 
-      // Chamando o método da classe Pessoa
       const result = await Pessoa.selectRegistroPessoa(id);
 
-      // Verifica se a consulta retornou dados
       if (result.length > 0) {
         return res.json({
           selectMessage: `Usuário localizado`,
-          person: result[0] // Primeiro registro retornado da consulta
+          person: result[0]
         });
       } else {
         return res.json({ selectMessage: `Usuário não encontrado` });
@@ -103,18 +75,40 @@ const pessoaControllers = {
     }
   },
 
+  editarUsuario: async (req, res) => {
+    try {
+      const id = req.params.id;
+      const { nome, cpf, email, tipo, logradouro, bairro, estado, numero, complemento, cep, telefone } = req.body;
+
+      if (!nome || !cpf || !email || !tipo || !logradouro || !bairro || !estado || !numero || !cep || !telefone) {
+        return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
+      }
+
+      const pessoa = new Pessoa({ id, nome, cpf, email, tipo });
+      await pessoa.atualizarRegistroPessoa();
+
+      const endereco = new Endereco({ id, logradouro, bairro, estado, numero, complemento, cep });
+      await endereco.atualizarRegistroEnd();
+
+      const telefoneObj = new Telefone({ id, telefone });
+      await telefoneObj.atualizarRegistroTel();
+
+      return res.json({ message: 'Usuário atualizado com sucesso.' });
+    } catch (e) {
+      console.error(e);
+      return res.status(500).json({ message: `Erro ao atualizar usuário, motivo: ${e.message}` });
+    }
+  },
+
 
   deletarUsuario: async (req, res) => {
     try {
       const id = req.params.id;
       const deletar = new Pessoa(id);
-      // verificar se o usuário existe
       const usuarioExistente = await Pessoa.selectRegistroPessoa(id);
       if (!usuarioExistente || usuarioExistente.length === 0) {
         return res.json({ deletMessage: `Usuário não encontrado` });
       }
-
-      // Chama a função para deletar o registro
       await deletar.deleteRegistroPessoa(id);
 
       return res.json({ deletMessage: `Usuário deletado com sucesso` });
@@ -128,12 +122,10 @@ const pessoaControllers = {
     try {
       const { login, senha } = req.body;
 
-      // Verifica se o usuário existe
       const usuario = await Login.selecionarUsuarioPorLogin(login);
       if (!usuario || usuario.length === 0) {
         return res.status(401).json({ message: 'Credenciais inválidas' });
       }
-      // Verifica a senha
       const senhaValida = await bcrypt.compare(senha, usuario[0].senha);
       if (!senhaValida) {
         return res.status(401).json({ message: 'Credenciais inválidas' });
@@ -147,6 +139,7 @@ const pessoaControllers = {
       return res.status(500).json({ message: 'Erro ao fazer login' });
     }
   },
+
 };
 
 export default pessoaControllers;

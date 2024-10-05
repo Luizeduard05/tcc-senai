@@ -26,9 +26,8 @@ class Login{
 
     novoRegistroLogin = async (idPessoa) => {
         const con = await conectarBancoDeDados();
-        //lógica para inserir os dados nas tabelas correspondentes no seu banco de dados
         try {
-            const hashedPassword = await bcrypt.hash(this.senha, 10); // Criptografa a senha
+            const hashedPassword = await bcrypt.hash(this.senha, 10); 
             const login = await con.query(`insert into tbl_login (perfil, login, senha, tbl_pessoa_id) values (?,?,?,?)`,
                 [this.perfil, this.login, hashedPassword, idPessoa]);
             return login[0].insertId;
@@ -50,9 +49,7 @@ class Login{
 
     static deleteRegistroLog = async (idLogin) => {
         const con = await conectarBancoDeDados();
-        //lógica para inserir os dados nas tabelas correspondentes no seu banco de dados
         try {
-            //métodos para inserir os dados
             const person = await con.query(`delete from tbl_login where tbl_pessoa_id = ?`,
                 [idLogin]);
             return person;
