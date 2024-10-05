@@ -15,7 +15,7 @@ class Telefone {
     get Tbl_pessoa_id() { return this.tbl_pessoa_id; }
     set Tbl_pessoa_id(value) { this.tbl_pessoa_id = value; }
 
-    //Remover mascara (caracteres) 
+
     cleanMaskTel(value) {
         if (value != null) {
             let newValue = value.replace(/[() -]/g, '');
@@ -25,9 +25,7 @@ class Telefone {
 
     novoRegistroTel = async (idPessoa) => {
         const con = await conectarBancoDeDados();
-        //lógica para inserir os dados nas tabelas correspondentes no seu banco de dados
         try {
-            //métodos para inserir os dados
             const telefone = await con.query(`insert into tbl_telefone (telefone, tbl_pessoa_id) values (?,?)`,
                 [this.telefone, idPessoa]);
             return telefone[0].insertId;
@@ -37,28 +35,25 @@ class Telefone {
     };
     static deleteRegistroTel = async (idTel) => {
         const con = await conectarBancoDeDados();
-        //lógica para inserir os dados nas tabelas correspondentes no seu banco de dados
         try {
-            //métodos para inserir os dados
             const person = await con.query(`delete from tbl_telefone where tbl_pessoa_id = ?`,
                 [idTel]);
             return person;
-            // return { message: 'Usuário registrado com sucesso!', result: true };
         } catch (error) {
             throw new Error(`Erro ao registrar: ${error.message}`);
         }
     };
 
-    // static selectRegistroTelefone = async (idPessoa) => {
-    //     const con = await conectarBancoDeDados()
-    //     try{
-    //         const [rows] = await con.query(`select * from tbl_telefone where tbl_pessoa_id=?`,
-    //             [idPessoa]);
-    //             return rows;
-    //     }catch (error) {
-    //         throw new Error(`Erro ao selecionar: ${error.message}`);
-    //     }
-    // };
+    atualizarRegistroTel = async () => {
+        const con = await conectarBancoDeDados();
+        try {
+          await con.query(`UPDATE tbl_telefone SET telefone = ? WHERE tbl_pessoa_id = ?`,
+            [this.telefone, this.id]);
+        } catch (error) {
+          throw new Error(`Erro ao atualizar: ${error.message}`);
+        }
+      };
+      
 
     validarCampos() {
         return (

@@ -40,9 +40,7 @@ class Endereco {
     novoRegistroEnd = async (idPessoa) => {
 
         const con = await conectarBancoDeDados();
-        //lógica para inserir os dados nas tabelas correspondentes no seu banco de dados
-        try {
-            //métodos para inserir os dados    
+        try {  
             const endereco = await con.query(`insert into tbl_endereco (logradouro, bairro, estado, numero, complemento, cep, tbl_pessoa_id) VALUES (?,?,?,?,?,?,?)`,
                 [this.logradouro, this.bairro, this.estado, this.numero, this.complemento, this.cep, idPessoa]);
 
@@ -55,28 +53,25 @@ class Endereco {
     static deleteRegistroEnd = async (idEndereco) => {
 
         const con = await conectarBancoDeDados();
-        //lógica para inserir os dados nas tabelas correspondentes no seu banco de dados
         try {
-            //métodos para inserir os dados
             const person = await con.query(`delete from tbl_endereco where tbl_pessoa_id = ?`,
                 [idEndereco]);
             return person;
-            // return { message: 'Usuário registrado com sucesso!', result: true };
         } catch (error) {
             throw new Error(`Erro ao registrar: ${error.message}`);
         }
     };
 
-    // static selectRegistroEndereço = async (idEndereco) => {
-    //     const con = await conectarBancoDeDados()
-    //     try{
-    //         const [rows] = await con.query(`select * from tbl_endereco where tbl_pessoa_id=?`,
-    //             [idEndereco]);
-    //             return rows;
-    //     }catch (error) {
-    //         throw new Error(`Erro ao selecionar: ${error.message}`);
-    //     }
-    // };
+    atualizarRegistroEnd = async () => {
+        const con = await conectarBancoDeDados();
+        try {
+          await con.query(`UPDATE tbl_endereco SET logradouro = ?, bairro = ?, estado = ?, numero = ?, complemento = ?, cep = ? WHERE tbl_pessoa_id = ?`,
+            [this.logradouro, this.bairro, this.estado, this.numero, this.complemento, this.cep, this.id]);
+        } catch (error) {
+          throw new Error(`Erro ao atualizar: ${error.message}`);
+        }
+      };
+      
 
     validarCampos() {
         return (
