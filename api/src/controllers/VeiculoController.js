@@ -3,7 +3,7 @@ import conectarBancoDeDados from '../config/db.js'
 
 
 
-class VeiculoController {
+const VeiculoController = {
     async registroDeVeiculo(req, res) {
         const { placa, marca, ano, modelo } = req.body;
         const idPessoa = req.params.idPessoa;
@@ -21,7 +21,7 @@ class VeiculoController {
             console.error(error); 
             return res.status(500).json({ message: `Erro ao registrar veículo: ${error.message}` });
         }
-    }
+    },
     
 
     async buscarVeiculosPorPessoa(req, res) {
@@ -43,7 +43,7 @@ class VeiculoController {
             console.error(error); 
             return res.status(500).json({ message: `Erro ao buscar veículos: ${error.message}` });
         }
-    }
+    },
 
     async editarVeiculo(req, res) {
         const idVei = req.params.id; 
@@ -62,7 +62,7 @@ class VeiculoController {
             console.error(error);
             return res.status(500).json({ message: `Erro ao atualizar veículo: ${error.message}` });
         }
-    }
+    },
 
     async deletarVeiculo(req, res) {
         const idVei = req.params.id; 
@@ -82,4 +82,4 @@ class VeiculoController {
     
 }
 
-export const veiculoControllers = new VeiculoController();
+export default VeiculoController;
