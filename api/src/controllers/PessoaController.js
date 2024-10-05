@@ -2,6 +2,12 @@ import Pessoa from "../models/Classes/PessoaClass.js";
 import Telefone from "../models/Classes/TelefoneClass.js";
 import Endereco from '../models/Classes/EnderecoClass.js';
 import Login from "../models/Classes/LoginClass.js";
+import Veiculo from "../models/Classes/VeiculoClass.js";
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
+import e from "express";
+
 
 const pessoaControllers = {
 
@@ -9,11 +15,14 @@ const pessoaControllers = {
   registroDeUsuario: async (req, res) => {
     try {
       // Desestruturação dos dados do corpo da requisição
-      const { nome, cpf, email, tipo, logradouro, bairro, estado, numero, complemento, cep, telefone, perfil, login, senha } = req.body;
+      const { nome, cpf, email, tipo, logradouro, bairro, estado, numero, complemento, cep, telefone, senha } = req.body;
+      // Definir perfil igual ao tipo e login igual ao email
+      const perfil = tipo;
+      const login = email;
       const personObj = new Pessoa({ id: null, nome, cpf, email, tipo });
       const enderecoObj = new Endereco({ id: null, logradouro, bairro, estado, numero, complemento, cep });
       const telefoneObj = new Telefone({ id: null, telefone });
-      const loginObj = new Login({ id: null, perfil, login, senha });
+      const loginObj = new Login({ id: null,perfil, login, senha});
       // Validação de campos
       if (!personObj.validarCampos() || !enderecoObj.validarCampos() || !telefoneObj.validarCampos() || !loginObj.validarCampos()) {
         console.log(`O arquivo informado possui informações faltantes`);
@@ -49,25 +58,41 @@ const pessoaControllers = {
     }
   },
 
-  //Trazer usuario pra tela atraves do ID
+  //Cadastro de veiculos
+  registroDeVeiculo: async (req, res) => {
+    try {
+      const idPessoa = req.params.idPessoa;
+      const { placa, marca, modelo, ano } = req.body;
+      const veiculoObj = new Veiculo({ id: null, placa, marca, modelo, ano, idPessoa });
+      // Validação de campos
+      if (!veiculoObj.validarCampos()) {
+        console.log(`O arquivo informado possui informações faltantes`);
+        return res.json({ message: `O arquivo informado possui informações faltantes` });
+      }
+
+      // Passando o idPessoa como parâmetro para o método
+      const idVeiculo = await veiculoObj.novoRegistroVeiculo(idPessoa);
+      res.json({ message: "Veículo registrado com sucesso!", idVeiculo });
+
+    } catch (e) {
+      return res.json({ cadastroMessage: `Veiculo não foi registrado, motivo: ${e.message}` });
+    }
+  },
+
+  //Trazer usuario pra tela atraves do Id da tbl_pessoa
   selecionarUsuario: async (req, res) => {
     try {
-      const id = req.params.id;
+      const id = req.params.id; // O ID do usuário a ser buscado
       console.log(`Buscando usuário com ID: ${id}`);
-      const [person, tel, end, login] = await Promise.all([
-        Pessoa.selectRegistroPessoa(id),
-        Telefone.selectRegistroTelefone(id),
-        Endereco.selectRegistroEndereço(id),
-        Login.selectRegistroLogin(id)
-      ]);
-      console.log(`Resultados da busca:`, { person, tel, end, login });
-      if (person && person.length > 0) {
+
+      // Chamando o método da classe Pessoa
+      const result = await Pessoa.selectRegistroPessoa(id);
+
+      // Verifica se a consulta retornou dados
+      if (result.length > 0) {
         return res.json({
           selectMessage: `Usuário localizado`,
-          person: person[0],
-          telefone: tel[0],
-          endereco: end[0],
-          login: login[0]
+          person: result[0] // Primeiro registro retornado da consulta
         });
       } else {
         return res.json({ selectMessage: `Usuário não encontrado` });
@@ -78,19 +103,48 @@ const pessoaControllers = {
     }
   },
 
+
   deletarUsuario: async (req, res) => {
     try {
       const id = req.params.id;
-      const deletar = new Pessoa(id)
-      // Aqui você pode verificar se o usuário existe
+      const deletar = new Pessoa(id);
+      // verificar se o usuário existe
       const usuarioExistente = await Pessoa.selectRegistroPessoa(id);
       if (!usuarioExistente || usuarioExistente.length === 0) {
         return res.json({ deletMessage: `Usuário não encontrado` });
       }
-      deletar.deleteRegistroPessoa(id);
+
+      // Chama a função para deletar o registro
+      await deletar.deleteRegistroPessoa(id);
+
       return res.json({ deletMessage: `Usuário deletado com sucesso` });
     } catch (e) {
-      res.json({ deletMessage: `Não foi possiel excluir o usuário, motivo: ${e.message}` });
+      res.status(500).json({ deletMessage: `Não foi possível excluir o usuário, motivo: ${e.message}` });
+    }
+  },
+
+
+  loginUsuario: async (req, res) => {
+    try {
+      const { login, senha } = req.body;
+
+      // Verifica se o usuário existe
+      const usuario = await Login.selecionarUsuarioPorLogin(login);
+      if (!usuario || usuario.length === 0) {
+        return res.status(401).json({ message: 'Credenciais inválidas' });
+      }
+      // Verifica a senha
+      const senhaValida = await bcrypt.compare(senha, usuario[0].senha);
+      if (!senhaValida) {
+        return res.status(401).json({ message: 'Credenciais inválidas' });
+      }
+      dotenv.config();
+      // Gera o token
+      const token = jwt.sign({ id: usuario[0].tbl_pessoa_id }, process.env.JWT_SECRET, { expiresIn: '2h' });
+      return res.json({ token });
+    } catch (e) {
+      console.error(e);
+      return res.status(500).json({ message: 'Erro ao fazer login' });
     }
   },
 };

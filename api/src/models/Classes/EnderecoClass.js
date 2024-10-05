@@ -67,16 +67,16 @@ class Endereco {
         }
     };
 
-    static selectRegistroEndereço = async (idPessoa) => {
-        const con = await conectarBancoDeDados()
-        try{
-            const [rows] = await con.query(`select * from tbl_endereco where id=?`,
-                [idPessoa]);
-                return rows;
-        }catch (error) {
-            throw new Error(`Erro ao selecionar: ${error.message}`);
-        }
-    };
+    // static selectRegistroEndereço = async (idEndereco) => {
+    //     const con = await conectarBancoDeDados()
+    //     try{
+    //         const [rows] = await con.query(`select * from tbl_endereco where tbl_pessoa_id=?`,
+    //             [idEndereco]);
+    //             return rows;
+    //     }catch (error) {
+    //         throw new Error(`Erro ao selecionar: ${error.message}`);
+    //     }
+    // };
 
     validarCampos() {
         return (
