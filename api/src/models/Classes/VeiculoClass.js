@@ -51,7 +51,7 @@ class Veiculo {
         try {
             this.validarCampos();
             const result = await con.query(
-                `INSERT INTO tbl_veiculo (placa, marca, ano, modelo, tbl_pessoa_id) VALUES (?, ?, ?, ?, ?)`,
+                `INSERT INTO tbl_veiculo (placa, marca, ano, modelo, tbl_veiculo_id) VALUES (?, ?, ?, ?, ?)`,
                 [this.placa, this.marca, this.ano, this.modelo, idPessoa]
             );
             return result[0].insertId; 
