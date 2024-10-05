@@ -1,115 +1,78 @@
-import 'react-native-gesture-handler';
+// src/App.js
 import React from 'react';
-
-
 import { NavigationContainer } from '@react-navigation/native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { AuthProvider, useAuth} from './src/context/AuthContext';
 
-
+// Importando telas
 import Intranet from './src/pages/intranet';
 import Login from './src/pages/login';
-import Home from './src/pages/home';
-import Sobre from './src/pages/sobre';
-import Historico from './src/pages/historico';
-import Agendamentos from './src/pages/agendamentos';
 import CadastroUser from './src/pages/cadastroUser';
+import Home from './src/pages/Usuario/home';
+import Historico from './src/pages/Usuario/historico';
+import Agendamentos from './src/pages/Usuario/agendamentos';
+import MecanicoHome from './src/pages/Mecanico/home';
+import AdminHome from './src/pages/Adm/home';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-function DrawerNavigation() {
+function UserDrawer() {
   return (
-    <Drawer.Navigator initialRouteName="Home" screenOptions={{
-      drawerStyle: {
-        backgroundColor: 'black',
-      },
-      drawerLabelStyle: {
-        color: '#fff',
-      }
-    }}>
-      <Drawer.Screen name="Home" component={Home} options={{
-        title: 'Home',
-        headerTitle: "",
-        headerStyle: {
-          backgroundColor: '#000',
-        },
-        headerTintColor: '#fff',
-      }} />
-      <Drawer.Screen name="Sobre nós" component={Sobre} options={{
-        headerStyle: {
-          backgroundColor: '#000',
-        },
-        headerTintColor: '#fff',
-      }} />
-      <Drawer.Screen name="Sair" component={Intranet} options={{
-        headerShown: false
-      }} />
+    <Drawer.Navigator initialRouteName="Home">
+      <Drawer.Screen name="Home" component={Home} />
+      <Drawer.Screen name="Historico" component={Historico} />
+      <Drawer.Screen name="Agendamentos" component={Agendamentos} />
     </Drawer.Navigator>
+  );
+}
+
+function MechanicDrawer() {
+  return (
+    <Drawer.Navigator initialRouteName="MecanicoHome">
+      <Drawer.Screen name="Home" component={MecanicoHome} />
+    </Drawer.Navigator>
+  );
+}
+
+function AdminDrawer() {
+  return (
+    <Drawer.Navigator initialRouteName="AdminHome">
+      <Drawer.Screen name="Home" component={AdminHome} />
+    </Drawer.Navigator>
+  );
+}
+
+function AppNavigator() {
+  const { userType } = useAuth();
+
+  return (
+    <Stack.Navigator>
+      {userType ? (
+        userType === "mecanico" ? (
+          <Stack.Screen name="MechanicDrawer" component={MechanicDrawer} options={{ headerShown: false }} />
+        ) : userType === "usuario" ? (
+          <Stack.Screen name="UserDrawer" component={UserDrawer} options={{ headerShown: false }} />
+        ) : (
+          <Stack.Screen name="AdminDrawer" component={AdminDrawer} options={{ headerShown: false }} />
+        )
+      ) : (
+        <>
+          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+          <Stack.Screen name="CadastroUser" component={CadastroUser} options={{ headerShown: false }} />
+        </>
+      )}
+    </Stack.Navigator>
   );
 }
 
 export default function App() {
   return (
-    <SafeAreaProvider>
+    <AuthProvider>
       <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name='Inicio'
-            component={Intranet}
-            options={{
-              title: 'Home',
-              headerShown: false
-            }}
-          />
-          <Stack.Screen
-            name='Login'
-            component={Login}
-            options={{
-              title: 'Login',
-              headerShown: false
-            }}
-          />
-          <Stack.Screen
-            name='CadastroUser'
-            component={CadastroUser}
-            options={{
-              title: 'Cadastrar-se',
-              headerShown: false
-            }}
-          />
-          <Stack.Screen
-            name='Drawer'
-            component={DrawerNavigation}
-            options={{
-              headerShown: false
-            }}
-          />
-          <Stack.Screen
-            name='Historico'
-            component={Historico}
-            options={{
-              title: 'Histórico',
-              headerStyle: {
-                backgroundColor: '#000',
-              },
-              headerTintColor: '#fff',
-            }}
-          />
-          <Stack.Screen
-            name='Agendamentos'
-            component={Agendamentos}
-            options={{
-              title: 'Agendamentos',
-              headerStyle: {
-                backgroundColor: '#000',
-              },
-              headerTintColor: '#fff',
-            }}
-          />
-        </Stack.Navigator>
+        <AppNavigator />
       </NavigationContainer>
-    </SafeAreaProvider>
+    </AuthProvider>
   );
 }

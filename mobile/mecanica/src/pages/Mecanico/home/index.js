@@ -1,10 +1,10 @@
 import { LinearGradient } from "expo-linear-gradient"; 
 import { View, Text, Image, StyleSheet, Platform, StatusBar, TouchableOpacity } from "react-native"; 
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
-import carro3 from '../../assets/carro3.png'; 
+import carro3 from '../../../assets/carro3.png'; 
 import { useNavigation } from "@react-navigation/native";
 
-export default function Home() { 
+export default function MecanicoHome() { 
     const navigation = useNavigation()
     return ( 
         <LinearGradient 
