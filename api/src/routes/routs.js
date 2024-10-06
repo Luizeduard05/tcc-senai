@@ -3,6 +3,8 @@ import veiculoControllers from "../controllers/VeiculoController.js";
 import pessoaControllers from "../controllers/PessoaController.js";
 import OsController from "../controllers/OsController.js";
 import jwt from 'jsonwebtoken';
+import novoAgendamento from "../models/Classes/AgendamentoClass.js";
+import agendamentoController from "../controllers/AgendamentoController.js";
 
 const router = Router();
 
@@ -57,6 +59,17 @@ router.get('/Os/:idVei', autenticarToken, OsController.buscarOsPorVeiculos);
 router.put('/Os/:id', autenticarToken, OsController.editarOS); 
 // Rota para deletar OS 
 router.delete('/Os/:id', autenticarToken, OsController.deletarOS); 
+
+// ROTAS : AGENDAMENTO
+
+// rota para Cadastro de AGENDAMENTO
+router.post('/agendar/:idOS', autenticarToken, agendamentoController.registroDeAgendamento); 
+// rota para Busca de AGENDAMENTO
+router.get('/agendar/:idOS', autenticarToken, agendamentoController.buscarAgendamentoPorPessoa); 
+// Rota para editar AGENDAMENTO
+router.put('/agendar/:id', autenticarToken, agendamentoController.editarAgendamento); 
+// Rota para deletar AGENDAMENTO 
+router.delete('/agendar/:id', autenticarToken, agendamentoController.deletarAgendamento); 
 
 
 

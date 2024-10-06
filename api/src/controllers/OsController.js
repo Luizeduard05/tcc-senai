@@ -80,7 +80,25 @@ const osController = {
         try {
             const [rows] = await con.query(`SELECT * FROM tbl_ordem_de_servico WHERE tbl_veiculo_id = ?`, [idVei]);
             if (rows.length > 0) {
-                return res.json(rows);
+                const dataFormatada = rows.map(servico => {
+                    const dataUTC = new Date(servico.data);
+
+                    // Formatação da data
+                    const opcoes = {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit'
+                    };
+
+                    const data = dataUTC.toLocaleString('pt-BR', opcoes);
+                    const [dia, mes, ano] = data.split('/'); // Separa dia, mês e ano
+
+                    return {
+                        ...servico,
+                        data: `${dia}/${mes}/${ano}`
+                    };
+                });
+                return res.json(dataFormatada);
             } else {
                 return res.status(404).json({ message: 'Nenhum OS encontrada para este veiculo.' });
             }
@@ -146,7 +164,7 @@ const osController = {
 
 
 
-    
+
 
     async deletarOS(req, res) {
         const idOS = req.params.id;
