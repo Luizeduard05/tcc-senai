@@ -28,6 +28,7 @@ function AgendamentosStack() {
           title: 'Agendamentos',
           headerStyle: { backgroundColor: '#000' },
           headerTintColor: '#fff',
+          headerShown: false
         }}
       />
     </Stack.Navigator>
@@ -45,6 +46,7 @@ function HistoricoStack() {
           title: 'Historico',
           headerStyle: { backgroundColor: '#000' },
           headerTintColor: '#fff',
+          headerShown: false
         }}
       />
     </Stack.Navigator>
@@ -82,7 +84,11 @@ function UserDrawer({ navigation }) {
         component={AgendamentosStack} // Navega para o stack que contém Agendamentos
         options={{
           title: 'Agendamentos',
-          headerShown: false
+          headerTintColor: "#fff",
+          headerShown: true,  // Alterar para true
+          headerStyle: {
+            backgroundColor: '#000'
+          },
         }}
       />
       <Drawer.Screen
@@ -90,11 +96,24 @@ function UserDrawer({ navigation }) {
         component={HistoricoStack} // Navega para o stack que contém Historico
         options={{
           title: 'Historico',
+          headerTintColor: "#fff",
+          headerShown: true,  // Alterar para true
+          headerStyle: {
+            backgroundColor: '#000'
+          },
+        }}
+      />
+      <Drawer.Screen
+        name='Sair'
+        component={Intranet}
+        options={{
+          headerShown: false
         }}
       />
     </Drawer.Navigator>
   );
 }
+
 
 function UserStack() {
   return (
