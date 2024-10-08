@@ -43,7 +43,7 @@ export default function MecanicoHome() {
                     > 
                         <View style={styles.menuLine} /> 
                         <Icon name="table-chart" color="#ccc" size={30} style={styles.icon} /> 
-                        <Text style={styles.iconText}>Histórico</Text> 
+                        <Text style={styles.iconText}>Montar orçamento</Text> 
                     </TouchableOpacity> 
                 </View> 
             </LinearGradient> 
