@@ -41,18 +41,6 @@ const osController = {
         // Calcular o total
         const total = moFormatado;
 
-        // Verificar se pecas foi fornecido e calcular o total
-        // if (pecas && Array.isArray(pecas)) {
-        //     for (const peca of pecas) {
-        //         if (peca.valor) {
-        //             const valorPeca = parseFloat(peca.valor.replace(',', '.'));
-        //             if (!isNaN(valorPeca)) {
-        //                 total += valorPeca; // Adiciona o valor da peça ao total
-        //             }
-        //         }
-        //     }
-        // }
-
         const ordemServico = new Os({ data: dataFormatada, status: statusCodigo, mo: moFormatado, total });
 
         try {
@@ -65,9 +53,7 @@ const osController = {
     },
 
 
-
-
-
+    
 
     async buscarOsPorVeiculos(req, res) {
         const idVei = req.params.idVei;
