@@ -15,6 +15,7 @@ import AdminHome from './src/pages/Adm/home';
 import AgendamentosMecanico from './src/pages/Mecanico/agendamentos';
 import HistoricoMecanico from './src/pages/Mecanico/historico';
 import NovoOrcamentoMecanico from './src/pages/Mecanico/novoOrcamento';
+import VisualizaOrcamentoMecanico from './src/pages/Mecanico/visualizaOrcamento';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -212,10 +213,46 @@ function MechanicDrawer() {
         }}
       />
       <Drawer.Screen 
+        name='HistoricoMecanico'
+        component={HistoricoMecanico}
+        options={{
+          title: 'Historico',
+          headerTintColor: "#fff",
+          headerShown: true,  // Alterar para true
+          headerStyle: {
+            backgroundColor: '#000'
+          },
+        }}
+      />
+      <Drawer.Screen 
         name="Agendamentos" 
         component={AgendamentosStackMecanic} 
         options={{
           title: 'Agendamentos',
+          headerTintColor: "#fff",
+          headerShown: true,  // Alterar para true
+          headerStyle: {
+            backgroundColor: '#000'
+          },
+        }}
+      />
+      <Drawer.Screen 
+        name="MontarOrcamento" 
+        component={NovoOrcamentoMecanico} 
+        options={{
+          title: 'Novo Orçamento',
+          headerTintColor: "#fff",
+          headerShown: true,  // Alterar para true
+          headerStyle: {
+            backgroundColor: '#000'
+          },
+        }}
+      />
+      <Drawer.Screen 
+        name="VisualizarOrcamentoMecanico" 
+        component={VisualizaOrcamentoMecanico} 
+        options={{
+          title: 'Visualizar Orçamentos',
           headerTintColor: "#fff",
           headerShown: true,  // Alterar para true
           headerStyle: {
