@@ -10,7 +10,7 @@ export default function Login() {
     const navigation = useNavigation();
 
     const handleLogin = () => {
-        const userType = "usuario"; // Atrelando o tipo de usuario a variavel
+        const userType = "mecanico"; // Atrelando o tipo de usuario a variavel
         login(userType) // Atrelando o valor ao contexto para requisição
     }
 

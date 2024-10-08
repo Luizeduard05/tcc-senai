@@ -13,11 +13,13 @@ import Agendamentos from './src/pages/Usuario/agendamentos';
 import MecanicoHome from './src/pages/Mecanico/home';
 import AdminHome from './src/pages/Adm/home';
 import AgendamentosMecanico from './src/pages/Mecanico/agendamentos';
+import HistoricoMecanico from './src/pages/Mecanico/historico';
+import NovoOrcamentoMecanico from './src/pages/Mecanico/novoOrcamento';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-// Stack para Agendamentos
+// Stack para Agendamentos do usuario
 function AgendamentosStack() {
   return (
     <Stack.Navigator>
@@ -35,7 +37,7 @@ function AgendamentosStack() {
   );
 }
 
-// Stack para Historico
+// Stack para Historico do usuario
 function HistoricoStack() {
   return (
     <Stack.Navigator>
@@ -147,12 +149,80 @@ function UserStack() {
   );
 }
 
+function AgendamentosStackMecanic() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="AgendamentosMecanico"
+        component={AgendamentosMecanico}
+        options={{
+          title: 'Agendamentos',
+          headerStyle: { backgroundColor: '#000' },
+          headerTintColor: '#fff',
+          headerShown: false
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+// Stack para Historico do usuario
+function HistoricoStackMecanico() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="HistoricoMecanico"
+        component={HistoricoMecanico}
+        options={{
+          title: 'Historico',
+          headerStyle: { backgroundColor: '#000' },
+          headerTintColor: '#fff',
+          headerShown: false
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+
+
 // Drawer para mecânico
 function MechanicDrawer() {
   return (
-    <Drawer.Navigator initialRouteName="MecanicoHome">
-      <Drawer.Screen name="Home" component={MecanicoHome} />
-      <Drawer.Screen name="Agendamentos" component={AgendamentosMecanico} />
+    <Drawer.Navigator 
+      initialRouteName="MecanicoHome"
+      screenOptions={{
+        drawerStyle: {
+          backgroundColor: 'black',
+        },
+        drawerLabelStyle: {
+          color: '#fff',
+        },
+      }}
+    >
+      <Drawer.Screen 
+        name="Home" 
+        component={MecanicoHome} 
+        options={{
+          headerStyle: {
+            backgroundColor: '#000',
+          },
+          headerTintColor: '#fff',
+          title: 'Início',
+        }}
+      />
+      <Drawer.Screen 
+        name="Agendamentos" 
+        component={AgendamentosStackMecanic} 
+        options={{
+          title: 'Agendamentos',
+          headerTintColor: "#fff",
+          headerShown: true,  // Alterar para true
+          headerStyle: {
+            backgroundColor: '#000'
+          },
+        }}
+      />
     </Drawer.Navigator>
   );
 }
@@ -161,7 +231,29 @@ function MechanicDrawer() {
 function MechanicStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="MechanicDrawer" component={MechanicDrawer} options={{ headerShown: false }} />
+      <Stack.Screen 
+      name="MechanicDrawer" 
+      component={MechanicDrawer} 
+      options={{ headerShown: false }} />
+      <Stack.Screen 
+        name="AgendamentosMecanico" 
+        component={AgendamentosMecanico} 
+        options={{
+          title: 'Agendamentos',
+          headerStyle: { backgroundColor: '#000' },
+          headerTintColor: '#fff',
+        }}
+      />
+      <Stack.Screen 
+        name="MontarOrcamentoMecanico" 
+        component={NovoOrcamentoMecanico} 
+        options={{
+          title: 'Novo orçamento',
+          headerStyle: { backgroundColor: '#000' },
+          headerTintColor: '#fff',
+        }}
+      />
+      
     </Stack.Navigator>
   );
 }

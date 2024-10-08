@@ -27,7 +27,7 @@ export default function MecanicoHome() {
                 <View style={styles.iconSection}> 
                     <TouchableOpacity 
                         style={styles.iconContainer} 
-                        onPress={() => navigation.navigate('Agendamentos')} 
+                        onPress={() => navigation.navigate('AgendamentosMecanico')} 
                     > 
                         <View style={styles.menuLine} /> 
                         <Icon name="event" color="#ccc" size={30} style={styles.icon} /> 
@@ -39,7 +39,7 @@ export default function MecanicoHome() {
 
                     <TouchableOpacity 
                         style={styles.iconContainer} 
-                        onPress={() => navigation.navigate('Historico')} 
+                        onPress={() => navigation.navigate('MontarOrcamentoMecanico')} 
                     > 
                         <View style={styles.menuLine} /> 
                         <Icon name="table-chart" color="#ccc" size={30} style={styles.icon} /> 
