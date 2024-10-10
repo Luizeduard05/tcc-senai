@@ -6,7 +6,7 @@ const Cadastro = () => {
 
             <section className="pai">
 
-                <section>
+                <section className="containerCad">
 
                     <span></span>
                     <span></span>

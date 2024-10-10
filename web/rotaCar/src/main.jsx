@@ -6,8 +6,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Home from './routes/Home.jsx'
 import Cadastro from './routes/Cadastro.jsx'
 import Intranet from './routes/Intranet.jsx'
-import Historico from './routes/historico.jsx'
-import Agendamento from './routes/historico.jsx'
+import Historico from './routes/Historico.jsx'
+// import Agendamento from './routes/historico.jsx'
 
 
 const router = createBrowserRouter([
@@ -20,7 +20,7 @@ const router = createBrowserRouter([
       { path: "/cadastro", element: <Cadastro /> },
       { path: "/intranet", element: <Intranet/> },
       { path: "/historico", element: <Historico/> },
-      { path: "/agendamento", element: <Agendamentos/> }
+      // { path: "/agendamento", element: <Agendamentos/> }
 
 
     ]

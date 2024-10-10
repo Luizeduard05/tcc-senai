@@ -13,7 +13,7 @@
     background: #000;
 }
 
-section {
+section .containerCad {
     position: absolute;
     width: 100vw;
     height: 100vh;
@@ -25,7 +25,7 @@ section {
     overflow: hidden;
 }
 
-section::before {
+section .containerCad::before {
     content: '';
     position: absolute;
     width: 100%;
@@ -44,7 +44,7 @@ section::before {
     }
 }
 
-section span {
+section .containerCad span {
     position: relative;
     display: block;
     width: calc(6.25vw - 2px);
@@ -54,12 +54,12 @@ section span {
     transition: 1.5s;
 }
 
-section span:hover {
+section .containerCad span:hover {
     background: #ff0000;
     transition: 0s;
 }
 
-section .signin {
+section .containerCad .signin {
     position: absolute;
     width: 400px;
     background: #222;
@@ -73,7 +73,7 @@ section .signin {
     box-shadow: 0 15px 35px rgba(0, 0, 0, 9);
 }
 
-section .signin .content {
+section .containerCad .signin .content {
     position: relative;
     width: 100%;
     display: flex;
@@ -83,25 +83,25 @@ section .signin .content {
     gap: 40px;
 }
 
-section .signin .content h2 {
+section .containerCad .signin .content h2 {
     font-size: 2em;
     color: rgb(255, 255, 255);
     text-transform: uppercase;
 }
 
-section .signin .content .form {
+section .containerCad .signin .content .form {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
 
-section .signin .content .form .inputBox {
+section .containerCad .signin .content .form .inputBox {
     position: relative;
     width: 100%;
 }
 
-section .signin .content .form .inputBox input {
+section .containerCad .signin .content .form .inputBox input {
     position: relative;
     width: 100%;
     background: #333;
@@ -114,7 +114,7 @@ section .signin .content .form .inputBox input {
     font-size: 1em;
 }
 
-section .signin .content .form .inputBox i {
+section .containerCad .signin .content .form .inputBox i {
     position: absolute;
     left: 0;
     padding: 15px 10px;
