@@ -27,7 +27,7 @@ export default function AdminHome() {
                 <View style={styles.iconSection}> 
                     <TouchableOpacity 
                         style={styles.iconContainer} 
-                        onPress={() => navigation.navigate('Agendamentos')} 
+                        onPress={() => navigation.navigate('AgendamentosADM')} 
                     > 
                         <View style={styles.menuLine} /> 
                         <Icon name="event" color="#ccc" size={30} style={styles.icon} /> 
@@ -39,11 +39,11 @@ export default function AdminHome() {
 
                     <TouchableOpacity 
                         style={styles.iconContainer} 
-                        onPress={() => navigation.navigate('Historico')} 
+                        onPress={() => navigation.navigate('NovoOrcamentoADM')} 
                     > 
                         <View style={styles.menuLine} /> 
                         <Icon name="table-chart" color="#ccc" size={30} style={styles.icon} /> 
-                        <Text style={styles.iconText}>Histórico</Text> 
+                        <Text style={styles.iconText}>Montar orçamento</Text> 
                     </TouchableOpacity> 
                 </View> 
             </LinearGradient> 
@@ -129,3 +129,4 @@ const styles = StyleSheet.create({
         marginTop: 5, 
     }, 
 }); 
+
