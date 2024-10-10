@@ -1,8 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Text, View, Platform, StyleSheet, StatusBar, Pressable, Image, TouchableOpacity, TextInput } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context";
-import CadastroUser from "../cadastroUser";
 import { useAuth } from "../../context/AuthContext";
 
 export default function Login() {
@@ -10,7 +8,7 @@ export default function Login() {
     const navigation = useNavigation();
 
     const handleLogin = () => {
-        const userType = "admin"; // Atrelando o tipo de usuario a variavel
+        const userType = "mecanico"; // Atrelando o tipo de usuario a variavel
         login(userType) // Atrelando o valor ao contexto para requisição
     }
 
