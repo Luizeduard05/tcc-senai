@@ -39,7 +39,7 @@ export default function AdminHome() {
 
                     <TouchableOpacity 
                         style={styles.iconContainer} 
-                        onPress={() => navigation.navigate('NovoOrcamentoADM')} 
+                        onPress={() => navigation.navigate('NovosOrcamentoADM')} 
                     > 
                         <View style={styles.menuLine} /> 
                         <Icon name="table-chart" color="#ccc" size={30} style={styles.icon} /> 

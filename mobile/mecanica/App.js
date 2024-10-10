@@ -89,13 +89,11 @@ function UserDrawer({ navigation }) { // Drawer para o usuário
 function UserStack() { // Stack para o usuario
   return (
     <Stack.Navigator>
-      {/* Tela principal com o Drawer */}
       <Stack.Screen
         name="UserDrawer"
         component={UserDrawer}
         options={{ headerShown: false }}
       />
-      {/* Telas empilhadas que terão o botão de voltar */}
       <Stack.Screen
         name="Agendamentos"
         component={Agendamentos}
@@ -264,7 +262,7 @@ function AdminDrawer() { // Drawer para administrador
         }}
       />
       <Drawer.Screen 
-        name="AgendamentosADM" 
+        name="AgendamentoADM" 
         component={AgendamentosADM} 
         options={{
           headerStyle: {
@@ -326,7 +324,10 @@ function AdminDrawer() { // Drawer para administrador
 function AdminStack() { // Stack de administrador
   return (
     <Stack.Navigator>
-      <Stack.Screen name="AdminDrawer" component={AdminDrawer} options={{ headerShown: false }} />
+      <Stack.Screen 
+        name="AdminDrawer" 
+        component={AdminDrawer} 
+        options={{ headerShown: false }} />
       <Stack.Screen 
         name="AgendamentosADM" 
         component={AgendamentosADM} 
@@ -337,7 +338,7 @@ function AdminStack() { // Stack de administrador
         }}
         />
       <Stack.Screen 
-        name="NovoOrcamentoADM" 
+        name="NovosOrcamentoADM" 
         component={NovoOrcamentoADM} 
         options={{
           title: 'Novo Orçamento',
