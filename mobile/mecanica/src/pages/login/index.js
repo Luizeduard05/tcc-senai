@@ -10,7 +10,7 @@ export default function Login() {
     const navigation = useNavigation();
 
     const handleLogin = () => {
-        const userType = "mecanico"; // Atrelando o tipo de usuario a variavel
+        const userType = "admin"; // Atrelando o tipo de usuario a variavel
         login(userType) // Atrelando o valor ao contexto para requisição
     }
 
@@ -19,7 +19,7 @@ export default function Login() {
     } else if (userType === "usuario") {
         navigation.navigate("UserDrawer");
     } else if (userType === "admin") {
-        // Redirecionar para a página de admin que ainda não existe.
+        navigation.navigate("AdminDrawer")
     }
 
     const navegaHome = () => {
