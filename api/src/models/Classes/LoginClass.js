@@ -7,7 +7,7 @@ class Login{
         this.perfil = pLog.perfil;
         this.login = pLog.login;
         this.senha = pLog.senha;
-        this.tbl_pessoa_id = (pLog.tbl_pessoa_id !== null || pLog.tbl_pessoa_id > 0) ? pLog.tbl_pessoa_id : null;
+        this.id_pessoa = (pLog.id_pessoa !== null || pLog.id_pessoa > 0) ? pLog.id_pessoa : null;
     }
     get Id(){return this.id;}
     set Id(value){this.id = value;}
@@ -21,25 +21,27 @@ class Login{
     get Senha(){return this.senha;}
     set Senha(value){this.senha=value;}
 
-    get Tbl_pessoa_id(){return this.tbl_pessoa_id;}
-    set Tbl_pessoa_id(value){this.tbl_pessoa_id = value;}
+    get Id_pessoa(){return this.id_pessoa;}
+    set Id_pessoa(value){this.id_pessoa = value;}
 
     novoRegistroLogin = async (idPessoa) => {
         const con = await conectarBancoDeDados();
         try {
             const hashedPassword = await bcrypt.hash(this.senha, 10); 
-            const login = await con.query(`insert into tbl_login (perfil, login, senha, tbl_pessoa_id) values (?,?,?,?)`,
+            const login = await con.query(`insert into tbl_login (perfil, login, senha, id_pessoa) values (?,?,?,?)`,
                 [this.perfil, this.login, hashedPassword, idPessoa]);
             return login[0].insertId;
         } catch (error) {
             throw new Error(`Erro ao registrar: ${error.message}`);
+        }finally{
+            con.release();
         }
     };
 
     static selectRegistroLogin = async (idPessoa) => {
         const con = await conectarBancoDeDados()
         try{
-            const [rows] = await con.query(`select * from tbl_login where tbl_pessoa_id=?`,
+            const [rows] = await con.query(`select * from tbl_login where id_pessoa=?`,
                 [idPessoa]);
                 return rows;
         }catch (error) {
@@ -50,7 +52,7 @@ class Login{
     static deleteRegistroLog = async (idLogin) => {
         const con = await conectarBancoDeDados();
         try {
-            const person = await con.query(`delete from tbl_login where tbl_pessoa_id = ?`,
+            const person = await con.query(`delete from tbl_login where id_pessoa = ?`,
                 [idLogin]);
             return person;
         } catch (error) {

@@ -11,7 +11,7 @@ class Endereco {
         this.numero = pEnd.numero;
         this.complemento = pEnd.complemento;
         this.cep = pEnd.cep;
-        this.tbl_pessoa_id = (pEnd.tbl_pessoa_id !== null || pEnd.tbl_pessoa_id > 0) ? pEnd.tbl_pessoa_id : null;
+        this.id_pessoa = (pEnd.id_pessoa !== null || pEnd.id_pessoa > 0) ? pEnd.id_pessoa : null;
     }
     get Id() { return this.id; }
     set Id(value) { this.id = value; }
@@ -34,19 +34,21 @@ class Endereco {
     get Estado() { return this.estado; }
     set Estado(value) { this.estado = value; }
 
-    get Tbl_pessoa_id() { return this.tbl_pessoa_id; }
-    set Tbl_pessoa_id(value) { this.tbl_pessoa_id = value; }
+    get Id_pessoa() { return this.id_pessoa; }
+    set Id_pessoa(value) { this.id_pessoa = value; }
 
     novoRegistroEnd = async (idPessoa) => {
 
         const con = await conectarBancoDeDados();
         try {  
-            const endereco = await con.query(`insert into tbl_endereco (logradouro, bairro, estado, numero, complemento, cep, tbl_pessoa_id) VALUES (?,?,?,?,?,?,?)`,
+            const endereco = await con.query(`insert into tbl_endereco (logradouro, bairro, estado, numero, complemento, cep, id_pessoa) VALUES (?,?,?,?,?,?,?)`,
                 [this.logradouro, this.bairro, this.estado, this.numero, this.complemento, this.cep, idPessoa]);
 
             return endereco[0].insertId;
         } catch (error) {
             throw new Error(`Erro ao registrar: ${error.message}`);
+        }finally{
+            con.release();
         }
     };
 
@@ -54,7 +56,7 @@ class Endereco {
 
         const con = await conectarBancoDeDados();
         try {
-            const person = await con.query(`delete from tbl_endereco where tbl_pessoa_id = ?`,
+            const person = await con.query(`delete from tbl_endereco where id_pessoa = ?`,
                 [idEndereco]);
             return person;
         } catch (error) {
@@ -65,7 +67,7 @@ class Endereco {
     atualizarRegistroEnd = async () => {
         const con = await conectarBancoDeDados();
         try {
-          await con.query(`UPDATE tbl_endereco SET logradouro = ?, bairro = ?, estado = ?, numero = ?, complemento = ?, cep = ? WHERE tbl_pessoa_id = ?`,
+          await con.query(`UPDATE tbl_endereco SET logradouro = ?, bairro = ?, estado = ?, numero = ?, complemento = ?, cep = ? WHERE id_pessoa = ?`,
             [this.logradouro, this.bairro, this.estado, this.numero, this.complemento, this.cep, this.id]);
         } catch (error) {
           throw new Error(`Erro ao atualizar: ${error.message}`);

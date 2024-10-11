@@ -64,7 +64,7 @@ const osController = {
 
         const con = await conectarBancoDeDados();
         try {
-            const [rows] = await con.query(`SELECT * FROM tbl_ordem_de_servico WHERE tbl_veiculo_id = ?`, [idVei]);
+            const [rows] = await con.query(`SELECT * FROM tbl_ordem_de_serviço WHERE id_veiculo = ?`, [idVei]);
             if (rows.length > 0) {
                 const dataFormatada = rows.map(servico => {
                     const dataUTC = new Date(servico.data);

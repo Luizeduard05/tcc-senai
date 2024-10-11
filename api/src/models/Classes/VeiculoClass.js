@@ -8,7 +8,7 @@ class Veiculo {
         this.marca = pVei.marca;
         this.ano = pVei.ano;
         this.modelo = pVei.modelo;
-        this.tbl_pessoa_id = pVei.tbl_pessoa_id ?? null;
+        this.id_pessoa = pVei.id_pessoa ?? null;
     }
 
     get Id() { return this.id; }
@@ -26,8 +26,8 @@ class Veiculo {
     get Modelo() { return this.modelo; }
     set Modelo(value) { this.modelo = value; }
 
-    get Tbl_pessoa_id() { return this.tbl_pessoa_id; }
-    set Tbl_pessoa_id(value) { this.tbl_pessoa_id = value; }
+    get Id_pessoa() { return this.id_pessoa; }
+    set Id_pessoa(value) { this.id_pessoa = value; }
 
     validarCampos() {
         const campos = {
@@ -49,7 +49,7 @@ class Veiculo {
         try {
             this.validarCampos();
             const result = await con.query(
-                `INSERT INTO tbl_veiculo (placa, marca, ano, modelo, tbl_pessoa_id) VALUES (?, ?, ?, ?, ?)`,
+                `INSERT INTO tbl_veiculo (placa, marca, ano, modelo, id_pessoa) VALUES (?, ?, ?, ?, ?)`,
                 [this.placa, this.marca, this.ano, this.modelo, idPessoa]
             );
             return result[0].insertId; 

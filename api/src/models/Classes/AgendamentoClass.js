@@ -5,9 +5,9 @@ class novoAgendamento {
         this.id = (pAge.id !== null || pAge.id > 0) ? pAge.id : null;
         this.data_e_hora = pAge.data_e_hora;
         this.observacao = pAge.observacao;
-        this.tbl_ordem_de_serviço_id = (pAge.tbl_ordem_de_serviço_id !== null || pAge.tbl_ordem_de_serviço_id > 0) ? pAge.tbl_ordem_de_serviço_id : null;
-        this.tbl_ordem_de_serviço_tbl_veiculo_id = (pAge.tbl_ordem_de_serviço_tbl_veiculo_id !== null || pAge.tbl_ordem_de_serviço_tbl_veiculo_id > 0) ? pAge.tbl_ordem_de_serviço_tbl_veiculo_id : null;
-        this.tbl_ordem_de_serviço_tbl_veiculo_tbl_pessoa_id = (pAge.tbl_ordem_de_serviço_tbl_veiculo_tbl_pessoa_id !== null || pAge.tbl_ordem_de_serviço_tbl_veiculo_tbl_pessoa_id > 0) ? pAge.tbl_ordem_de_serviço_tbl_veiculo_tbl_pessoa_id : null;
+        this.id_os = (pAge.id_os !== null || pAge.id_os > 0) ? pAge.id_os : null;
+        this.id_veiculo_os = (pAge.id_veiculo_os !== null || pAge.id_veiculo_os > 0) ? pAge.id_veiculo_os : null;
+        this.id_pessoa_veiculo_os = (pAge.id_pessoa_veiculo_os !== null || pAge.id_pessoa_veiculo_os > 0) ? pAge.id_pessoa_veiculo_os : null;
     }
     get Id() { return this.id; }
     set Id(value) { this.id = value; }
@@ -18,14 +18,14 @@ class novoAgendamento {
     get Observaçao() { return this.observacao; }
     set Observaçao(value) { this.observacao = value; }
 
-    get Tbl_ordem_de_servico_id() { return this.tbl_ordem_de_servico_id; }
-    set Tbl_ordem_de_servico_id(value) { this.tbl_ordem_de_servico_id = value; }
+    get Id_os() { return this.id_os; }
+    set Id_os(value) { this.id_os = value; }
 
-    // get Tbl_ordem_de_servico_tbl_veiculo_id() { return this.tbl_ordem_de_servico_tbl_veiculo_id; }
-    // set Tbl_ordem_de_servico_tbl_veiculo_id(value) { this.tbl_ordem_de_servico_tbl_veiculo_id = value; }
+    get Id_veiculo_os() { return this.id_veiculo_os; }
+    set Id_veiculo_os(value) { this.id_veiculo_os = value; }
 
-    // get Tbl_ordem_de_servico_tbl_veiculo_tbl_pessoa_id() { return this.tbl_ordem_de_servico_tbl_veiculo_tbl_pessoa_id; }
-    // set Tbl_ordem_de_servico_tbl_veiculo_tbl_pessoa_id(value) { this.tbl_ordem_de_servico_tbl_veiculo_tbl_pessoa_id = value; }
+    get Id_pessoa_veiculo_os() { return this.id_pessoa_veiculo_os; }
+    set Id_pessoa_veiculo_os(value) { this.id_pessoa_veiculo_os = value; }
 
     validarCampos() {
         const campos = {
@@ -40,13 +40,13 @@ class novoAgendamento {
         return true;
     }
 
-    novoRegistroAgendamento = async (idOS) => {
+    novoRegistroAgendamento = async (idOS, idVeiOs, idPessoaVeiOs) => {
         const con = await conectarBancoDeDados();
         try {
             this.validarCampos();
             const result = await con.query(
-                `INSERT INTO tbl_agendamento (data_e_hora, observacao, tbl_ordem_de_servico_id) VALUES (?, ?, ?)`,
-                [this.data_e_hora, this.observacao, idOS]
+                `INSERT INTO tbl_agendamento (data_e_hora, observacao, id_os, id_veiculo_os, id_pessoa_veiculo_os) VALUES (?, ?, ?, ?, ?)`,
+                [this.data_e_hora, this.observacao, idOS, idVeiOs, idPessoaVeiOs]
             );
             return result[0].insertId;
         } catch (error) {

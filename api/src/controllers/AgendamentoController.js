@@ -43,7 +43,7 @@ const agendamentoController = {
 
         const con = await conectarBancoDeDados();
         try {
-            const [rows] = await con.query(`SELECT * FROM tbl_agendamento WHERE tbl_ordem_de_servico_id = ?`, [idOS]);
+            const [rows] = await con.query(`SELECT * FROM tbl_agendamento WHERE id_os = ?`, [idOS]);
             if (rows.length > 0) {
                 const agendamentosFormatados = rows.map(agendamento => {
                     const dataUTC = new Date(agendamento.data_e_hora);
