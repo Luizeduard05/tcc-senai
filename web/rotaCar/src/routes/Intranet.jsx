@@ -25,7 +25,7 @@ const Intranet = () => {
               <button className={styles.button}>Agendamentos</button>
             </div>
            
-            <img className="carros" src={CarroCivic} alt="" />
+            <img className={styles.carros} src={CarroCivic} alt="" />
           </div>
         </div>
       </div>
