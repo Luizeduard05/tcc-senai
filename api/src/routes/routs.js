@@ -2,9 +2,12 @@ import { Router } from "express";
 import veiculoControllers from "../controllers/VeiculoController.js";
 import pessoaControllers from "../controllers/PessoaController.js";
 import OsController from "../controllers/OsController.js";
-import jwt from 'jsonwebtoken';
 import PecasController from "../controllers/PecasController.js";
 import agendamentoController from "../controllers/AgendamentoController.js";
+import ItemOs from "../models/Classes/ItemOs.js";
+import jwt from 'jsonwebtoken';
+import authMiddleware from "../../Middlewares/authMiddlewares.js";
+import ItemOsController from "../controllers/ItemOs.js";
 
 const router = Router();
 
@@ -29,6 +32,8 @@ const autenticarToken = (req, res, next) => {
 
 // rota para cadastrar uma pessoa 
 router.post('/usuarios', pessoaControllers.registroDeAdm);
+// Rotas protegidas (exige token)
+router.post('/adm/usuarios', authMiddleware, pessoaControllers.registroDeAdm); // Cadastro de ADM e MEC (exige token)
 // rota para buscar uma pessoa cadastrada
 router.get('/usuarios/:id', autenticarToken, pessoaControllers.selecionarUsuario);
 // rota para editar uma pessoa cadastrada
@@ -81,6 +86,13 @@ router.get('/pecas/:idPro', autenticarToken, PecasController.buscarPecas);
 router.put('/pecas/:id', autenticarToken, PecasController.editarPecas);
 // Rota para deletar PEÇAS 
 router.delete('/pecas/:id', autenticarToken, PecasController.deletarPecas);
+
+// ROTAS : INSERIR PEÇAS NA OS
+
+// rota para Cadastro de PEÇAS
+router.post('/item/', autenticarToken, ItemOsController.registroDePecasOS);
+// Rota para deletar PEÇAS 
+router.delete('/item/:id', autenticarToken, ItemOsController.deletarPecasOS);
 
 
 

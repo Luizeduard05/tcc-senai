@@ -35,6 +35,8 @@ class Pessoa {
             return person[0].insertId;
         } catch (error) {
             throw new Error(`Erro ao registrar: ${error.message}`);
+        }finally{
+            con.release();
         }
     };
     

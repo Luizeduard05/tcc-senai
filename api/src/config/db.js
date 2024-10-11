@@ -11,6 +11,7 @@ async function criarPoolDeConexoes() {
             user: 'root',
             password: '1234',
             waitForConnections: true,
+            connectionLimit: 100,
             multipleStatements: true
         });
     }
