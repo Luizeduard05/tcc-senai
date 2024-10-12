@@ -1,14 +1,11 @@
-import "./Cadastro.css"
+import './Login.css'
 
-const Cadastro = () => {
+const Login = () => {
     return (
         <>
-
-            <section className="pai">
-
-                <section className="containerCad">
-
-                    <span></span>
+            <section className='PaiLogin'>
+                <section className='conteinerLoginn'>
+                <span></span>
                     <span></span>
                     <span></span>
                     <span></span>
@@ -269,58 +266,24 @@ const Cadastro = () => {
                     <span></span>
                     <span></span>
 
-                    <div class="signin">
-                        <div class="content">
-                            <h2>olá, seja Bem vindo</h2>
-                            <h2></h2>
-                            <div className="form">
-                                <div className="input-left">
-                                    <div className="inputBox">
-                                        <input type="text" required />
-                                        <i>Nome</i>
-                                    </div>
-                                    <div className="inputBox">
-                                        <input type="number" required />
-                                        <i>cpf</i>
-                                    </div>
-                                    <div className="inputBox">
-                                        <input type="email" required />
-                                        <i>email</i>
-                                    </div>
-                                    <div className="inputBox">
-                                        <input type="text" required />
-                                        <i>logradouro</i>
-                                    </div>
-                                    <div className="inputBox">
-                                        <input type="text" required />
-                                        <i>bairro</i>
-                                    </div>
-                                    <div className="inputBox">
-                                        <input type="text" required />
-                                        <i>estado</i>
-                                    </div>
+                    <div className="loginSection">
+                        <div className="loginContent">
+                            <h2>Sign In</h2>
+                            <div className="loginForm">
+                                <div className="inputWrapper">
+                                    <input type="email" required />
+                                    <i>email</i>
                                 </div>
-                                <div className="input-right">
-                                    <div className="inputBox">
-                                        <input type="text" required />
-                                        <i>numero</i>
-                                    </div>
-                                    <div className="inputBox">
-                                        <input type="text" required />
-                                        <i>complemento</i>
-                                    </div>
-                                    <div className="inputBox">
-                                        <input type="number" required />
-                                        <i>cep</i>
-                                    </div>
-                                    <div className="inputBox">
-                                        <input type="number" required />
-                                        <i>telefone</i>
-                                    </div>
-                                    <div className="inputBox">
-                                        <input type="password" required />
-                                        <i>senha</i>
-                                    </div>
+                                <div className="inputWrapper">
+                                    <input type="password" required />
+                                    <i>senha</i>
+                                </div>
+                                <div className="loginLinks">
+                                    <a href="#">Forgot Password</a>
+                                    <a href="#">Signup</a>
+                                </div>
+                                <div className="inputWrapper">
+                                    <input type="submit" value="Login" />
                                 </div>
                             </div>
                         </div>
@@ -330,8 +293,9 @@ const Cadastro = () => {
             </section>
 
 
-        </>
-    );
-};
 
-export default Cadastro
+        </>
+    )
+}
+
+export default Login

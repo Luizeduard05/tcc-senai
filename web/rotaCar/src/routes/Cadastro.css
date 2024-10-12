@@ -89,12 +89,25 @@ section .containerCad .signin .content h2 {
     text-transform: uppercase;
 }
 
+/* Para a formatação em grid */
 section .containerCad .signin .content .form {
-    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Duas colunas */
+    gap: 25px;
+}
+
+.input-left, .input-right {
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
+
+@media (max-width: 900px) {
+    section .containerCad .signin .content .form {
+        grid-template-columns: 1fr; /* Apenas uma coluna em telas menores */
+    }
+}
+
 
 section .containerCad .signin .content .form .inputBox {
     position: relative;
