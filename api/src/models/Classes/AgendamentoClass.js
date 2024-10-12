@@ -45,7 +45,7 @@ class novoAgendamento {
         try {
             this.validarCampos();
             const result = await con.query(
-                `INSERT INTO tbl_agendamento (data_e_hora, observacao, id_os, id_veiculo_os, id_pessoa_veiculo_os) VALUES (?, ?, ?, ?, ?)`,
+                `INSERT INTO tbl_agendamento (data_e_hora, Observação, id_os, id_veiculo_os, id_pessoa_veiculo_os) VALUES (?, ?, ?, ?, ?)`,
                 [this.data_e_hora, this.observacao, idOS, idVeiOs, idPessoaVeiOs]
             );
             return result[0].insertId;
@@ -59,7 +59,7 @@ class novoAgendamento {
         try {
             this.validarCampos();
             await con.query(
-                `UPDATE tbl_agendamento SET data_e_hora = ?, observacao = ? WHERE id = ?`,
+                `UPDATE tbl_agendamento SET data_e_hora = ?, Observação = ? WHERE id = ?`,
                 [this.data_e_hora, this.observacao, this.id]
             );
         } catch (error) {
