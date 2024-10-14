@@ -4,10 +4,10 @@ import pessoaControllers from "../controllers/PessoaController.js";
 import OsController from "../controllers/OsController.js";
 import PecasController from "../controllers/PecasController.js";
 import agendamentoController from "../controllers/AgendamentoController.js";
-import ItemOs from "../models/Classes/ItemOs.js";
+import ItemOs from "../models/Classes/ItemOsClass.js";
 import jwt from 'jsonwebtoken';
 import authMiddleware from "../../Middlewares/authMiddlewares.js";
-import ItemOsController from "../controllers/ItemOs.js";
+import ItemOsController from "../controllers/ItemOsController.js";
 
 const router = Router();
 
@@ -57,9 +57,9 @@ router.delete('/veiculos/:id', autenticarToken, veiculoControllers.deletarVeicul
 // ROTAS : OS
 
 // rota para Cadastro de OS
-router.post('/Os/:idVei', autenticarToken, OsController.registroDeOS);
+router.post('/Os/:idVei/:idPessoaVei', autenticarToken, OsController.registroDeOS);
 // rota para Busca de OSs
-router.get('/Os/:idVei', autenticarToken, OsController.buscarOsPorVeiculos);
+router.get('/Os/:idVei/:idPessoaVei', autenticarToken, OsController.buscarOsPorVeiculos);
 // Rota para editar OS
 router.put('/Os/:id', autenticarToken, OsController.editarOS);
 // Rota para deletar OS 
@@ -68,9 +68,9 @@ router.delete('/Os/:id', autenticarToken, OsController.deletarOS);
 // ROTAS : AGENDAMENTO
 
 // rota para Cadastro de AGENDAMENTO
-router.post('/agendar/:idOS', autenticarToken, agendamentoController.registroDeAgendamento);
+router.post('/agendar/:idOS/:idVeiOs/:idPessoaVeiOs', autenticarToken, agendamentoController.registroDeAgendamento);
 // rota para Busca de AGENDAMENTO
-router.get('/agendar/:idOS', autenticarToken, agendamentoController.buscarAgendamentoPorPessoa);
+router.get('/agendar/:idOS/:idVeiOs/:idPessoaVeiOs', autenticarToken, agendamentoController.buscarAgendamentoPorPessoa);
 // Rota para editar AGENDAMENTO
 router.put('/agendar/:id', autenticarToken, agendamentoController.editarAgendamento);
 // Rota para deletar AGENDAMENTO 
@@ -90,7 +90,7 @@ router.delete('/pecas/:id', autenticarToken, PecasController.deletarPecas);
 // ROTAS : INSERIR PEÇAS NA OS
 
 // rota para Cadastro de PEÇAS
-router.post('/item/', autenticarToken, ItemOsController.registroDePecasOS);
+router.post('/item/:idPro/:idOS/:idVeiOs/:idPessoaVeiOs', autenticarToken, ItemOsController.registroDePecasOS);
 // Rota para deletar PEÇAS 
 router.delete('/item/:id', autenticarToken, ItemOsController.deletarPecasOS);
 

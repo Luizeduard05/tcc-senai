@@ -1,15 +1,20 @@
-import ItemOs from '../models/Classes/ItemOs.js';
+import ItemOs from '../models/Classes/ItemOsClass.js';
 import conectarBancoDeDados from '../config/db.js'
 
 const ItemOsController = {
     async registroDePecasOS(req, res) {
         const { quantidade } = req.body;
+        const idPro = req.params.idPro;
+        const idOS = req.params.idOS;
+        const idVeiOs = req.params.idVeiOs;
+        const idPessoaVeiOs = req.params.idPessoaVeiOs;
+
         if (!quantidade) {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
         }
-        const pecas = new Produtos({ quantidade });
+        const item = new ItemOs({ quantidade });
         try {
-            await pecas.novoRegistroPecas();
+            await item.adicionarPecaOs(idPro,idOS, idVeiOs, idPessoaVeiOs);
             return res.status(201).json({ message: 'Peça registrada com sucesso!' });
         } catch (error) {
             console.error(error);

@@ -5,8 +5,10 @@ const agendamentoController = {
     async registroDeAgendamento(req, res) {
         const { data_e_hora, observacao } = req.body;
         const idOS = req.params.idOS;
+        const idVeiOs = req.params.idVeiOs;
+        const idPessoaVeiOs = req.params.idPessoaVeiOs;
 
-        if (!data_e_hora || !observacao || !idOS) {
+        if (!data_e_hora || !observacao || !idOS || !idVeiOs || !idPessoaVeiOs) {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
         }
 
@@ -25,7 +27,7 @@ const agendamentoController = {
         const agendamento = new novoAgendamento({ data_e_hora: dataFormatada, observacao });
 
         try {
-            await agendamento.novoRegistroAgendamento(idOS);
+            await agendamento.novoRegistroAgendamento(idOS, idVeiOs, idPessoaVeiOs);
             return res.status(201).json({ message: 'Agendamento registrado com sucesso!' });
         } catch (error) {
             console.error(error);

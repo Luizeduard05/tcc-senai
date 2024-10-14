@@ -6,8 +6,8 @@ class Os {
         this.status = (pOs.status !== null || pOs.status != '') ? pOs.status : null;
         this.mo = pOs.mo;
         this.total = pOs.total;
-        this.id_veiculo = (pOs.id_veiculo !== null || pOs.id_veiculo > 0) ? pOs.id_veiculo : null;
-        this.id_pessoa_veiculo = (pOs.id_pessoa_veiculo !== null || pOs.id_pessoa_veiculo > 0) ? pOs.id_pessoa_veiculo : null;
+        this.id_veiculo = (pOs.id_veiculo !== null && pOs.id_veiculo > 0) ? pOs.id_veiculo : null;
+        this.id_pessoa_veiculo = (pOs.id_pessoa_veiculo !== null && pOs.id_pessoa_veiculo > 0) ? pOs.id_pessoa_veiculo : null;
     }
     get Id() { return this.id; }
     set Id(value) { this.id = value; }
