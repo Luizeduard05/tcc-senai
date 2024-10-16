@@ -1,13 +1,12 @@
 import { Text, View, Platform, StyleSheet, StatusBar, Pressable, Image } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from "@react-navigation/native";
 
 import carro1 from '../../assets/carro1.png';
 import carro2 from '../../assets/carro2.png'; 
-import { useNavigation, useRoute } from "@react-navigation/native";
 
 export default function Intranet() {
     const navigation = useNavigation();
-    // const useRoute = useRoute()
 
     const navegaLogin = () => {
         navigation.navigate('Login')
@@ -15,8 +14,6 @@ export default function Intranet() {
     const navegaCadastroUser = () => {
         navigation.navigate("CadastroUser")
     }
-
-
 
     return (
         <LinearGradient 
