@@ -1,14 +1,12 @@
-import styleCad from "./Cadastro.module.css"
+import { Link } from 'react-router-dom'
+import styleLogin from './Login.module.css'
 
-const Cadastro = () => {
+const Login = () => {
     return (
         <>
-
-            <section className={styleCad.pai}>
-
-                <section className={styleCad.containerCad}>
-
-                    <span></span>
+            <section className={styleLogin.PaiLogin}>
+                <section className={styleLogin.conteinerLoginn}>
+                <span></span>
                     <span></span>
                     <span></span>
                     <span></span>
@@ -269,58 +267,30 @@ const Cadastro = () => {
                     <span></span>
                     <span></span>
 
-                    <div className={styleCad.signin}>
-                        <div className={styleCad.content}>
-                            <h2>olá, seja Bem vindo</h2>
-                            <h2></h2>
-                            <div className={styleCad.form}>
-                                <div className={styleCad.inputLeft}>
-                                    <div className={styleCad.inputBox}>
-                                        <input type="text" required />
-                                        <i>Nome</i>
-                                    </div>
-                                    <div className={styleCad.inputBox}>
-                                        <input type="number" required />
-                                        <i>cpf</i>
-                                    </div>
-                                    <div className={styleCad.inputBox}>
-                                        <input type="email" required />
-                                        <i>email</i>
-                                    </div>
-                                    <div className={styleCad.inputBox}>
-                                        <input type="text" required />
-                                        <i>logradouro</i>
-                                    </div>
-                                    <div className={styleCad.inputBox}>
-                                        <input type="text" required />
-                                        <i>bairro</i>
-                                    </div>
-                                    <div className={styleCad.inputBox}>
-                                        <input type="text" required />
-                                        <i>estado</i>
-                                    </div>
+                    <div className={styleLogin.loginSection}>
+                        <div className={styleLogin.loginContent}>
+                            <h2>Sign In</h2>
+                            <div className={styleLogin.loginForm}>
+                                <div className={styleLogin.inputWrapper}>
+                                    <input type="email" required />
+                                    <i>email</i>
                                 </div>
-                                <div className={styleCad.inputRight}>
-                                    <div className={styleCad.inputBox}>
-                                        <input type="text" required />
-                                        <i>numero</i>
-                                    </div>
-                                    <div className={styleCad.inputBox}>
-                                        <input type="text" required />
-                                        <i>complemento</i>
-                                    </div>
-                                    <div className={styleCad.inputBox}>
-                                        <input type="number" required />
-                                        <i>cep</i>
-                                    </div>
-                                    <div className={styleCad.inputBox}>
-                                        <input type="number" required />
-                                        <i>telefone</i>
-                                    </div>
-                                    <div className={styleCad.inputBox}>
-                                        <input type="password" required />
-                                        <i>senha</i>
-                                    </div>
+                                <div className={styleLogin.inputWrapper}>
+                                    <input type="password" required />
+                                    <i>senha</i>
+                                </div>
+                                <div className={styleLogin.loginLinks}>
+                                    <a href="#">Forgot Password</a>
+                                    <Link to={"/cadastro"}>
+                                        Signup
+                                    </Link>
+                                    
+                                </div>
+                                <div className={styleLogin.inputWrapper}>
+                                    <Link to={"/intranet"}>
+                                    <input type="submit" value="Login" />
+                                    </Link>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -330,8 +300,9 @@ const Cadastro = () => {
             </section>
 
 
-        </>
-    );
-};
 
-export default Cadastro
+        </>
+    )
+}
+
+export default Login
