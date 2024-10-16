@@ -1,0 +1,57 @@
+.container {
+    background-color: #000;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    padding: 20px;
+}
+
+.history-wrapper {
+    background-color: #1a1a1a;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border: 1px solid #ff0000;
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+}
+
+.historico h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #ff0000;
+}
+
+.logo img {
+    margin: 20px 0;
+    max-width: 150px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th,
+table td {
+    border: 1px solid #fff;
+    padding: 12px;
+    text-align: center;
+}
+
+table th {
+    background-color: #ff0000;
+    color: #fff;
+}
+
+table tr:nth-child(even) {
+    background-color: #333;
+}
+
+table tr:hover {
+    background-color: #ff0000;
+}

@@ -2,97 +2,106 @@ import Pessoa from "../models/Classes/PessoaClass.js";
 import Telefone from "../models/Classes/TelefoneClass.js";
 import Endereco from '../models/Classes/EnderecoClass.js';
 import Login from "../models/Classes/LoginClass.js";
-import Veiculo from "../models/Classes/VeiculoClass.js";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
-import e from "express";
+
 
 
 const pessoaControllers = {
 
-  //Cadastro de usuarios
-  registroDeUsuario: async (req, res) => {
+  //Cadastro de usuarios ADM
+  registroDeAdm: async (req, res) => {
     try {
-      // Desestruturação dos dados do corpo da requisição
       const { nome, cpf, email, tipo, logradouro, bairro, estado, numero, complemento, cep, telefone, senha } = req.body;
-      // Definir perfil igual ao tipo e login igual ao email
-      const perfil = tipo;
-      const login = email;
-      const personObj = new Pessoa({ id: null, nome, cpf, email, tipo });
+      console.log("chegou aki")
+      // Definir o tipo de usuário como CLI (Cliente) se o campo tipo não for enviado
+      const tipoUsuario = tipo ? tipo : 'CLI';
+  
+      // Se o tipo for ADM
+      if (tipoUsuario === 'ADM') {
+        console.log("tipo de usuário sendo cadastrado é ADM")
+        // Verifica se há um token de ADM ou se o ADM está se cadastrando pela primeira vez (sem token)
+        if (req.user && req.user.perfil !== 'ADM') {
+          // Caso o token exista mas o usuário não seja ADM, bloqueia a requisição
+          return res.status(403).json({ message: 'Apenas administradores logados podem registrar outros administradores.' });
+        }
+        // Se não houver token, é permitido que o próprio ADM se registre
+      }
+  
+      // Se o tipo for MEC, o cadastro só é permitido por um administrador logado
+      if (tipoUsuario === 'MEC') {
+        console.log("tipo de usuário sendo cadastrado é Mecanico")
+        if (!req.user || req.user.perfil !== 'ADM') {
+          console.log("usuário tentando criar mecanico não é adm")
+          return res.status(403).json({ message: 'Apenas administradores logados podem registrar mecânicos.' });
+        }
+      }
+  
+      // Validar tipo (apenas ADM, MEC ou CLI são permitidos)
+      if (!['ADM', 'MEC', 'CLI'].includes(tipoUsuario)) {
+        return res.status(400).json({ message: 'Tipo de usuário inválido. Permitido apenas ADM, MEC ou CLI.' });
+      }
+  
+      // Criar objetos
+      const personObj = new Pessoa({ id: null, nome, cpf, email, tipo: tipoUsuario });
       const enderecoObj = new Endereco({ id: null, logradouro, bairro, estado, numero, complemento, cep });
       const telefoneObj = new Telefone({ id: null, telefone });
-      const loginObj = new Login({ id: null,perfil, login, senha});
+      const loginObj = new Login({ id: null, perfil: tipoUsuario, login: email, senha });
+
       // Validação de campos
       if (!personObj.validarCampos() || !enderecoObj.validarCampos() || !telefoneObj.validarCampos() || !loginObj.validarCampos()) {
-        console.log(`O arquivo informado possui informações faltantes`);
-        return res.json({ message: `O arquivo informado possui informações faltantes` });
+        return res.status(400).json({ message: 'O arquivo informado possui informações faltantes.' });
       }
+  
+      // Registro da pessoa
       const idPessoa = await personObj.novoRegistroPessoa();
       if (idPessoa != null && idPessoa > 0) {
         const insertIdEnd = await enderecoObj.novoRegistroEnd(idPessoa);
         if (!insertIdEnd) {
           await personObj.deleteRegistroPessoa(idPessoa);
-          return res.json({ cadastroMessage: `Usuário não foi registrado` });
+          
+          return res.status(500).json({ message: 'Erro ao registrar o usuário.' });
         }
+  
         const insertIdTel = await telefoneObj.novoRegistroTel(idPessoa);
         if (!insertIdTel) {
           await personObj.deleteRegistroPessoa(idPessoa);
           await enderecoObj.deleteRegistroEnd(insertIdEnd);
-          return res.json({ cadastroMessage: `Usuário não foi registrado` });
+          return res.status(500).json({ message: 'Erro ao registrar o usuário.' });
         }
-        const insertIdLog = await loginObj.novoRegistroLogin(idPessoa);
+  
+        const insertIdLog = await loginObj.novoRegistroLogin(idPessoa);       
         if (!insertIdLog) {
           await personObj.deleteRegistroPessoa(idPessoa);
           await telefoneObj.deleteRegistroTel(insertIdTel);
           await enderecoObj.deleteRegistroEnd(insertIdEnd);
-          return res.json({ cadastroMessage: `Usuário não foi registrado` });
+          return res.status(500).json({ message: 'Erro ao registrar o usuário.' });
         }
-        return res.json({ cadastroMessage: `Usuário registrado com sucesso` });
+  
+        // Retorna resposta de sucesso
+        return res.json({ message: 'Usuário registrado com sucesso.' });
       } else {
-        return res.json({ cadastroMessage: `Usuário não foi registrado` });
+        return res.status(500).json({ message: 'Erro ao registrar o usuário.' });
       }
     } catch (e) {
       console.error(e);
-      return res.json({ cadastroMessage: `Usuário não foi registrado, motivo: ${e.message}` });
+      return res.status(500).json({ message: `Erro ao registrar o usuário, motivo: ${e.message}` });
     }
   },
+  
 
-  //Cadastro de veiculos
-  registroDeVeiculo: async (req, res) => {
-    try {
-      const idPessoa = req.params.idPessoa;
-      const { placa, marca, modelo, ano } = req.body;
-      const veiculoObj = new Veiculo({ id: null, placa, marca, modelo, ano, idPessoa });
-      // Validação de campos
-      if (!veiculoObj.validarCampos()) {
-        console.log(`O arquivo informado possui informações faltantes`);
-        return res.json({ message: `O arquivo informado possui informações faltantes` });
-      }
-
-      // Passando o idPessoa como parâmetro para o método
-      const idVeiculo = await veiculoObj.novoRegistroVeiculo(idPessoa);
-      res.json({ message: "Veículo registrado com sucesso!", idVeiculo });
-
-    } catch (e) {
-      return res.json({ cadastroMessage: `Veiculo não foi registrado, motivo: ${e.message}` });
-    }
-  },
-
-  //Trazer usuario pra tela atraves do Id da tbl_pessoa
   selecionarUsuario: async (req, res) => {
     try {
-      const id = req.params.id; // O ID do usuário a ser buscado
+      const id = req.params.id;
       console.log(`Buscando usuário com ID: ${id}`);
 
-      // Chamando o método da classe Pessoa
       const result = await Pessoa.selectRegistroPessoa(id);
 
-      // Verifica se a consulta retornou dados
       if (result.length > 0) {
         return res.json({
           selectMessage: `Usuário localizado`,
-          person: result[0] // Primeiro registro retornado da consulta
+          person: result[0]
         });
       } else {
         return res.json({ selectMessage: `Usuário não encontrado` });
@@ -103,18 +112,40 @@ const pessoaControllers = {
     }
   },
 
+  editarUsuario: async (req, res) => {
+    try {
+      const id = req.params.id;
+      const { nome, cpf, email, tipo, logradouro, bairro, estado, numero, complemento, cep, telefone } = req.body;
+
+      if (!nome || !cpf || !email || !tipo || !logradouro || !bairro || !estado || !numero || !cep || !telefone) {
+        return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
+      }
+
+      const pessoa = new Pessoa({ id, nome, cpf, email, tipo });
+      await pessoa.atualizarRegistroPessoa();
+
+      const endereco = new Endereco({ id, logradouro, bairro, estado, numero, complemento, cep });
+      await endereco.atualizarRegistroEnd();
+
+      const telefoneObj = new Telefone({ id, telefone });
+      await telefoneObj.atualizarRegistroTel();
+
+      return res.json({ message: 'Usuário atualizado com sucesso.' });
+    } catch (e) {
+      console.error(e);
+      return res.status(500).json({ message: `Erro ao atualizar usuário, motivo: ${e.message}` });
+    }
+  },
+
 
   deletarUsuario: async (req, res) => {
     try {
       const id = req.params.id;
       const deletar = new Pessoa(id);
-      // verificar se o usuário existe
       const usuarioExistente = await Pessoa.selectRegistroPessoa(id);
       if (!usuarioExistente || usuarioExistente.length === 0) {
         return res.json({ deletMessage: `Usuário não encontrado` });
       }
-
-      // Chama a função para deletar o registro
       await deletar.deleteRegistroPessoa(id);
 
       return res.json({ deletMessage: `Usuário deletado com sucesso` });
@@ -127,26 +158,33 @@ const pessoaControllers = {
   loginUsuario: async (req, res) => {
     try {
       const { login, senha } = req.body;
-
-      // Verifica se o usuário existe
+      console.log(login,senha)
+  
       const usuario = await Login.selecionarUsuarioPorLogin(login);
       if (!usuario || usuario.length === 0) {
         return res.status(401).json({ message: 'Credenciais inválidas' });
       }
-      // Verifica a senha
+  
       const senhaValida = await bcrypt.compare(senha, usuario[0].senha);
       if (!senhaValida) {
         return res.status(401).json({ message: 'Credenciais inválidas' });
       }
+  
       dotenv.config();
-      // Gera o token
-      const token = jwt.sign({ id: usuario[0].tbl_pessoa_id }, process.env.JWT_SECRET, { expiresIn: '2h' });
+  
+      const token = jwt.sign({ 
+        id: usuario[0].tbl_pessoa_id, 
+        perfil: usuario[0].perfil 
+      }, process.env.JWT_SECRET, { expiresIn: '2h' });
+      
       return res.json({ token });
     } catch (e) {
       console.error(e);
       return res.status(500).json({ message: 'Erro ao fazer login' });
     }
   },
+  
+
 };
 
 export default pessoaControllers;
