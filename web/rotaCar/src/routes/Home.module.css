@@ -114,7 +114,7 @@ a:hover {
     font-family: poppins, sans-serif;
 }
 
-.carro-container {
+.carrocontainer{
     width: 60%;
     position: absolute;
     bottom: 27px;

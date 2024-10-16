@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -96,7 +97,7 @@ section .containerCad .signin .content .form {
     gap: 25px;
 }
 
-.input-left, .input-right {
+.inputLeft, .inputRight {
     display: flex;
     flex-direction: column;
     gap: 25px;

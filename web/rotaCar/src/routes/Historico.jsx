@@ -1,5 +1,5 @@
 import stylesH from "./Historico.module.css";
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import logoCarro from "../assets/logoCarro.png";
 
 const Historico = () => {
