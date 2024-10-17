@@ -114,7 +114,7 @@ a:hover {
     font-family: poppins, sans-serif;
 }
 
-.carrocontainer{
+.carro-container{
     width: 60%;
     position: absolute;
     bottom: 27px;
@@ -315,7 +315,6 @@ button:active {
     background-color: #6f1223;
     border-radius: 14px;
 }
-
 
 .hidden {
     display: none;

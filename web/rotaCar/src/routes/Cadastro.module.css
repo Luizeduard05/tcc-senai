@@ -62,7 +62,7 @@ section .containerCad span:hover {
 
 section .containerCad .signin {
     position: absolute;
-    width: 400px;
+    width: 629px;
     background: #222;
     z-index: 1000;
     display: flex;
@@ -93,8 +93,9 @@ section .containerCad .signin .content h2 {
 /* Para a formatação em grid */
 section .containerCad .signin .content .form {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Duas colunas */
+    grid-template-columns: repeat(2, 1fr);
     gap: 25px;
+    width: 104%;
 }
 
 .inputLeft, .inputRight {
@@ -188,4 +189,13 @@ input[type="submit"]:active {
         width: calc(20vw - 2px);
         height: calc(20vw - 2px);
     }
+}
+
+.buttonCad{
+
+}
+
+.Cepcontent{
+    display: flex;
+    gap: 21px;
 }
