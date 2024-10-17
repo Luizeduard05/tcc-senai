@@ -12,14 +12,11 @@ const agendamentoController = {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
         }
 
-        // Função para formatar a data e hora
         const formatarDataEHora = (data_e_hora) => {
-            const partes = data_e_hora.split(' '); // Divide data e hora
-            const dataPartes = partes[0].split('/'); // Pega apenas a parte da data
-            const horaPartes = partes[1].split(':').slice(0, 2).join(':'); // Pega apenas horas e minutos
-            // Formata a data para YYYY-MM-DD
+            const partes = data_e_hora.split(' ');
+            const dataPartes = partes[0].split('/'); 
+            const horaPartes = partes[1].split(':').slice(0, 2).join(':'); 
             const dataFormatada = `${dataPartes[2]}-${dataPartes[1]}-${dataPartes[0]}`;
-            // Retorna a data formatada com a hora
             return `${dataFormatada} ${horaPartes}`;
         };
         const dataFormatada = formatarDataEHora(data_e_hora);
@@ -50,7 +47,6 @@ const agendamentoController = {
                 const agendamentosFormatados = rows.map(agendamento => {
                     const dataUTC = new Date(agendamento.data_e_hora);
 
-                    // Formatação da data e hora para o formato desejado
                     const opcoes = {
                         year: 'numeric',
                         month: '2-digit',
@@ -61,8 +57,8 @@ const agendamentoController = {
                     };
 
                     const dataLocal = dataUTC.toLocaleString('pt-BR', opcoes);
-                    const [data, hora] = dataLocal.split(', '); // Separa data e hora
-                    const [dia, mes, ano] = data.split('/'); // Separa dia, mês e ano
+                    const [data, hora] = dataLocal.split(', '); 
+                    const [dia, mes, ano] = data.split('/');
 
                     return {
                         ...agendamento,
@@ -88,14 +84,11 @@ const agendamentoController = {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
         }
 
-        // Função para formatar a data e hora
         const formatarDataEHora = (data_e_hora) => {
-            const partes = data_e_hora.split(' '); // Divide data e hora
-            const dataPartes = partes[0].split('/'); // Pega apenas a parte da data
-            const horaPartes = partes[1].split(':').slice(0, 2).join(':'); // Pega apenas horas e minutos
-            // Formata a data para YYYY-MM-DD
+            const partes = data_e_hora.split(' '); 
+            const dataPartes = partes[0].split('/'); 
+            const horaPartes = partes[1].split(':').slice(0, 2).join(':'); 
             const dataFormatada = `${dataPartes[2]}-${dataPartes[1]}-${dataPartes[0]}`;
-            // Retorna a data formatada com a hora
             return `${dataFormatada} ${horaPartes}`;
         };
         const dataFormatada = formatarDataEHora(data_e_hora);
