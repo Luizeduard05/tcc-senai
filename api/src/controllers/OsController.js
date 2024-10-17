@@ -6,6 +6,7 @@ const osController = {
     async registroDeOS(req, res) {
         const { data, status, mo } = req.body;
         const idVei = req.params.idVei;
+        const idPessoaVei = req.params.idPessoaVei;
 
         if (!data || !status || !mo) {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
@@ -44,7 +45,7 @@ const osController = {
         const ordemServico = new Os({ data: dataFormatada, status: statusCodigo, mo: moFormatado, total });
 
         try {
-            await ordemServico.novoRegistroOs(idVei);
+            await ordemServico.novoRegistroOs(idVei, idPessoaVei);
             return res.status(201).json({ message: 'OS registrada com sucesso!' });
         } catch (error) {
             console.error('Erro ao registrar OS:', error);
@@ -57,14 +58,15 @@ const osController = {
 
     async buscarOsPorVeiculos(req, res) {
         const idVei = req.params.idVei;
+        const idPessoaVei = req.params.idPessoaVei;
 
-        if (!idVei) {
+        if (!idVei || !idPessoaVei) {
             return res.status(400).json({ message: 'ID do veiculo é obrigatório.' });
         }
 
         const con = await conectarBancoDeDados();
         try {
-            const [rows] = await con.query(`SELECT * FROM tbl_ordem_de_servico WHERE tbl_veiculo_id = ?`, [idVei]);
+            const [rows] = await con.query(`SELECT * FROM tbl_ordem_de_serviço WHERE id_veiculo = ?`, [idVei]);
             if (rows.length > 0) {
                 const dataFormatada = rows.map(servico => {
                     const dataUTC = new Date(servico.data);

@@ -4,7 +4,8 @@ import "./Home.css";
 import logoCarro from "../assets/logoCarro.png";
 import CarrosImg from "../assets/carros-imagem.png";
 import boschLogo from "../assets/Bosch-Logo-2002.png";
-import imgsusp from "../assets/imgsusp.png";
+import { Link } from "react-router-dom";
+
 
 const Home = () => {
     useEffect(() => {
@@ -41,9 +42,9 @@ const Home = () => {
                                 <img src={logoCarro} alt="" />
                             </div>
                             <div className="textoSuperior">
-                                <a href="">
+                                <Link to="/login">
                                     <p> login</p>
-                                </a>
+                                </Link>
                                 <a href="">
                                     <p>saiba mais</p>
                                 </a>
@@ -108,143 +109,143 @@ const Home = () => {
 
             <section className="outrosServicos">
 
-                <div class="container1">
-                    <div class="content-inner">
-                        <div class="content-front">
-                            <div class="cf-inner">
-                                <div class="bg"></div>
-                                <div class="overlay"></div>
-                                <div class="inner">
-                                    <h2>"Suspensão"</h2>
+                <div className="container1">
+                    <div className="content-inner">
+                        <div className="content-front">
+                            <div className="cf-inner">
+                                <div className="bg"></div>
+                                <div className="overlay"></div>
+                                <div className="inner">
+                                    <h2>Suspensão</h2>
                                     <h4>Lorem ipsum dolor sit amet</h4>
                                 </div>
-                                <div class="serv-num">03</div>
+                                <div className="serv-num">03</div>
                             </div>
                         </div>
-                        <div class="content-back">
-                            <div class="cf-inner">
-                                <div class="inner">
-                                    <div class="dec-icon">
-                                        <i class="fas fa-bomb"></i>
+                        <div className="content-back">
+                            <div className="cf-inner">
+                                <div className="inner">
+                                    <div className="dec-icon">
+                                        <i className="fas fa-bomb"></i>
                                     </div>
-                                    <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar."</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="content-inner">
-                        <div class="content-front">
-                            <div class="cf-inner">
-                                <div class="bg"></div>
-                                <div class="overlay"></div>
-                                <div class="inner">
-                                    <h2>"Suspensão"</h2>
+                    <div className="content-inner">
+                        <div className="content-front">
+                            <div className="cf-inner">
+                                <div className="bg"></div>
+                                <div className="overlay"></div>
+                                <div className="inner">
+                                    <h2>Suspensão</h2>
                                     <h4>Lorem ipsum dolor sit amet</h4>
                                 </div>
-                                <div class="serv-num">03</div>
+                                <div className="serv-num">03</div>
                             </div>
                         </div>
-                        <div class="content-back">
-                            <div class="cf-inner">
-                                <div class="inner">
-                                    <div class="dec-icon">
-                                        <i class="fas fa-bomb"></i>
+                        <div className="content-back">
+                            <div className="cf-inner">
+                                <div className="inner">
+                                    <div className="dec-icon">
+                                        <i className="fas fa-bomb"></i>
                                     </div>
-                                    <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar."</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="content-inner">
-                        <div class="content-front">
-                            <div class="cf-inner">
-                                <div class="bg"></div>
-                                <div class="overlay"></div>
-                                <div class="inner">
-                                    <h2>"Suspensão"</h2>
+                    <div className="content-inner">
+                        <div className="content-front">
+                            <div className="cf-inner">
+                                <div className="bg"></div>
+                                <div className="overlay"></div>
+                                <div className="inner">
+                                    <h2>Suspensão</h2>
                                     <h4>Lorem ipsum dolor sit amet</h4>
                                 </div>
-                                <div class="serv-num">03</div>
+                                <div className="serv-num">03</div>
                             </div>
                         </div>
-                        <div class="content-back">
-                            <div class="cf-inner">
-                                <div class="inner">
-                                    <div class="dec-icon">
-                                        <i class="fas fa-bomb"></i>
+                        <div className="content-back">
+                            <div className="cf-inner">
+                                <div className="inner">
+                                    <div className="dec-icon">
+                                        <i className="fas fa-bomb"></i>
                                     </div>
-                                    <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar."</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="container2">
-                    <div class="content-inner">
-                        <div class="content-front">
-                            <div class="cf-inner">
-                                <div class="bg"></div>
-                                <div class="overlay"></div>
-                                <div class="inner">
-                                    <h2>"Suspensão"</h2>
+                    <div className="content-inner">
+                        <div className="content-front">
+                            <div className="cf-inner">
+                                <div className="bg"></div>
+                                <div className="overlay"></div>
+                                <div className="inner">
+                                    <h2>Suspensão</h2>
                                     <h4>Lorem ipsum dolor sit amet</h4>
                                 </div>
-                                <div class="serv-num">03</div>
+                                <div className="serv-num">03</div>
                             </div>
                         </div>
-                        <div class="content-back">
-                            <div class="cf-inner">
-                                <div class="inner">
-                                    <div class="dec-icon">
-                                        <i class="fas fa-bomb"></i>
+                        <div className="content-back">
+                            <div className="cf-inner">
+                                <div className="inner">
+                                    <div className="dec-icon">
+                                        <i className="fas fa-bomb"></i>
                                     </div>
-                                    <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar."</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="content-inner">
-                        <div class="content-front">
-                            <div class="cf-inner">
-                                <div class="bg"></div>
-                                <div class="overlay"></div>
-                                <div class="inner">
-                                    <h2>"Suspensão"</h2>
+                    <div className="content-inner">
+                        <div className="content-front">
+                            <div className="cf-inner">
+                                <div className="bg"></div>
+                                <div className="overlay"></div>
+                                <div className="inner">
+                                    <h2>Suspensão</h2>
                                     <h4>Lorem ipsum dolor sit amet</h4>
                                 </div>
-                                <div class="serv-num">03</div>
+                                <div className="serv-num">03</div>
                             </div>
                         </div>
-                        <div class="content-back">
-                            <div class="cf-inner">
-                                <div class="inner">
-                                    <div class="dec-icon">
-                                        <i class="fas fa-bomb"></i>
+                        <div className="content-back">
+                            <div className="cf-inner">
+                                <div className="inner">
+                                    <div className="dec-icon">
+                                        <i className="fas fa-bomb"></i>
                                     </div>
-                                    <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar."</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="content-inner">
-                        <div class="content-front">
-                            <div class="cf-inner">
-                                <div class="bg"></div>
-                                <div class="overlay"></div>
-                                <div class="inner">
-                                    <h2>"Suspensão"</h2>
+                    <div className="content-inner">
+                        <div className="content-front">
+                            <div className="cf-inner">
+                                <div className="bg"></div>
+                                <div className="overlay"></div>
+                                <div className="inner">
+                                    <h2>Suspensão</h2>
                                     <h4>Lorem ipsum dolor sit amet</h4>
                                 </div>
-                                <div class="serv-num">03</div>
+                                <div className="serv-num">03</div>
                             </div>
                         </div>
-                        <div class="content-back">
-                            <div class="cf-inner">
-                                <div class="inner">
-                                    <div class="dec-icon">
-                                        <i class="fas fa-bomb"></i>
+                        <div className="content-back">
+                            <div className="cf-inner">
+                                <div className="inner">
+                                    <div className="dec-icon">
+                                        <i className="fas fa-bomb"></i>
                                     </div>
-                                    <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar."</p>
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar.</p>
                                 </div>
                             </div>
                         </div>

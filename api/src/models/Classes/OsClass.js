@@ -6,8 +6,8 @@ class Os {
         this.status = (pOs.status !== null || pOs.status != '') ? pOs.status : null;
         this.mo = pOs.mo;
         this.total = pOs.total;
-        this.tbl_vaiculo_id = (pOs.tbl_vaiculo_id !== null || pOs.tbl_vaiculo_id > 0) ? pOs.tbl_vaiculo_id : null;
-        this.tbl_vaiculo_tbl_pessoa_id = (pOs.tbl_vaiculo_tbl_pessoa_id !== null || pOs.tbl_vaiculo_tbl_pessoa_id > 0) ? pOs.tbl_vaiculo_tbl_pessoa_id : null;
+        this.id_veiculo = (pOs.id_veiculo !== null && pOs.id_veiculo > 0) ? pOs.id_veiculo : null;
+        this.id_pessoa_veiculo = (pOs.id_pessoa_veiculo !== null && pOs.id_pessoa_veiculo > 0) ? pOs.id_pessoa_veiculo : null;
     }
     get Id() { return this.id; }
     set Id(value) { this.id = value; }
@@ -24,11 +24,11 @@ class Os {
     get Total() { return this.total; }
     set Total(value) { this.total = value; }
 
-    get Tbl_veiculo_id() { return this.tbl_veiculo_id; }
-    set Tbl_veiculo_id(value) { this.tbl_veiculo_id = value; }
+    get Id_veiculo() { return this.id_veiculo; }
+    set Id_veiculo(value) { this.id_veiculo = value; }
 
-    // get Tbl_vaiculo_tbl_pessoa_id(){return this.tbl_vaiculo_tbl_pessoa_id;}
-    // set Tbl_vaiculo_tbl_pessoa_id(value){this.tbl_vaiculo_tbl_pessoa_id = value;}
+    get Id_pessoa_veiculo(){return this.id_pessoa_veiculo;}
+    set Id_pessoa_veiculo(value){this.id_pessoa_veiculo = value;}
 
     validarCampos() {
         const campos = {
@@ -40,13 +40,13 @@ class Os {
         return true;
     }
 
-    novoRegistroOs = async (idVei) => {
+    novoRegistroOs = async (idVei, idPessoaVei) => {
         const con = await conectarBancoDeDados();
         try {
             this.validarCampos();
             const result = await con.query(
-                `INSERT INTO tbl_ordem_de_servico (data, status, mo, total, tbl_veiculo_id) VALUES (?, ?, ?, ?, ?)`,
-                [this.data, this.status, this.mo, this.total, idVei]
+                `INSERT INTO tbl_ordem_de_serviço (data, status, mo, total, id_veiculo, id_pessoa_veiculo) VALUES (?, ?, ?, ?, ?, ?)`,
+                [this.data, this.status, this.mo, this.total, idVei, idPessoaVei]
             );
             return result[0].insertId;
         } catch (error) {
@@ -59,7 +59,7 @@ class Os {
         try {
             this.validarCampos();
             await con.query(
-                `UPDATE tbl_ordem_de_servico SET data = ?, status = ?, mo = ?, total = ? WHERE id = ?`,
+                `UPDATE tbl_ordem_de_serviço SET data = ?, status = ?, mo = ?, total = ? WHERE id = ?`,
                 [this.data, this.status, this.mo, this.total, idOS]
             );
         } catch (error) {
@@ -71,7 +71,7 @@ class Os {
     static deleteRegistroOs = async (idOS) => {
         const con = await conectarBancoDeDados();
         try {
-            const result = await con.query(`DELETE FROM tbl_ordem_de_servico WHERE id = ?`, [idOS]);
+            const result = await con.query(`DELETE FROM tbl_ordem_de_serviço WHERE id = ?`, [idOS]);
             return result;
         } catch (error) {
             throw new Error(`Erro ao excluir OS: ${error.message}`);

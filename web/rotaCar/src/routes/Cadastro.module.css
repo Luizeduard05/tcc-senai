@@ -1,3 +1,4 @@
+
 * {
     margin: 0;
     padding: 0;
@@ -61,7 +62,7 @@ section .containerCad span:hover {
 
 section .containerCad .signin {
     position: absolute;
-    width: 400px;
+    width: 629px;
     background: #222;
     z-index: 1000;
     display: flex;
@@ -89,12 +90,26 @@ section .containerCad .signin .content h2 {
     text-transform: uppercase;
 }
 
+/* Para a formatação em grid */
 section .containerCad .signin .content .form {
-    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    width: 104%;
+}
+
+.inputLeft, .inputRight {
     display: flex;
     flex-direction: column;
     gap: 25px;
 }
+
+@media (max-width: 900px) {
+    section .containerCad .signin .content .form {
+        grid-template-columns: 1fr; /* Apenas uma coluna em telas menores */
+    }
+}
+
 
 section .containerCad .signin .content .form .inputBox {
     position: relative;
@@ -174,4 +189,13 @@ input[type="submit"]:active {
         width: calc(20vw - 2px);
         height: calc(20vw - 2px);
     }
+}
+
+.buttonCad{
+
+}
+
+.Cepcontent{
+    display: flex;
+    gap: 21px;
 }

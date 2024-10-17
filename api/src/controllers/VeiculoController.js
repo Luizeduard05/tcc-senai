@@ -33,7 +33,7 @@ const VeiculoController = {
 
         const con = await conectarBancoDeDados();
         try {
-            const [rows] = await con.query(`SELECT * FROM tbl_veiculo WHERE tbl_pessoa_id = ?`, [idPessoa]);
+            const [rows] = await con.query(`SELECT * FROM tbl_veiculo WHERE id_pessoa = ?`, [idPessoa]);
             if (rows.length > 0) {
                 return res.json(rows); 
             } else {
