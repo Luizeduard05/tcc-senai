@@ -38,9 +38,28 @@ export default function CadastroUser() {
                 telefone: telefone,
                 senha: senha
             })
+
             console.log(response.data)
+
+            alert("Usuario cadastrado")
+
+            // Limpando campos após cadastro
+            setNome('');
+            setCpf('');
+            setEmail('');
+            setLogradouro('');
+            setBairro('');
+            setEstado('');
+            setNumero('');
+            setComplemento('');
+            setCep('');
+            setTelefone('');
+            setSenha('');
+
+            navegaLogin()
         } catch (error) {
             console.log(error)
+            alert("Erro")
         }
     }
 
