@@ -1,5 +1,6 @@
 import conectarBancoDeDados from '../../config/db.js';
 
+
 class Pessoa {
     constructor(pPes) {
         this.id = (pPes.id !== null || pPes.id > 0) ? pPes.id : null;
@@ -62,9 +63,9 @@ class Pessoa {
   l.login,
   l.senha
 FROM tbl_pessoa p
-INNER JOIN tbl_endereco e ON p.id = e.tbl_pessoa_id
-INNER JOIN tbl_telefone t ON p.id = t.tbl_pessoa_id
-INNER JOIN tbl_login l ON p.id = l.tbl_pessoa_id
+INNER JOIN tbl_endereco e ON p.id = e.id_pessoa
+INNER JOIN tbl_telefone t ON p.id = t.id_pessoa
+INNER JOIN tbl_login l ON p.id = l.id_pessoa
 WHERE p.id = ?;
 
           `;
@@ -113,7 +114,6 @@ WHERE p.id = ?;
             (this.tipo !== undefined || this.tipo === null) 
         );
     }
-    
 
 }
 

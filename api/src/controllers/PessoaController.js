@@ -7,29 +7,20 @@ import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 
 
-
 const pessoaControllers = {
 
-  //Cadastro de usuarios ADM
   registroDeAdm: async (req, res) => {
     try {
       const { nome, cpf, email, tipo, logradouro, bairro, estado, numero, complemento, cep, telefone, senha } = req.body;
-      console.log("chegou aki")
-      // Definir o tipo de usuário como CLI (Cliente) se o campo tipo não for enviado
       const tipoUsuario = tipo ? tipo : 'CLI';
-  
-      // Se o tipo for ADM
+
       if (tipoUsuario === 'ADM') {
         console.log("tipo de usuário sendo cadastrado é ADM")
-        // Verifica se há um token de ADM ou se o ADM está se cadastrando pela primeira vez (sem token)
         if (req.user && req.user.perfil !== 'ADM') {
-          // Caso o token exista mas o usuário não seja ADM, bloqueia a requisição
           return res.status(403).json({ message: 'Apenas administradores logados podem registrar outros administradores.' });
         }
-        // Se não houver token, é permitido que o próprio ADM se registre
       }
   
-      // Se o tipo for MEC, o cadastro só é permitido por um administrador logado
       if (tipoUsuario === 'MEC') {
         console.log("tipo de usuário sendo cadastrado é Mecanico")
         if (!req.user || req.user.perfil !== 'ADM') {
@@ -38,23 +29,19 @@ const pessoaControllers = {
         }
       }
   
-      // Validar tipo (apenas ADM, MEC ou CLI são permitidos)
       if (!['ADM', 'MEC', 'CLI'].includes(tipoUsuario)) {
         return res.status(400).json({ message: 'Tipo de usuário inválido. Permitido apenas ADM, MEC ou CLI.' });
       }
   
-      // Criar objetos
       const personObj = new Pessoa({ id: null, nome, cpf, email, tipo: tipoUsuario });
       const enderecoObj = new Endereco({ id: null, logradouro, bairro, estado, numero, complemento, cep });
       const telefoneObj = new Telefone({ id: null, telefone });
       const loginObj = new Login({ id: null, perfil: tipoUsuario, login: email, senha });
 
-      // Validação de campos
       if (!personObj.validarCampos() || !enderecoObj.validarCampos() || !telefoneObj.validarCampos() || !loginObj.validarCampos()) {
         return res.status(400).json({ message: 'O arquivo informado possui informações faltantes.' });
       }
   
-      // Registro da pessoa
       const idPessoa = await personObj.novoRegistroPessoa();
       if (idPessoa != null && idPessoa > 0) {
         const insertIdEnd = await enderecoObj.novoRegistroEnd(idPessoa);
@@ -79,8 +66,7 @@ const pessoaControllers = {
           return res.status(500).json({ message: 'Erro ao registrar o usuário.' });
         }
   
-        // Retorna resposta de sucesso
-        return res.json({ message: 'Usuário registrado com sucesso.' });
+        return res.status(201).json({ message: 'Usuário registrado com sucesso.' });
       } else {
         return res.status(500).json({ message: 'Erro ao registrar o usuário.' });
       }
@@ -88,8 +74,11 @@ const pessoaControllers = {
       console.error(e);
       return res.status(500).json({ message: `Erro ao registrar o usuário, motivo: ${e.message}` });
     }
+
+ 
   },
-  
+
+
 
   selecionarUsuario: async (req, res) => {
     try {
@@ -158,7 +147,6 @@ const pessoaControllers = {
   loginUsuario: async (req, res) => {
     try {
       const { login, senha } = req.body;
-      console.log(login,senha)
   
       const usuario = await Login.selecionarUsuarioPorLogin(login);
       if (!usuario || usuario.length === 0) {
