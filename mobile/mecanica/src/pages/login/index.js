@@ -3,6 +3,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Text, View, Platform, StyleSheet, StatusBar, Pressable, Image, TouchableOpacity, TextInput } from "react-native"
 import { useAuth } from "../../context/AuthContext";
 
+import api from "../../services/api/api";
+
 export default function Login() {
     const {login, userType} = useAuth();
     const navigation = useNavigation();
