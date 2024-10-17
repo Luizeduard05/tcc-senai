@@ -1,13 +1,10 @@
 import conectarBancoDeDados from '../../config/db.js';
 
 
-// Função de inserção no banco
 const novoRegistroPessoa = async (personObj, enderecoObj, telefoneObj) => {
 
     const con = await conectarBancoDeDados();
-    //lógica para inserir os dados nas tabelas correspondentes no seu banco de dados
     try {
-        //métodos para inserir os dados
         const person = await con.query(`insert into tbl_pessoa (nome, cpf, email, tipo) values (?,?,?,?)`,
             [personObj.nome, personObj.cpf, personObj.email, personObj.tipo]);
 

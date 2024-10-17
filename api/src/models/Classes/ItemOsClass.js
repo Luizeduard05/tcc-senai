@@ -41,7 +41,7 @@ class ItemOs{
         try {
             this.validarCampos();
             const result = await con.query(
-                `INSERT INTO tbl_itensOs (id_produtos ,quantidade, id_os, id_veiculo_os, id_pessoa_veiculo_os) VALUES (?, ?, ?, ?, ?)`,
+                `INSERT INTO tbl_itens_os (id_produto ,quantidade, id_os, id_veiculo_os, id_pessoa_veiculo_os) VALUES (?, ?, ?, ?, ?)`,
                 [idPro, this.quantidade, idOS, idVeiOs, idPessoaVeiOs]
             );
             return result[0].insertId;
@@ -54,7 +54,7 @@ class ItemOs{
     static deletePecaOs = async (idItem) => {
         const con = await conectarBancoDeDados();
         try {
-            const result = await con.query(`DELETE FROM tbl_itensOs WHERE id = ?`, [idItem]);
+            const result = await con.query(`DELETE FROM tbl_itens_os WHERE id = ?`, [idItem]);
             return result;
         } catch (error) {
             throw new Error(`Erro ao excluir peça: ${error.message}`);

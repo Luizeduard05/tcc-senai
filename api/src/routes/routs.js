@@ -4,7 +4,6 @@ import pessoaControllers from "../controllers/PessoaController.js";
 import OsController from "../controllers/OsController.js";
 import PecasController from "../controllers/PecasController.js";
 import agendamentoController from "../controllers/AgendamentoController.js";
-import ItemOs from "../models/Classes/ItemOsClass.js";
 import jwt from 'jsonwebtoken';
 import authMiddleware from "../../Middlewares/authMiddlewares.js";
 import ItemOsController from "../controllers/ItemOsController.js";

@@ -1,10 +1,10 @@
 import { LinearGradient } from "expo-linear-gradient"; 
 import { View, Text, Image, StyleSheet, Platform, StatusBar, TouchableOpacity } from "react-native"; 
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
-import carro3 from '../../assets/carro3.png'; 
+import carro3 from '../../../assets/carro3.png'; 
 import { useNavigation } from "@react-navigation/native";
 
-export default function Home() { 
+export default function MecanicoHome() { 
     const navigation = useNavigation()
     return ( 
         <LinearGradient 
@@ -27,7 +27,7 @@ export default function Home() {
                 <View style={styles.iconSection}> 
                     <TouchableOpacity 
                         style={styles.iconContainer} 
-                        onPress={() => navigation.navigate('Agendamentos')} 
+                        onPress={() => navigation.navigate('AgendamentosMecanico')} 
                     > 
                         <View style={styles.menuLine} /> 
                         <Icon name="event" color="#ccc" size={30} style={styles.icon} /> 
@@ -39,11 +39,11 @@ export default function Home() {
 
                     <TouchableOpacity 
                         style={styles.iconContainer} 
-                        onPress={() => navigation.navigate('Histórico')} 
+                        onPress={() => navigation.navigate('MontarOrcamentoMecanico')} 
                     > 
                         <View style={styles.menuLine} /> 
                         <Icon name="table-chart" color="#ccc" size={30} style={styles.icon} /> 
-                        <Text style={styles.iconText}>Histórico</Text> 
+                        <Text style={styles.iconText}>Montar orçamento</Text> 
                     </TouchableOpacity> 
                 </View> 
             </LinearGradient> 
