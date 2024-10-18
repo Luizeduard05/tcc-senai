@@ -12,17 +12,14 @@ const osController = {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
         }
 
-        // Função para formatar a data
         const formatarData = (data) => {
             const partes = data.split('/');
-            return `${partes[2]}-${partes[1]}-${partes[0]}`; // Converte para YYYY-MM-DD
+            return `${partes[2]}-${partes[1]}-${partes[0]}`;
         };
 
-        // Formatar a data recebida
         const dataFormatada = formatarData(data);
-        console.log('Data formatada:', dataFormatada); // Verifique o valor da data formatada
+        console.log('Data formatada:', dataFormatada); 
 
-        // Mapear status para código
         const statusMap = {
             'Aguardando Retorno': 0,
             'Aprovado': 1,
@@ -33,13 +30,11 @@ const osController = {
             return res.status(400).json({ message: 'Status inválido.' });
         }
 
-        // Converter o orçamento para decimal
         const moFormatado = parseFloat(mo.replace(',', '.'));
         if (isNaN(moFormatado)) {
             return res.status(400).json({ message: 'O campo mo deve ser um valor decimal válido.' });
         }
 
-        // Calcular o total
         const total = moFormatado;
 
         const ordemServico = new Os({ data: dataFormatada, status: statusCodigo, mo: moFormatado, total });
@@ -71,7 +66,6 @@ const osController = {
                 const dataFormatada = rows.map(servico => {
                     const dataUTC = new Date(servico.data);
 
-                    // Formatação da data
                     const opcoes = {
                         year: 'numeric',
                         month: '2-digit',
@@ -79,7 +73,7 @@ const osController = {
                     };
 
                     const data = dataUTC.toLocaleString('pt-BR', opcoes);
-                    const [dia, mes, ano] = data.split('/'); // Separa dia, mês e ano
+                    const [dia, mes, ano] = data.split('/'); 
 
                     return {
                         ...servico,
@@ -109,17 +103,14 @@ const osController = {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
         }
 
-        // Função para formatar a data
         const formatarData = (data) => {
             const partes = data.split('/');
-            return `${partes[2]}-${partes[1]}-${partes[0]}`; // Converte para YYYY-MM-DD
+            return `${partes[2]}-${partes[1]}-${partes[0]}`; 
         };
 
-        // Formatar a data recebida
         const dataFormatada = formatarData(data);
-        console.log('Data formatada:', dataFormatada); // Verifique o valor da data formatada
+        console.log('Data formatada:', dataFormatada); 
 
-        // Mapear status para código
         const statusMap = {
             'Aguardando Retorno': 0,
             'Aprovado': 1,
@@ -130,13 +121,11 @@ const osController = {
             return res.status(400).json({ message: 'Status inválido.' });
         }
 
-        // Converter o orçamento para decimal
         const moFormatado = parseFloat(mo.replace(',', '.'));
         if (isNaN(moFormatado)) {
             return res.status(400).json({ message: 'O campo mo deve ser um valor decimal válido.' });
         }
 
-        // Calcular o total
         const total = moFormatado;
 
         const ordemServico = new Os({ data: dataFormatada, status: statusCodigo, mo: moFormatado, total });

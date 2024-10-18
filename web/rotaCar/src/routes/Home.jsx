@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import Swiper from "swiper/bundle";
-import styleHome from "./Home.module.css";
+import "./Home.css";
 import logoCarro from "../assets/logoCarro.png";
 import CarrosImg from "../assets/carros-imagem.png";
 import boschLogo from "../assets/Bosch-Logo-2002.png";
@@ -34,17 +34,17 @@ const Home = () => {
 
     return (
         <>
-            <section className={styleHome.topoPagina}>
-                <div className={styleHome.containerTp}>
-                    <div className={styleHome.navBar}>
-                        <div className={styleHome.conteudoSuperior}>
-                            <div className={styleHome.logo}>
+            <section className="topoPagina">
+                <div className="containerTp">
+                    <div className="navBar">
+                        <div className="conteudoSuperior">
+                            <div className="logo">
                                 <img src={logoCarro} alt="" />
                             </div>
-                            <div className={styleHome.textoSuperior}>
-                                <a href="">
+                            <div className="textoSuperior">
+                                <Link to="/login">
                                     <p> login</p>
-                                </a>
+                                </Link>
                                 <a href="">
                                     <p>saiba mais</p>
                                 </a>
@@ -54,34 +54,29 @@ const Home = () => {
                             </div>
                         </div>
                     </div>
-                    <div className={styleHome.textosBV}>
+                    <div className="textosBV">
                         <h2>olá Seja bem-vindo</h2>
                         <h1>Tudo oque seu carro precisa</h1>
                         <h4>O cuidado que voce e seu carro merecem de forma facil e rapido</h4>
 
+
+
                     </div>
-
-                    <button className="botãoTp">
-                        <Link to={"/login"}>
-                            Acesse já
-                        </Link>
-
-                    </button>
-
-                    <div className={styleHome.carrocontainer}>
-                        <img className={styleHome.carros} src={CarrosImg} alt="" />
+                    <button className="botãoTp">Acesse já</button>
+                    <div className="carro-container">
+                        <img className="carros" src={CarrosImg} alt="" />
                     </div>
                 </div>
             </section>
-            <section className={styleHome.principaisServico}>
+            <section className="principaisServico">
 
             </section>
 
-            <section className={styleHome.marcas}>
-                <div className={styleHome.container}>
-                    <div className="swiper"> {/* SwiperJS precisa dessa classe */}
-                        <div className="swiper-wrapper"> {/* SwiperJS precisa dessa classe */}
-                            <div className="swiper-slide"> {/* SwiperJS precisa dessa classe */}
+            <section className="marcas">
+                <div className="container">
+                    <div className="swiper">
+                        <div className="swiper-wrapper">
+                            <div className="swiper-slide">
                                 <img src={boschLogo} alt="Bosch Logo" />
                                 <p>bosch</p>
                             </div>
@@ -94,24 +89,23 @@ const Home = () => {
                                 <p>bosch</p>
                             </div>
                             <div className="swiper-slide">
-                                <img src={CarrosImg} alt="Bosch Logo" />
+                                <img src={boschLogo} alt="Bosch Logo" />
                                 <p>bosch</p>
                             </div>
                             <div className="swiper-slide">
-                                <img src={CarrosImg} alt="Bosch Logo" />
+                                <img src={boschLogo} alt="Bosch Logo" />
                                 <p>bosch</p>
                             </div>
                             <div className="swiper-slide">
-                                <img src={CarrosImg} alt="Bosch Logo" />
+                                <img src={boschLogo} alt="Bosch Logo" />
                                 <p>bosch</p>
                             </div>
+
                         </div>
-                        <div className="swiper-pagination"></div> {/* SwiperJS precisa dessa classe */}
+                        <div className="swiper-pagination"></div>
                     </div>
                 </div>
             </section>
-
-
 
             <section className="outrosServicos">
 

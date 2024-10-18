@@ -58,9 +58,12 @@ class Telefone {
       
 
     validarCampos() {
-        return (
-            this.telefone
-        );
+        return this.telefone && Telefone.validarTelefone(this.telefone);
+    }
+    
+    static validarTelefone(telefone) {
+        const regex = /^\d{11}$/;
+        return regex.test(telefone);
     }
 
 }

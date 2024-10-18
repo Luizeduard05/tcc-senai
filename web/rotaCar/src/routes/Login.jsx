@@ -269,7 +269,7 @@ const Login = () => {
 
                     <div className={styleLogin.loginSection}>
                         <div className={styleLogin.loginContent}>
-                            <h2>Sign In</h2>
+                            <h2>Bem vindo de volta</h2>
                             <div className={styleLogin.loginForm}>
                                 <div className={styleLogin.inputWrapper}>
                                     <input type="email" required />
@@ -280,15 +280,15 @@ const Login = () => {
                                     <i>senha</i>
                                 </div>
                                 <div className={styleLogin.loginLinks}>
-                                    <a href="#">Forgot Password</a>
+                                  
                                     <Link to={"/cadastro"}>
-                                        Signup
+                                        cadastre-se
                                     </Link>
                                     
                                 </div>
                                 <div className={styleLogin.inputWrapper}>
                                     <Link to={"/intranet"}>
-                                    <input type="submit" value="Login" />
+                                    <input type="submit" value="Entrar" />
                                     </Link>
                                     
                                 </div>

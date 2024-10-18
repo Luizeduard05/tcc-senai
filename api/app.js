@@ -1,18 +1,26 @@
 import express from "express";
 import router from "./src/routes/routs.js";
 import bodyParser from 'body-parser';
-// require("dotenv-safe").config();
+import cors from 'cors'
+
+
 const app = express();
 const port = 5000;
 
+app.use(cors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 const { json, urlencoded } = bodyParser;
 
-// Configurar o BodyParser
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use('/', router);
 
-// INICIA O SERVIDOR NA PORTA INFORMADA
+
+
 app.listen(port, () => {
     console.log(`Servidor respondendo na porta ${port}`);
 });

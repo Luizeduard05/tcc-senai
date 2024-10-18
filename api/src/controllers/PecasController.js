@@ -9,7 +9,6 @@ const PecasController = {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
         }
 
-        // Converter o orçamento para decimal
         const valorFormatado = parseFloat(valor_produto.replace(',', '.'));
         if (isNaN(valorFormatado)) {
             return res.status(400).json({ message: 'O campo mo deve ser um valor decimal válido.' });
@@ -57,7 +56,6 @@ const PecasController = {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
         }
 
-        // Converter o orçamento para decimal
         const valorFormatado = parseFloat(valor_produto.replace(',', '.'));
         if (isNaN(valorFormatado)) {
             return res.status(400).json({ message: 'O campo mo deve ser um valor decimal válido.' });

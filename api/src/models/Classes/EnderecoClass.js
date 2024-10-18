@@ -86,6 +86,9 @@ class Endereco {
         );
     }
 
+    static validarCEP(cep) {
+        return /^\d{8}$/.test(cep); 
+    }
    
 
 }

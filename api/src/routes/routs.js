@@ -4,7 +4,6 @@ import pessoaControllers from "../controllers/PessoaController.js";
 import OsController from "../controllers/OsController.js";
 import PecasController from "../controllers/PecasController.js";
 import agendamentoController from "../controllers/AgendamentoController.js";
-import ItemOs from "../models/Classes/ItemOsClass.js";
 import jwt from 'jsonwebtoken';
 import authMiddleware from "../../Middlewares/authMiddlewares.js";
 import ItemOsController from "../controllers/ItemOsController.js";
@@ -33,7 +32,7 @@ const autenticarToken = (req, res, next) => {
 // rota para cadastrar uma pessoa 
 router.post('/usuarios', pessoaControllers.registroDeAdm);
 // Rotas protegidas (exige token)
-router.post('/adm/usuarios', authMiddleware, pessoaControllers.registroDeAdm); // Cadastro de ADM e MEC (exige token)
+router.post('/adm/usuarios', authMiddleware, pessoaControllers.registroDeAdm); 
 // rota para buscar uma pessoa cadastrada
 router.get('/usuarios/:id', autenticarToken, pessoaControllers.selecionarUsuario);
 // rota para editar uma pessoa cadastrada

@@ -1,5 +1,4 @@
 import ItemOs from '../models/Classes/ItemOsClass.js';
-import conectarBancoDeDados from '../config/db.js'
 
 const ItemOsController = {
     async registroDePecasOS(req, res) {

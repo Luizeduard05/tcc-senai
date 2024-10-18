@@ -9,7 +9,7 @@ async function criarPoolDeConexoes() {
             port: '3306',
             database: 'rotacar',
             user: 'root',
-            password: 'H26b14b16',
+            password: '1234',
             waitForConnections: true,
             connectionLimit: 100,
             multipleStatements: true

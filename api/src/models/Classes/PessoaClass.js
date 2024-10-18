@@ -6,7 +6,7 @@ class Pessoa {
         this.nome = pPes.nome;
         this.cpf = pPes.cpf;
         this.email = pPes.email;
-        this.tipo = pPes.tipo || null; 
+        this.tipo = pPes.tipo || null;
     }
     get Id() { return this.id; }
     set Id(value) { this.id = value; }
@@ -30,17 +30,17 @@ class Pessoa {
         try {
             const query = `INSERT INTO tbl_pessoa (nome, cpf, email${this.tipo ? ', tipo' : ''}) VALUES (?, ?, ?${this.tipo ? ', ?' : ''})`;
             const values = [this.nome, this.cpf, this.email];
-            if (this.tipo) values.push(this.tipo); 
+            if (this.tipo) values.push(this.tipo);
             const person = await con.query(query, values);
             return person[0].insertId;
         } catch (error) {
             throw new Error(`Erro ao registrar: ${error.message}`);
-        }finally{
+        } finally {
             con.release();
         }
     };
-    
-    
+
+
     static selectRegistroPessoa = async (idPessoa) => {
         const con = await conectarBancoDeDados();
         try {
@@ -62,9 +62,9 @@ class Pessoa {
   l.login,
   l.senha
 FROM tbl_pessoa p
-INNER JOIN tbl_endereco e ON p.id = e.tbl_pessoa_id
-INNER JOIN tbl_telefone t ON p.id = t.tbl_pessoa_id
-INNER JOIN tbl_login l ON p.id = l.tbl_pessoa_id
+INNER JOIN tbl_endereco e ON p.id = e.id_pessoa
+INNER JOIN tbl_telefone t ON p.id = t.id_pessoa
+INNER JOIN tbl_login l ON p.id = l.id_pessoa
 WHERE p.id = ?;
 
           `;
@@ -82,16 +82,16 @@ WHERE p.id = ?;
         try {
             const query = `UPDATE tbl_pessoa SET nome = ?, cpf = ?, email = ?${this.tipo ? ', tipo = ?' : ''} WHERE id = ?`;
             const values = [this.nome, this.cpf, this.email];
-            if (this.tipo) values.push(this.tipo); 
+            if (this.tipo) values.push(this.tipo);
             values.push(this.id);
-            
+
             await con.query(query, values);
         } catch (error) {
             throw new Error(`Erro ao atualizar: ${error.message}`);
         }
     };
-    
-    
+
+
 
     deleteRegistroPessoa = async (idPessoa) => {
         const con = await conectarBancoDeDados();
@@ -104,16 +104,39 @@ WHERE p.id = ?;
         }
     };
 
-   
+
     validarCampos() {
         return (
             this.nome &&
             this.cpf &&
             this.email &&
-            (this.tipo !== undefined || this.tipo === null) 
+            (this.tipo !== undefined || this.tipo === null)
         );
     }
+
+    static validarCPF(cpf) {
+        if (cpf.length !== 11) return false;
+        if (/^(\d)\1{10}$/.test(cpf)) return false;
+        return true;
+    }
+
+    static verificarCPFExistente = async (cpf) => {
+        const con = await conectarBancoDeDados();
+        try {
+            const query = `SELECT COUNT(*) as count FROM tbl_pessoa WHERE cpf = ?`;
+            const [rows] = await con.query(query, [cpf]);
+            return rows[0].count > 0; 
+        } catch (error) {
+            throw new Error(`Erro ao verificar CPF: ${error.message}`);
+        } finally {
+            con.release();
+        }
+    };
     
+    static validarEmail(email) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
 
 }
 
