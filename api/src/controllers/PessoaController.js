@@ -7,12 +7,20 @@ import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 
 
-const pessoaControllers = {
 
+const pessoaControllers = {
   registroDeAdm: async (req, res) => {
     try {
       const { nome, cpf, email, tipo, logradouro, bairro, estado, numero, complemento, cep, telefone, senha } = req.body;
       const tipoUsuario = tipo ? tipo : 'CLI';
+
+      if (!Pessoa.validarCPF(cpf)) {
+        return res.status(400).json({ message: 'CPF inválido. Deve conter 11 dígitos e ser um CPF existente.' });
+      }
+
+      if (!Pessoa.validarEmail(email)) {
+        return res.status(400).json({ message: 'E-mail inválido. Por favor, insira um e-mail válido.' });
+      }
 
       if (tipoUsuario === 'ADM') {
         console.log("tipo de usuário sendo cadastrado é ADM")
@@ -20,7 +28,7 @@ const pessoaControllers = {
           return res.status(403).json({ message: 'Apenas administradores logados podem registrar outros administradores.' });
         }
       }
-  
+
       if (tipoUsuario === 'MEC') {
         console.log("tipo de usuário sendo cadastrado é Mecanico")
         if (!req.user || req.user.perfil !== 'ADM') {
@@ -28,11 +36,11 @@ const pessoaControllers = {
           return res.status(403).json({ message: 'Apenas administradores logados podem registrar mecânicos.' });
         }
       }
-  
+
       if (!['ADM', 'MEC', 'CLI'].includes(tipoUsuario)) {
         return res.status(400).json({ message: 'Tipo de usuário inválido. Permitido apenas ADM, MEC ou CLI.' });
       }
-  
+
       const personObj = new Pessoa({ id: null, nome, cpf, email, tipo: tipoUsuario });
       const enderecoObj = new Endereco({ id: null, logradouro, bairro, estado, numero, complemento, cep });
       const telefoneObj = new Telefone({ id: null, telefone });
@@ -41,31 +49,35 @@ const pessoaControllers = {
       if (!personObj.validarCampos() || !enderecoObj.validarCampos() || !telefoneObj.validarCampos() || !loginObj.validarCampos()) {
         return res.status(400).json({ message: 'O arquivo informado possui informações faltantes.' });
       }
-  
+
+      if (await Pessoa.verificarCPFExistente(cpf)) {
+        return res.status(400).json({ message: 'CPF já cadastrado.' });
+      }
+
       const idPessoa = await personObj.novoRegistroPessoa();
       if (idPessoa != null && idPessoa > 0) {
         const insertIdEnd = await enderecoObj.novoRegistroEnd(idPessoa);
         if (!insertIdEnd) {
           await personObj.deleteRegistroPessoa(idPessoa);
-          
+
           return res.status(500).json({ message: 'Erro ao registrar o usuário.' });
         }
-  
+
         const insertIdTel = await telefoneObj.novoRegistroTel(idPessoa);
         if (!insertIdTel) {
           await personObj.deleteRegistroPessoa(idPessoa);
           await enderecoObj.deleteRegistroEnd(insertIdEnd);
           return res.status(500).json({ message: 'Erro ao registrar o usuário.' });
         }
-  
-        const insertIdLog = await loginObj.novoRegistroLogin(idPessoa);       
+
+        const insertIdLog = await loginObj.novoRegistroLogin(idPessoa);
         if (!insertIdLog) {
           await personObj.deleteRegistroPessoa(idPessoa);
           await telefoneObj.deleteRegistroTel(insertIdTel);
           await enderecoObj.deleteRegistroEnd(insertIdEnd);
           return res.status(500).json({ message: 'Erro ao registrar o usuário.' });
         }
-  
+
         return res.status(201).json({ message: 'Usuário registrado com sucesso.' });
       } else {
         return res.status(500).json({ message: 'Erro ao registrar o usuário.' });
@@ -74,10 +86,7 @@ const pessoaControllers = {
       console.error(e);
       return res.status(500).json({ message: `Erro ao registrar o usuário, motivo: ${e.message}` });
     }
-
- 
   },
-
 
 
   selecionarUsuario: async (req, res) => {
@@ -147,31 +156,31 @@ const pessoaControllers = {
   loginUsuario: async (req, res) => {
     try {
       const { login, senha } = req.body;
-  
+
       const usuario = await Login.selecionarUsuarioPorLogin(login);
       if (!usuario || usuario.length === 0) {
         return res.status(401).json({ message: 'Credenciais inválidas' });
       }
-  
+
       const senhaValida = await bcrypt.compare(senha, usuario[0].senha);
       if (!senhaValida) {
         return res.status(401).json({ message: 'Credenciais inválidas' });
       }
-  
+
       dotenv.config();
-  
-      const token = jwt.sign({ 
-        id: usuario[0].tbl_pessoa_id, 
-        perfil: usuario[0].perfil 
+
+      const token = jwt.sign({
+        id: usuario[0].id_pessoa,
+        perfil: usuario[0].perfil
       }, process.env.JWT_SECRET, { expiresIn: '2h' });
-      
+
       return res.json({ token });
     } catch (e) {
       console.error(e);
       return res.status(500).json({ message: 'Erro ao fazer login' });
     }
   },
-  
+
 
 };
 
