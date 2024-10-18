@@ -1,19 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
 
-
 * {
   padding: 0;
   margin: 0;
 }
+
 .body {
-
   font-family: "Poppins", sans-serif !important;
-
 }
 
-.carros {
-  width: 80%; 
-
+.carro {
+  width: 80%;
 }
 
 .container {
@@ -41,17 +38,16 @@
   top: -100px;
 }
 
-
- .header::after {
+.header::after {
   content: "";
   display: block;
   width: 100%;
   height: 1px;
   background-color: #fff;
   margin-top: -150px;
-} 
+}
 
-.contentVn {
+.content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -65,25 +61,22 @@
 }
 
 .text {
-  text-align: left; 
+  text-align: left;
   color: #fff;
-  width: 100%; 
+  width: 100%;
   font-family: "Poppins", sans-serif !important;
-
 }
 
 .text h1 {
   font-size: 2em;
   margin-bottom: 10px;
   font-family: "Poppins", sans-serif !important;
-
 }
 
-.text h2 {
+.text h2 { 
   font-size: 1.5em;
   margin-bottom: 20px;
   font-family: "Poppins", sans-serif !important;
-
 }
 
 .buttons {
@@ -91,20 +84,9 @@
   margin-bottom: 20px;
   width: 15%;
   position: absolute;
-  left: 56%;
+  left: 54%;
   gap: 1rem;
   flex-direction: column;
-
-}
-.buttons {
-  display: flex;
-  margin-bottom: 20px;
-  width: 13%;
-  position: absolute;
-  left: 57%;
-  gap: 1rem;
-  flex-direction: column;
-
 }
 
 .button {
@@ -117,23 +99,14 @@
   cursor: pointer;
   border-radius: 5px;
   box-shadow: 0 0 5px rgb(255, 255, 255);
-  border: .25em solid var(--glow-color);
   font-size: 18px;
   font-weight: bold;
-  /* border-radius: 1em; */
   outline: none;
-  box-shadow: 0 0 1em .25em var(--glow-color), 0 0 4em 1em var(--glow-spread-color), inset 0 0 .75em .25em var(--glow-color);
-  text-shadow: 0 0 .5em var(--glow-color);
   transition: all 0.3s;
-  cursor: pointer;
-  left: 55%;
+  
 }
 
-
-
-
-
- button::after {
+.button::after {
   pointer-events: none;
   content: "";
   position: absolute;
@@ -145,23 +118,21 @@
   filter: blur(2em);
   opacity: .7;
   transform: perspective(1.5em) rotateX(35deg) scale(1, .6);
-
-} 
-
-button:hover {
-  background: linear-gradient(to top, #690101, #FF0000);
-
-  box-shadow: 
-  0 0 20px rgba(255, 0, 0, 1), /* Luz mais intensa */
-  0 0 30px rgba(255, 0, 0, 0.7), /* Luz secundária */
-  0 0 50px rgba(255, 0, 0, 0.5); /* Luz difusa mais intensa */
-transform: scale(1.05); /* Aumenta ligeiramente o tamanho do botão */
-  transform: scale(1.05); /* Aumenta ligeiramente o tamanho do botão */
-
 }
 
-button:active {
-  box-shadow: 0 0 0.6em .25em var(--glow-color),
-      0 0 2.5em 2em var(--glow-spread-color),
-      inset 0 0 .5em .25em var(--glow-color);
+.button:hover {
+  background: linear-gradient(to top, #690101, #FF0000);
+  color: white;
+  box-shadow: 
+    0 0 20px rgba(255, 0, 0, 1),
+    0 0 30px rgba(255, 0, 0, 0.7),
+    0 0 50px rgba(255, 0, 0, 0.5);
+  transform: scale(1.05);
+}
+
+.button:active {
+  box-shadow: 
+    0 0 0.6em .25em var(--glow-color),
+    0 0 2.5em 2em var(--glow-spread-color),
+    inset 0 0 .5em .25em var(--glow-color);
 }
