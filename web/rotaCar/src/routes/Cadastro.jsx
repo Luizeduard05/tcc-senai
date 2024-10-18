@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import api from "../../service/api"; 
+import api from "../../service/api";
 import styleCad from "./Cadastro.module.css";
 
 const Cadastro = () => {
@@ -11,7 +11,6 @@ const Cadastro = () => {
         senha: "",
         complemento: "",
         cep: "",
-        tipo: "cliente",
         numero: "",
         logradouro: "",
         bairro: "",
@@ -28,27 +27,20 @@ const Cadastro = () => {
         });
     };
 
-
+    console.log(formData)
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        try {
-            const response = await api.post(
-                "/usuarios",
-                {
-                    ...formData,
-                    
-                },
-               
-            );
 
-            console.log(response.data); 
-            alert("Cadastro realizado com sucesso!");
+        try {
+            const response = await api.post("/usuarios", formData); // Use o estado formData
+            console.log(response.data);
+            console.log(formData.nome)
         } catch (error) {
             console.error(error);
-            alert("Erro ao realizar o cadastro!");
         }
     };
+
 
     return (
 
@@ -325,52 +317,52 @@ const Cadastro = () => {
                         <form className={styleCad.form} onSubmit={handleSubmit}>
                             <div className={styleCad.inputLeft}>
                                 <div className={styleCad.inputBox}>
-                                    <input type="text" name="nome" required onChange={handleChange} />
+                                    <input type="text" name="nome" value={formData.nome} required onChange={handleChange} />
                                     <i>Nome</i>
                                 </div>
                                 <div className={styleCad.inputBox}>
-                                    <input type="number" name="cpf" required onChange={handleChange} />
+                                    <input type="number" name="cpf" value={formData.cpf} required onChange={handleChange} />
                                     <i>CPF</i>
                                 </div>
                                 <div className={styleCad.inputBox}>
-                                    <input type="email" name="email" required onChange={handleChange} />
+                                    <input type="email" name="email" value={formData.email} required onChange={handleChange} />
                                     <i>Email</i>
                                 </div>
                                 <div className={styleCad.inputBox}>
-                                    <input type="number" name="telefone" required onChange={handleChange} />
+                                    <input type="number" name="telefone" value={formData.telefone} required onChange={handleChange} />
                                     <i>Telefone</i>
                                 </div>
                                 <div className={styleCad.inputBox}>
-                                    <input type="password" name="senha" required onChange={handleChange} />
+                                    <input type="password" name="senha" value={formData.senha} required onChange={handleChange} />
                                     <i>Senha</i>
                                 </div>
                             </div>
 
                             <div className={styleCad.inputRight}>
                                 <div className={styleCad.inputBox}>
-                                    <input type="text" name="complemento" required onChange={handleChange} />
+                                    <input type="text" name="complemento" value={formData.complemento} required onChange={handleChange} />
                                     <i>Complemento</i>
                                 </div>
                                 <div className={styleCad.Cepcontent}>
                                     <div className={styleCad.inputBox}>
-                                        <input type="number" name="cep" required onChange={handleChange} />
+                                        <input type="number" name="cep" value={formData.cep} required onChange={handleChange} />
                                         <i>CEP</i>
                                     </div>
                                     <div className={styleCad.inputBox}>
-                                        <input type="text" name="numero" required onChange={handleChange} />
+                                        <input type="text" name="numero" value={formData.numero} required onChange={handleChange} />
                                         <i>Número</i>
                                     </div>
                                 </div>
                                 <div className={styleCad.inputBox}>
-                                    <input type="text" name="logradouro" required onChange={handleChange} />
+                                    <input type="text" name="logradouro" value={formData.logradouro} required onChange={handleChange} />
                                     <i>Logradouro</i>
                                 </div>
                                 <div className={styleCad.inputBox}>
-                                    <input type="text" name="bairro" required onChange={handleChange} />
+                                    <input type="text" name="bairro" value={formData.bairro} required onChange={handleChange} />
                                     <i>Bairro</i>
                                 </div>
                                 <div className={styleCad.inputBox}>
-                                    <input type="text" name="estado" required onChange={handleChange} />
+                                    <input type="text" name="estado" value={formData.estado} required onChange={handleChange} />
                                     <i>Estado</i>
                                 </div>
                             </div>
@@ -379,6 +371,7 @@ const Cadastro = () => {
                                 <input type="submit" value="Cadastrar" />
                             </div>
                         </form>
+
                     </div>
                 </div>
             </section>
