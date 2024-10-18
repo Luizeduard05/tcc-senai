@@ -22,6 +22,11 @@ const pessoaControllers = {
         return res.status(400).json({ message: 'E-mail inválido. Por favor, insira um e-mail válido.' });
       }
 
+      if (!Endereco.validarCEP(cep)) {
+        return res.status(400).json({ message: 'CEP inválido. Deve conter exatamente 8 dígitos.' });
+      }
+
+
       if (tipoUsuario === 'ADM') {
         console.log("tipo de usuário sendo cadastrado é ADM")
         if (req.user && req.user.perfil !== 'ADM') {
@@ -44,6 +49,9 @@ const pessoaControllers = {
       const personObj = new Pessoa({ id: null, nome, cpf, email, tipo: tipoUsuario });
       const enderecoObj = new Endereco({ id: null, logradouro, bairro, estado, numero, complemento, cep });
       const telefoneObj = new Telefone({ id: null, telefone });
+      if (!telefoneObj.validarCampos()) {
+        return res.status(400).json({ message: 'Telefone inválido. Deve conter exatamente 11 dígitos.' });
+      }
       const loginObj = new Login({ id: null, perfil: tipoUsuario, login: email, senha });
 
       if (!personObj.validarCampos() || !enderecoObj.validarCampos() || !telefoneObj.validarCampos() || !loginObj.validarCampos()) {
@@ -153,6 +161,7 @@ const pessoaControllers = {
   },
 
 
+
   loginUsuario: async (req, res) => {
     try {
       const { login, senha } = req.body;
@@ -174,7 +183,10 @@ const pessoaControllers = {
         perfil: usuario[0].perfil
       }, process.env.JWT_SECRET, { expiresIn: '2h' });
 
-      return res.json({ token });
+      return res.json({
+        token,
+        tipo: usuario[0].perfil
+      });
     } catch (e) {
       console.error(e);
       return res.status(500).json({ message: 'Erro ao fazer login' });
