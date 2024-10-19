@@ -12,21 +12,23 @@ const Login = () => {
     const handleChangeEmail = (e) => {
         setEmail(e.target.value);
         console.log(email)
-
-        
     }
 
     const handleChangeSenha = (e) => {
         setSenha(e.target.value);
         console.log(email)
-
-        
     }
 
     const hendleSubmit = async (e) => {
+        
         e.preventDefault()
         try {
-            const response = await api.post('/login', { email, senha });
+            const response = await api.post('/login', { login: email, senha: senha })
+                .then(response => {
+                    console.log(response);
+                }).catch(error => {
+                    console.log(error);
+                });
             setToken(response.data.token);
             setPerfil(response.data.perfil);
             console.log(response.data)
@@ -327,7 +329,7 @@ const Login = () => {
                                 </div>
                                 <div className={styleLogin.inputWrapper}>
                                     {/* <Link to={"/intranet"}> */}
-                                        <input type="submit"  value='Entrar' onSubmit={hendleSubmit} />
+                                    <input type="submit" value='Entrar' onClick={hendleSubmit}/>
                                     {/* </Link> */}
 
                                 </div>
@@ -346,4 +348,3 @@ const Login = () => {
 
 export default Login
 
- 

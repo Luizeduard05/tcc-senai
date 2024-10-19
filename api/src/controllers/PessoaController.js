@@ -165,12 +165,13 @@ const pessoaControllers = {
   loginUsuario: async (req, res) => {
     try {
       const { login, senha } = req.body;
-
+      
       const usuario = await Login.selecionarUsuarioPorLogin(login);
       if (!usuario || usuario.length === 0) {
         return res.status(401).json({ message: 'Credenciais inválidas' });
       }
-
+      
+      
       const senhaValida = await bcrypt.compare(senha, usuario[0].senha);
       if (!senhaValida) {
         return res.status(401).json({ message: 'Credenciais inválidas' });
