@@ -33,7 +33,7 @@ const Cadastro = () => {
 
 
         try {
-            const response = await api.post("/usuarios", formData); // Use o estado formData
+            const response = await api.post("/usuarios", formData);
             console.log(response.data);
             console.log(formData.nome)
         } catch (error) {
