@@ -358,11 +358,11 @@ function AppNavigator() {
   return (
     <Stack.Navigator>
       {userType ? (
-        userType === 'mecanico' ? (
+        userType === 'MEC' ? (
           <Stack.Screen name="MechanicStack" component={MechanicStack} options={{ headerShown: false }} />
-        ) : userType === 'usuario' ? (
+        ) : userType === 'CLI' ? (
           <Stack.Screen name="UserStack" component={UserStack} options={{ headerShown: false }} />
-        ) : (
+        ) : userType === 'ADM' (
           <Stack.Screen name="AdminStack" component={AdminStack} options={{ headerShown: false }} />
         )
       ) : (

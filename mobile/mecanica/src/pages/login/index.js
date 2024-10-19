@@ -4,23 +4,72 @@ import { Text, View, Platform, StyleSheet, StatusBar, Pressable, Image, Touchabl
 import { useAuth } from "../../context/AuthContext";
 
 import api from "../../services/api/api";
+import { useState } from "react";
 
 export default function Login() {
     const {login, userType} = useAuth();
     const navigation = useNavigation();
 
-    const handleLogin = () => {
-        const userType = "admin"; // Atrelando o tipo de usuario a variavel
-        login(userType) // Atrelando o valor ao contexto para requisição
-    }
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState("");
 
-    if (userType === "mecanico") { // Validação para redireção de pagina correta
-        navigation.navigate("MechanicDrawer");
-    } else if (userType === "usuario") {
-        navigation.navigate("UserDrawer");
-    } else if (userType === "admin") {
-        navigation.navigate("AdminDrawer")
-    }
+    const [token, setToken] = useState("")
+    const [tipo, setTipo] = useState("")
+
+    // const handleLogin = async () => {
+
+    //     try {
+    //         const response = await api.post("/login", {
+    //             login: email,
+    //             senha: senha
+    //         })
+    //         console.log(response.data)
+
+    //         if(response.data) {
+    //             setToken(response.data.token)
+    //             setTipo(response.data.tipo)
+    //         }
+ 
+    //         console.log(`tipo : ${tipo}`)
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+
+    //     const userType = tipo; // Atrelando o tipo de usuario a variavel
+    //     login(userType) // Atrelando o valor ao contexto para requisição
+    // }
+
+    const handleLogin = async () => {
+        try {
+            const response = await api.post("/login", {
+                login: email,
+                senha: senha
+            });
+    
+            console.log(response.data);
+    
+            if (response.data) {
+                setToken(response.data.token);
+                const userType = response.data.tipo; // Utilize diretamente o valor da resposta
+                console.log(`tipo : ${userType}`);
+                
+                // Faz o login e passa o tipo do usuário
+                login(userType);
+    
+                // Realiza a navegação com base no tipo do usuário
+                if (userType === "MEC") {
+                    navigation.navigate("MechanicDrawer");
+                } else if (userType === "CLI") {
+                    navigation.navigate("UserDrawer");
+                } else if (userType === "ADM") {
+                    navigation.navigate("AdminDrawer");
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
 
     const navegaHome = () => {
         navigation.navigate("Drawer")
@@ -41,13 +90,14 @@ export default function Login() {
 
                 <TextInput
                     style={styles.inputs}
-                    keyboardType="numeric"
-                    placeholder="Digite seu CPF"
-                    maxLength={11}
+                    value={email}
+                    onChangeText={setEmail}
+                    placeholder="Digite sua senha"
                 ></TextInput>
                 <TextInput
                     style={styles.inputs}
-                    maxLength={11}
+                    value={senha}
+                    onChangeText={setSenha}
                     secureTextEntry
                     placeholder="Digite sua Senha"
                 ></TextInput>
