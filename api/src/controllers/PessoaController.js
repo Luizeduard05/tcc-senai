@@ -118,30 +118,56 @@ const pessoaControllers = {
     }
   },
 
+
+
   editarUsuario: async (req, res) => {
     try {
       const id = req.params.id;
       const { nome, cpf, email, tipo, logradouro, bairro, estado, numero, complemento, cep, telefone } = req.body;
 
-      if (!nome || !cpf || !email || !tipo || !logradouro || !bairro || !estado || !numero || !cep || !telefone) {
-        return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
+      if (!Pessoa.validarCPF(cpf)) {
+        return res.status(400).json({ message: 'CPF inválido. Deve conter 11 dígitos e ser um CPF existente.' });
       }
-
+  
+      if (!Pessoa.validarEmail(email)) {
+        return res.status(400).json({ message: 'E-mail inválido. Por favor, insira um e-mail válido.' });
+      }
+  
+      if (!Endereco.validarCEP(cep)) {
+        return res.status(400).json({ message: 'CEP inválido. Deve conter exatamente 8 dígitos.' });
+      }
+  
+      const tipoUsuario = tipo ? tipo : 'CLI';
+      if (!['ADM', 'MEC', 'CLI'].includes(tipoUsuario)) {
+        return res.status(400).json({ message: 'Tipo de usuário inválido. Permitido apenas ADM, MEC ou CLI.' });
+      }
+  
+      const cpfExistente = await Pessoa.verificarCPFExistente(cpf, id);
+      if (cpfExistente) {
+        return res.status(400).json({ message: 'CPF já cadastrado.' });
+      }
+  
       const pessoa = new Pessoa({ id, nome, cpf, email, tipo });
       await pessoa.atualizarRegistroPessoa();
-
+  
       const endereco = new Endereco({ id, logradouro, bairro, estado, numero, complemento, cep });
       await endereco.atualizarRegistroEnd();
-
+  
       const telefoneObj = new Telefone({ id, telefone });
+      if (!telefoneObj.validarCampos()) {
+        return res.status(400).json({ message: 'Telefone inválido. Deve conter exatamente 11 dígitos.' });
+      }
       await telefoneObj.atualizarRegistroTel();
-
+  
       return res.json({ message: 'Usuário atualizado com sucesso.' });
     } catch (e) {
       console.error(e);
-      return res.status(500).json({ message: `Erro ao atualizar usuário, motivo: ${e.message}` });
+      return res.status(400).json({ message: `Erro ao atualizar usuário, motivo: ${e.message}` });
     }
   },
+  
+  
+  
 
 
   deletarUsuario: async (req, res) => {
@@ -189,8 +215,7 @@ const pessoaControllers = {
         tipo: usuario[0].perfil
       });
     } catch (e) {
-      console.error(e);
-      return res.status(500).json({ message: 'Erro ao fazer login' });
+      return res.status(400).json({ message: 'Erro ao fazer login' });
     }
   },
 
