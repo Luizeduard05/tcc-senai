@@ -19,9 +19,13 @@ const VeiculoController = {
             return res.status(201).json({ message: 'Veículo registrado com sucesso!' }); 
         } catch (error) {
             console.error(error); 
-            return res.status(500).json({ message: `Erro ao registrar veículo: ${error.message}` });
+            if (error.message.includes('obrigatório') || error.message.includes('dígitos')) {
+                return res.status(400).json({ message: error.message });
+            }
+            return res.status(500).json({ message: 'Erro interno ao registrar veículo. Tente novamente mais tarde.' });
         }
     },
+    
     
 
     async buscarVeiculosPorPessoa(req, res) {
@@ -41,14 +45,14 @@ const VeiculoController = {
             }
         } catch (error) {
             console.error(error); 
-            return res.status(500).json({ message: `Erro ao buscar veículos: ${error.message}` });
+            return res.status(400).json({ message: `Erro ao buscar veículos: ${error.message}` });
         }
     },
 
     async editarVeiculo(req, res) {
         const idVei = req.params.id; 
         const { placa, marca, ano, modelo } = req.body;
-
+    
         if (!placa || !marca || !ano || !modelo) {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
         }
@@ -56,13 +60,18 @@ const VeiculoController = {
         const veiculo = new Veiculo({ id: idVei, placa, marca, ano, modelo });
     
         try {
+            veiculo.validarCampos(); 
+    
             await veiculo.atualizarRegistroVeiculo(); 
             return res.json({ message: 'Veículo atualizado com sucesso!' });
         } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: `Erro ao atualizar veículo: ${error.message}` });
+            console.error(error); 
+            return res.status(400).json({ message: error.message });
         }
     },
+    
+    
+    
 
     async deletarVeiculo(req, res) {
         const idVei = req.params.id; 
@@ -75,7 +84,7 @@ const VeiculoController = {
             return res.json({ message: 'Veículo deletado com sucesso!' });
         } catch (error) {
             console.error(error);
-            return res.status(500).json({ message: `Erro ao deletar veículo: ${error.message}` });
+            return res.status(400).json({ message: `Erro ao deletar veículo: ${error.message}` });
         }
     }
     
