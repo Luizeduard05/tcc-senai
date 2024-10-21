@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styleLogin from './Login.module.css'
 import api from '../../service/api'
 import { useState } from 'react'
@@ -9,38 +9,38 @@ const Login = () => {
     const [token, setToken] = useState('')
     const [perfil, setPerfil] = useState('')
 
+    const navigate = useNavigate()
+
     const handleChangeEmail = (e) => {
         setEmail(e.target.value);
-        console.log(email)
     }
 
     const handleChangeSenha = (e) => {
         setSenha(e.target.value);
-        console.log(email)
     }
 
     const hendleSubmit = async (e) => {
-        
+
         e.preventDefault()
         try {
             const response = await api.post('/login', { login: email, senha: senha })
-                .then(response => {
-                    console.log(response);
-                }).catch(error => {
-                    console.log(error);
-                });
-            setToken(response.data.token);
-            setPerfil(response.data.perfil);
-            console.log(response.data)
-            console.log(setToken);
+
+            const tipouser = response.data.tipo
+            console.log(tipouser)
+
+
+            console.log(response);
+
+            if (tipouser === 'CLI') {
+                navigate('/intranet')
+            }
+
         } catch (error) {
             console.log(error);
 
         }
 
     }
-
-
 
 
     return (
@@ -329,7 +329,7 @@ const Login = () => {
                                 </div>
                                 <div className={styleLogin.inputWrapper}>
                                     {/* <Link to={"/intranet"}> */}
-                                    <input type="submit" value='Entrar' onClick={hendleSubmit}/>
+                                    <input type="submit" value='Entrar' onClick={hendleSubmit} />
                                     {/* </Link> */}
 
                                 </div>
