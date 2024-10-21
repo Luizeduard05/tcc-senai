@@ -138,7 +138,7 @@ img.carros {
     width: 74%;
 }
 
-button {
+.botãoTp {
     --glow-color: rgb(255, 102, 102);
     --glow-spread-color: rgba(255, 51, 51, 0.781);
     --enhanced-glow-color: rgb(255, 153, 153);
@@ -161,7 +161,7 @@ button {
     left: 10%;
 }
 
-button::after {
+.botãoTp::after {
     pointer-events: none;
     content: "";
     position: absolute;
@@ -176,7 +176,7 @@ button::after {
 
 }
 
-button:hover {
+.botãoTp:hover {
     color: var(--btn-color);
     background-color: var(--glow-color);
     box-shadow: 0 0 1em .25em var(--glow-color),
@@ -186,7 +186,7 @@ button:hover {
 
 }
 
-button:active {
+.botãoTp:active {
     box-shadow: 0 0 0.6em .25em var(--glow-color),
         0 0 2.5em 2em var(--glow-spread-color),
         inset 0 0 .5em .25em var(--glow-color);
