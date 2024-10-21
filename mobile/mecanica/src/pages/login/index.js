@@ -16,42 +16,18 @@ export default function Login() {
     const [token, setToken] = useState("")
     const [tipo, setTipo] = useState("")
 
-    // const handleLogin = async () => {
-
-    //     try {
-    //         const response = await api.post("/login", {
-    //             login: email,
-    //             senha: senha
-    //         })
-    //         console.log(response.data)
-
-    //         if(response.data) {
-    //             setToken(response.data.token)
-    //             setTipo(response.data.tipo)
-    //         }
- 
-    //         console.log(`tipo : ${tipo}`)
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-
-    //     const userType = tipo; // Atrelando o tipo de usuario a variavel
-    //     login(userType) // Atrelando o valor ao contexto para requisição
-    // }
-
     const handleLogin = async () => {
         try {
             const response = await api.post("/login", {
                 login: email,
                 senha: senha
-            });
-    
-            console.log(response.data);
+            }); 
+            // console.log(response.data);
     
             if (response.data) {
                 setToken(response.data.token);
                 const userType = response.data.tipo; // Utilize diretamente o valor da resposta
-                console.log(`tipo : ${userType}`);
+                // console.log(`tipo : ${userType}`);
                 
                 // Faz o login e passa o tipo do usuário
                 login(userType);
@@ -60,7 +36,7 @@ export default function Login() {
                 if (userType === "MEC") {
                     navigation.navigate("MechanicDrawer");
                 } else if (userType === "CLI") {
-                    navigation.navigate("UserDrawer");
+                    navigation.navigate("UserStack");
                 } else if (userType === "ADM") {
                     navigation.navigate("AdminDrawer");
                 }
@@ -92,7 +68,7 @@ export default function Login() {
                     style={styles.inputs}
                     value={email}
                     onChangeText={setEmail}
-                    placeholder="Digite sua senha"
+                    placeholder="Digite seu e-mail"
                 ></TextInput>
                 <TextInput
                     style={styles.inputs}
