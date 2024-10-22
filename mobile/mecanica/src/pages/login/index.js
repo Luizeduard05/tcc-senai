@@ -12,9 +12,7 @@ export default function Login() {
 
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState("");
-
     const [token, setToken] = useState("")
-    const [tipo, setTipo] = useState("")
 
     const handleLogin = async () => {
         try {
@@ -22,12 +20,12 @@ export default function Login() {
                 login: email,
                 senha: senha
             }); 
-            console.log(response.data);
+            // console.log(response.data);
     
             if (response.data) {
                 setToken(response.data.token);
                 const userType = response.data.tipo; // Utilize diretamente o valor da resposta
-                console.log(`tipo : ${userType}`);
+                // console.log(`tipo : ${userType}`);
                 
                 // Faz o login e passa o tipo do usuário
                 login(userType);
@@ -38,9 +36,8 @@ export default function Login() {
                 } else if (userType === "CLI") {
                     navigation.navigate("UserStack");
                 } else if (userType === "ADM") {
-                    navigation.navigate("AdminDrawer");
+                    navigation.navigate("AdminStack");
                 }
-
                 
             }
         } catch (error) {
@@ -48,14 +45,10 @@ export default function Login() {
         }
     };
 
-
-    const navegaHome = () => {
-        navigation.navigate("Drawer")
-    }
-
     const navegaCadastroUser = () => {
         navigation.navigate("CadastroUser")
     }
+
     return (
         <LinearGradient
             colors={['#000000', 'rgba(0, 0, 0, 0.5)']}
