@@ -12,72 +12,43 @@ export default function Login() {
 
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState("");
-
     const [token, setToken] = useState("")
-    const [tipo, setTipo] = useState("")
-
-    // const handleLogin = async () => {
-
-    //     try {
-    //         const response = await api.post("/login", {
-    //             login: email,
-    //             senha: senha
-    //         })
-    //         console.log(response.data)
-
-    //         if(response.data) {
-    //             setToken(response.data.token)
-    //             setTipo(response.data.tipo)
-    //         }
- 
-    //         console.log(`tipo : ${tipo}`)
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-
-    //     const userType = tipo; // Atrelando o tipo de usuario a variavel
-    //     login(userType) // Atrelando o valor ao contexto para requisição
-    // }
 
     const handleLogin = async () => {
         try {
             const response = await api.post("/login", {
                 login: email,
                 senha: senha
-            });
-    
-            console.log(response.data);
+            }); 
+            // console.log(response.data);
     
             if (response.data) {
                 setToken(response.data.token);
                 const userType = response.data.tipo; // Utilize diretamente o valor da resposta
-                console.log(`tipo : ${userType}`);
+                // console.log(`tipo : ${userType}`);
                 
                 // Faz o login e passa o tipo do usuário
                 login(userType);
     
                 // Realiza a navegação com base no tipo do usuário
                 if (userType === "MEC") {
-                    navigation.navigate("MechanicDrawer");
+                    navigation.navigate("MechanicStack");
                 } else if (userType === "CLI") {
-                    navigation.navigate("UserDrawer");
+                    navigation.navigate("UserStack");
                 } else if (userType === "ADM") {
-                    navigation.navigate("AdminDrawer");
+                    navigation.navigate("AdminStack");
                 }
+                
             }
         } catch (error) {
             console.log(error);
         }
     };
 
-
-    const navegaHome = () => {
-        navigation.navigate("Drawer")
-    }
-
     const navegaCadastroUser = () => {
         navigation.navigate("CadastroUser")
     }
+
     return (
         <LinearGradient
             colors={['#000000', 'rgba(0, 0, 0, 0.5)']}
@@ -92,7 +63,7 @@ export default function Login() {
                     style={styles.inputs}
                     value={email}
                     onChangeText={setEmail}
-                    placeholder="Digite sua senha"
+                    placeholder="Digite seu e-mail"
                 ></TextInput>
                 <TextInput
                     style={styles.inputs}
