@@ -16,7 +16,6 @@ const Historico = () => {
 
   return (
     
-    
     <div className={stylesH.container}>
       <div className={stylesH['history-wrapper']}>
         <div className={stylesH.historico}>
