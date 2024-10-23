@@ -5,8 +5,8 @@ import Os from '../models/Classes/OsClass.js';
 const osController = {
     async registroDeOS(req, res) {
         const { data, status, mo } = req.body;
-        const idVei = req.params.idVei;
-        const idPessoaVei = req.params.idPessoaVei;
+        const idVei = req.query.idVei; 
+        const idPessoaVei = req.query.idPessoaVei; 
 
         if (!data || !status || !mo) {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
@@ -18,7 +18,6 @@ const osController = {
         };
 
         const dataFormatada = formatarData(data);
-        console.log('Data formatada:', dataFormatada); 
 
         const statusMap = {
             'Aguardando Retorno': 0,
@@ -52,8 +51,8 @@ const osController = {
     
 
     async buscarOsPorVeiculos(req, res) {
-        const idVei = req.params.idVei;
-        const idPessoaVei = req.params.idPessoaVei;
+        const idVei = req.query.idVei; 
+        const idPessoaVei = req.query.idPessoaVei;
 
         if (!idVei || !idPessoaVei) {
             return res.status(400).json({ message: 'ID do veiculo é obrigatório.' });
