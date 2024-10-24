@@ -1,0 +1,96 @@
+.sectionTitle h2 {
+    position: relative;
+    text-align: center;
+    font-size: 36px;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-top: 35px;
+    color: red;
+    /* Título em vermelho */
+}
+
+.sectionTitle p {
+    font-size: 18px;
+    line-height: 28px;
+    text-align: center;
+    margin-top: 40px;
+    color: black;
+    /* Texto em preto */
+}
+
+.buttonGroup {
+    text-align: center;
+}
+
+.button {
+    display: inline-block;
+    font-family: sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    color: black;
+    /* Preto para os botões */
+    border: none;
+    background: none;
+    text-transform: lowercase;
+}
+
+.button:hover,
+.button.is-checked {
+    color: red;
+    /* Botões em vermelho ao clicar ou passar o mouse */
+}
+
+.card {
+    margin: 25px 0px;
+    border: 1px solid black;
+    /* Borda preta */
+}
+
+.cardBlock {
+    height: 120px;
+    padding: 25px;
+    background-color: white;
+}
+
+.cardImgTop {
+    border-radius: 50%;
+    align-self: center;
+    width: 250px;
+    height: 250px;
+    padding: 20px;
+    z-index: 1;
+    margin-top: 15px;
+}
+
+.circle {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    border: 15px solid red;
+    /* Círculo vermelho */
+    position: absolute;
+    top: 15px;
+    left: 40px;
+    z-index: 0;
+}
+
+.cardTitle {
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 18px;
+    color: black;
+    /* Título do card em preto */
+}
+
+.infoText {
+    float: left;
+    color: red;
+    /* Informação em vermelho */
+}
+
+.priceText {
+    float: right;
+    color: red;
+    /* Preço em vermelho */
+}

@@ -55,7 +55,7 @@ const Home = () => {
                         </div>
                     </div>
                     <div className="textosBV">
-                        <h2>olá Seja bem-vindo</h2>
+                        <span className="texto1">olá Seja bem-vindo</span>
                         <h1>Tudo oque seu carro precisa</h1>
                         <h4>O cuidado que voce e seu carro merecem de forma facil e rapido</h4>
 

@@ -12,10 +12,11 @@
   "dependencies": {
     "@tsparticles/react": "^3.0.0",
     "axios": "^1.7.7",
+    "isotope-layout": "^3.0.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "rotacar": "file:",
     "react-router-dom": "^6.26.2",
+    "rotacar": "file:",
     "swiper": "^11.1.14"
   },
   "devDependencies": {
