@@ -1,13 +1,16 @@
 import conectarBancoDeDados from '../../config/db.js';
+import ItemOs from './ItemOsClass.js';
+
 class Os {
     constructor(pOs) {
         this.id = (pOs.id !== null || pOs.id > 0) ? pOs.id : null;
         this.data = pOs.data;
-        this.status = (pOs.status !== null || pOs.status != '') ? pOs.status : null;
+        this.status = (pOs.status !== null || pOs.status !== '') ? pOs.status : null;
         this.mo = pOs.mo;
         this.total = pOs.total;
         this.id_veiculo = (pOs.id_veiculo !== null && pOs.id_veiculo > 0) ? pOs.id_veiculo : null;
         this.id_pessoa_veiculo = (pOs.id_pessoa_veiculo !== null && pOs.id_pessoa_veiculo > 0) ? pOs.id_pessoa_veiculo : null;
+        this.itens = pOs.itens || [];
     }
     get Id() { return this.id; }
     set Id(value) { this.id = value; }
@@ -40,7 +43,7 @@ class Os {
         return true;
     }
 
-    novoRegistroOs = async (idVei, idPessoaVei) => {
+    async novoRegistroOs(idVei, idPessoaVei) {
         const con = await conectarBancoDeDados();
         try {
             this.validarCampos();
@@ -48,11 +51,25 @@ class Os {
                 `INSERT INTO tbl_ordem_de_serviço (data, status, mo, total, id_veiculo, id_pessoa_veiculo) VALUES (?, ?, ?, ?, ?, ?)`,
                 [this.data, this.status, this.mo, this.total, idVei, idPessoaVei]
             );
-            return result[0].insertId;
+
+            const idOs = result[0].insertId;
+
+            for (const item of this.itens) {
+                const itemOs = new ItemOs({ 
+                    quantidade: item.quantidade, 
+                    id_produto: item.id_produto, 
+                    id_os: idOs,
+                    id_veiculo_os: idVei,
+                    id_pessoa_veiculo_os: idPessoaVei
+                });
+                await itemOs.adicionarPecaOs(idOs, idVei, idPessoaVei, item.id_produto);
+            }
+
+            return idOs;
         } catch (error) {
             throw new Error(`Erro ao registrar OS: ${error.message}`);
         }
-    };
+    }
 
     atualizarRegistroOs = async (idOS) => {
         const con = await conectarBancoDeDados();
