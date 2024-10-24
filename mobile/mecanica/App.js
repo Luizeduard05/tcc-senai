@@ -53,11 +53,11 @@ function UserDrawer({ navigation }) { // Drawer para o usuário
       />
       <Drawer.Screen
         name="AgendamentosDrawer"
-        component={Agendamentos} 
+        component={Agendamentos}
         options={{
           title: 'Agendamentos',
           headerTintColor: "#fff",
-          headerShown: true, 
+          headerShown: true,
           headerStyle: {
             backgroundColor: '#000'
           },
@@ -65,11 +65,11 @@ function UserDrawer({ navigation }) { // Drawer para o usuário
       />
       <Drawer.Screen
         name="HistoricoDrawer"
-        component={Historico} 
+        component={Historico}
         options={{
           title: 'Historico',
           headerTintColor: "#fff",
-          headerShown: true,  
+          headerShown: true,
           headerStyle: {
             backgroundColor: '#000'
           },
@@ -120,7 +120,7 @@ function UserStack() { // Stack para o usuario
 // INICIO NAVEGAÇÃO MECANICO
 function MechanicDrawer() { // Drawer para mecânico
   return (
-    <Drawer.Navigator 
+    <Drawer.Navigator
       initialRouteName="MecanicoHome"
       screenOptions={{
         drawerStyle: {
@@ -131,9 +131,9 @@ function MechanicDrawer() { // Drawer para mecânico
         },
       }}
     >
-      <Drawer.Screen 
-        name="Home" 
-        component={MecanicoHome} 
+      <Drawer.Screen
+        name="Home"
+        component={MecanicoHome}
         options={{
           headerStyle: {
             backgroundColor: '#000',
@@ -142,7 +142,7 @@ function MechanicDrawer() { // Drawer para mecânico
           title: 'Início',
         }}
       />
-      <Drawer.Screen 
+      <Drawer.Screen
         name='HistoricoMecanico'
         component={HistoricoMecanico}
         options={{
@@ -154,33 +154,33 @@ function MechanicDrawer() { // Drawer para mecânico
           },
         }}
       />
-      <Drawer.Screen 
-        name="Agendamentos" 
-        component={AgendamentosMecanico} 
+      <Drawer.Screen
+        name="Agendamentos"
+        component={AgendamentosMecanico}
         options={{
           title: 'Agendamentos',
           headerTintColor: "#fff",
-          headerShown: true,  
+          headerShown: true,
           headerStyle: {
             backgroundColor: '#000'
           },
         }}
       />
-      <Drawer.Screen 
-        name="MontarOrcamento" 
-        component={NovoOrcamentoMecanico} 
+      <Drawer.Screen
+        name="MontarOrcamento"
+        component={NovoOrcamentoMecanico}
         options={{
           title: 'Novo Orçamento',
           headerTintColor: "#fff",
-          headerShown: true, 
+          headerShown: true,
           headerStyle: {
             backgroundColor: '#000'
           },
         }}
       />
-      <Drawer.Screen 
-        name="VisualizarOrcamentoMecanico" 
-        component={VisualizaOrcamentoMecanico} 
+      <Drawer.Screen
+        name="VisualizarOrcamentoMecanico"
+        component={VisualizaOrcamentoMecanico}
         options={{
           title: 'Visualizar Orçamentos',
           headerTintColor: "#fff",
@@ -197,29 +197,29 @@ function MechanicDrawer() { // Drawer para mecânico
 function MechanicStack() { // Stack de mecânico
   return (
     <Stack.Navigator>
-      <Stack.Screen 
-      name="MechanicDrawer" 
-      component={MechanicDrawer} 
-      options={{ headerShown: false }} />
-      <Stack.Screen 
-        name="AgendamentosMecanico" 
-        component={AgendamentosMecanico} 
+      <Stack.Screen
+        name="MechanicDrawer"
+        component={MechanicDrawer}
+        options={{ headerShown: false }} />
+      <Stack.Screen
+        name="AgendamentosMecanico"
+        component={AgendamentosMecanico}
         options={{
           title: 'Agendamentos',
           headerStyle: { backgroundColor: '#000' },
           headerTintColor: '#fff',
         }}
       />
-      <Stack.Screen 
-        name="MontarOrcamentoMecanico" 
-        component={NovoOrcamentoMecanico} 
+      <Stack.Screen
+        name="MontarOrcamentoMecanico"
+        component={NovoOrcamentoMecanico}
         options={{
           title: 'Novo orçamento',
           headerStyle: { backgroundColor: '#000' },
           headerTintColor: '#fff',
         }}
       />
-      
+
     </Stack.Navigator>
   );
 }
@@ -228,7 +228,7 @@ function MechanicStack() { // Stack de mecânico
 // INICIO NAVEGAÇAO ADM
 function AdminDrawer() { // Drawer para administrador
   return (
-    <Drawer.Navigator 
+    <Drawer.Navigator
       initialRouteName="AdminHome"
       screenOptions={{
         drawerStyle: {
@@ -239,9 +239,9 @@ function AdminDrawer() { // Drawer para administrador
         },
       }}
     >
-      <Drawer.Screen 
-        name="Home" 
-        component={AdminHome} 
+      <Drawer.Screen
+        name="Home"
+        component={AdminHome}
         options={{
           headerStyle: {
             backgroundColor: '#000',
@@ -250,9 +250,9 @@ function AdminDrawer() { // Drawer para administrador
           title: 'Início',
         }}
       />
-      <Drawer.Screen 
-        name="HistoricoADM" 
-        component={HistoricoADM} 
+      <Drawer.Screen
+        name="HistoricoADM"
+        component={HistoricoADM}
         options={{
           headerStyle: {
             backgroundColor: '#000',
@@ -261,9 +261,9 @@ function AdminDrawer() { // Drawer para administrador
           title: 'Historico',
         }}
       />
-      <Drawer.Screen 
-        name="AgendamentoADM" 
-        component={AgendamentosADM} 
+      <Drawer.Screen
+        name="AgendamentoADM"
+        component={AgendamentosADM}
         options={{
           headerStyle: {
             backgroundColor: '#000',
@@ -272,9 +272,9 @@ function AdminDrawer() { // Drawer para administrador
           title: 'Agendamentos',
         }}
       />
-      <Drawer.Screen 
-        name="NovoOrcamentoADM" 
-        component={NovoOrcamentoADM} 
+      <Drawer.Screen
+        name="NovoOrcamentoADM"
+        component={NovoOrcamentoADM}
         options={{
           headerStyle: {
             backgroundColor: '#000',
@@ -283,9 +283,9 @@ function AdminDrawer() { // Drawer para administrador
           title: 'Novo Orçamento',
         }}
       />
-      <Drawer.Screen 
-        name="VisualizaOrcamentoADM" 
-        component={VisualizaOrcamentoADM} 
+      <Drawer.Screen
+        name="VisualizaOrcamentoADM"
+        component={VisualizaOrcamentoADM}
         options={{
           headerStyle: {
             backgroundColor: '#000',
@@ -294,9 +294,9 @@ function AdminDrawer() { // Drawer para administrador
           title: 'Visualiza Orçamento',
         }}
       />
-      <Drawer.Screen 
-        name="NovaPecaADM" 
-        component={NovaPeca} 
+      <Drawer.Screen
+        name="NovaPecaADM"
+        component={NovaPeca}
         options={{
           headerStyle: {
             backgroundColor: '#000',
@@ -305,9 +305,9 @@ function AdminDrawer() { // Drawer para administrador
           title: 'Cadastro de peças',
         }}
       />
-      <Drawer.Screen 
-        name="VisualizaPecaADM" 
-        component={VisualizaPeca} 
+      <Drawer.Screen
+        name="VisualizaPecaADM"
+        component={VisualizaPeca}
         options={{
           headerStyle: {
             backgroundColor: '#000',
@@ -324,28 +324,28 @@ function AdminDrawer() { // Drawer para administrador
 function AdminStack() { // Stack de administrador
   return (
     <Stack.Navigator>
-      <Stack.Screen 
-        name="AdminDrawer" 
-        component={AdminDrawer} 
+      <Stack.Screen
+        name="AdminDrawer"
+        component={AdminDrawer}
         options={{ headerShown: false }} />
-      <Stack.Screen 
-        name="AgendamentosADM" 
-        component={AgendamentosADM} 
+      <Stack.Screen
+        name="AgendamentosADM"
+        component={AgendamentosADM}
         options={{
           title: 'Agendamentos',
           headerStyle: { backgroundColor: '#000' },
           headerTintColor: '#fff',
         }}
-        />
-      <Stack.Screen 
-        name="NovosOrcamentoADM" 
-        component={NovoOrcamentoADM} 
+      />
+      <Stack.Screen
+        name="NovosOrcamentoADM"
+        component={NovoOrcamentoADM}
         options={{
           title: 'Novo Orçamento',
           headerStyle: { backgroundColor: '#000' },
           headerTintColor: '#fff',
         }}
-        />
+      />
     </Stack.Navigator>
   );
 }
@@ -358,13 +358,13 @@ function AppNavigator() {
   return (
     <Stack.Navigator>
       {userType ? (
-        userType === 'mecanico' ? (
+        userType === 'MEC' ? (
           <Stack.Screen name="MechanicStack" component={MechanicStack} options={{ headerShown: false }} />
-        ) : userType === 'usuario' ? (
+        ) : userType === 'CLI' ? (
           <Stack.Screen name="UserStack" component={UserStack} options={{ headerShown: false }} />
-        ) : (
+        ) : userType === 'ADM' ? (
           <Stack.Screen name="AdminStack" component={AdminStack} options={{ headerShown: false }} />
-        )
+        ) : null
       ) : (
         <>
           <Stack.Screen name="Intranet" component={Intranet} options={{ headerShown: false }} />

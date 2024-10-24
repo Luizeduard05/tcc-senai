@@ -4,11 +4,11 @@ import Os from '../models/Classes/OsClass.js';
 
 const osController = {
     async registroDeOS(req, res) {
-        const { data, status, mo } = req.body;
-        const idVei = req.params.idVei;
-        const idPessoaVei = req.params.idPessoaVei;
+        const { data, status, mo, itens } = req.body; 
+        const idVei = req.query.idVei; 
+        const idPessoaVei = req.query.idPessoaVei; 
 
-        if (!data || !status || !mo) {
+        if (!data || !status || !mo || !Array.isArray(itens)) {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
         }
 
@@ -18,7 +18,6 @@ const osController = {
         };
 
         const dataFormatada = formatarData(data);
-        console.log('Data formatada:', dataFormatada); 
 
         const statusMap = {
             'Aguardando Retorno': 0,
@@ -37,7 +36,13 @@ const osController = {
 
         const total = moFormatado;
 
-        const ordemServico = new Os({ data: dataFormatada, status: statusCodigo, mo: moFormatado, total });
+        const ordemServico = new Os({ 
+            data: dataFormatada, 
+            status: statusCodigo, 
+            mo: moFormatado, 
+            total, 
+            itens 
+        });
 
         try {
             await ordemServico.novoRegistroOs(idVei, idPessoaVei);
@@ -52,8 +57,8 @@ const osController = {
     
 
     async buscarOsPorVeiculos(req, res) {
-        const idVei = req.params.idVei;
-        const idPessoaVei = req.params.idPessoaVei;
+        const idVei = req.query.idVei; 
+        const idPessoaVei = req.query.idPessoaVei;
 
         if (!idVei || !idPessoaVei) {
             return res.status(400).json({ message: 'ID do veiculo é obrigatório.' });

@@ -120,11 +120,14 @@ WHERE p.id = ?;
         return true;
     }
 
-    static verificarCPFExistente = async (cpf) => {
+    static verificarCPFExistente = async (cpf, idAtual = null) => {
         const con = await conectarBancoDeDados();
         try {
-            const query = `SELECT COUNT(*) as count FROM tbl_pessoa WHERE cpf = ?`;
-            const [rows] = await con.query(query, [cpf]);
+            const query = `SELECT COUNT(*) as count FROM tbl_pessoa WHERE cpf = ?${idAtual ? ' AND id != ?' : ''}`;
+            const values = [cpf];
+            if (idAtual) values.push(idAtual);
+            
+            const [rows] = await con.query(query, values);
             return rows[0].count > 0; 
         } catch (error) {
             throw new Error(`Erro ao verificar CPF: ${error.message}`);
@@ -132,6 +135,7 @@ WHERE p.id = ?;
             con.release();
         }
     };
+    
     
     static validarEmail(email) {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

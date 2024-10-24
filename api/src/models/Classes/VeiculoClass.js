@@ -41,8 +41,17 @@ class Veiculo {
                 throw new Error(`O campo ${key} é obrigatório e deve ser válido.`);
             }
         }
+    
+        if (!/^([A-Z]{3}-[0-9]{4}|[A-Z]{3}[0-9]{4}|[A-Z]{3}[0-9][A-Z][0-9]{2})$/.test(this.placa)) {
+            throw new Error('A placa deve estar no formato válido: ABC-1234, ABC1234 ou ABC1D23.');
+        }
+        
+        if (!/^\d{4}$/.test(this.ano)) {
+            throw new Error('O ano deve conter exatamente 4 dígitos.');
+        }
         return true;
     }
+    
 
     novoRegistroVeiculo = async (idPessoa) => {
         const con = await conectarBancoDeDados();
@@ -81,7 +90,8 @@ class Veiculo {
             throw new Error(`Erro ao excluir veículo: ${error.message}`);
         }
     };
-    
+
+
 }
 
 export default Veiculo;
