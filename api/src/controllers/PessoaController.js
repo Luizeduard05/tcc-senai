@@ -190,33 +190,39 @@ const pessoaControllers = {
 
   loginUsuario: async (req, res) => {
     try {
-      const { login, senha } = req.body;
+        const { login, senha } = req.body;
 
-      const usuario = await Login.selecionarUsuarioPorLogin(login);
-      if (!usuario || usuario.length === 0) {
-        return res.status(401).json({ message: 'Credenciais inválidas' });
-      }
+        const usuario = await Login.selecionarUsuarioPorLogin(login);
+        if (!usuario || usuario.length === 0) {
+            return res.status(401).json({ message: 'Credenciais inválidas' });
+        }
 
-      const senhaValida = await bcrypt.compare(senha, usuario[0].senha);
-      if (!senhaValida) {
-        return res.status(401).json({ message: 'Credenciais inválidas' });
-      }
+        const senhaValida = await bcrypt.compare(senha, usuario[0].senha);
+        if (!senhaValida) {
+            return res.status(401).json({ message: 'Credenciais inválidas' });
+        }
 
-      dotenv.config();
+        dotenv.config();
 
-      const token = jwt.sign({
-        id: usuario[0].id_pessoa,
-        perfil: usuario[0].perfil
-      }, process.env.JWT_SECRET, { expiresIn: '2h' });
+        const token = jwt.sign({
+            id: usuario[0].id_pessoa,
+            perfil: usuario[0].perfil
+        }, process.env.JWT_SECRET, { expiresIn: '2h' });
 
-      return res.json({
-        token,
-        tipo: usuario[0].perfil
-      });
+        const pessoa = await Pessoa.selectRegistroPessoa(usuario[0].id_pessoa);
+
+        return res.json({
+            token,
+            tipo: usuario[0].perfil,
+            id: pessoa[0].pessoa_id, 
+            nome: pessoa[0].nome
+        });
     } catch (e) {
-      return res.status(400).json({ message: 'Erro ao fazer login' });
+        return res.status(400).json({ message: 'Erro ao fazer login' });
     }
-  },
+}
+
+
 
 
 };
