@@ -6,6 +6,7 @@ import PecasController from "../controllers/PecasController.js";
 import agendamentoController from "../controllers/AgendamentoController.js";
 import jwt from 'jsonwebtoken';
 import authMiddleware from "../../Middlewares/authMiddlewares.js";
+import osController from '../controllers/OsController.js';
 
 
 const router = Router();
@@ -58,11 +59,14 @@ router.delete('/veiculos/:id', autenticarToken, veiculoControllers.deletarVeicul
 // rota para Cadastro de OS
 router.post('/Os', autenticarToken, OsController.registroDeOS);
 // rota para Busca de OSs
-router.get('/Os', autenticarToken, OsController.buscarOsPorVeiculos);
+router.get('/os/pessoa/:idPessoa', autenticarToken, osController.buscarOrcamentoPorPessoa);
 // Rota para editar OS
 router.put('/Os/:id', autenticarToken, OsController.editarOS);
 // Rota para deletar OS 
 router.delete('/Os/:id', autenticarToken, OsController.deletarOS);
+
+
+
 
 // ROTAS : AGENDAMENTO
 
@@ -87,7 +91,6 @@ router.get('/pecas', autenticarToken, PecasController.listarPecas);
 router.put('/pecas/:id', autenticarToken, PecasController.editarPecas);
 // Rota para deletar PEÇAS 
 router.delete('/pecas/:id', autenticarToken, PecasController.deletarPecas);
-
 
 
 export default router;

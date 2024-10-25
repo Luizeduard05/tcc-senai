@@ -54,51 +54,26 @@ const osController = {
     },
 
 
+    async buscarOrcamentoPorPessoa(req, res) {
+        const idPessoa = req.params.idPessoa;
     
-
-    async buscarOsPorVeiculos(req, res) {
-        const idVei = req.query.idVei; 
-        const idPessoaVei = req.query.idPessoaVei;
-
-        if (!idVei || !idPessoaVei) {
-            return res.status(400).json({ message: 'ID do veiculo é obrigatório.' });
+        if (!idPessoa) {
+            return res.status(400).json({ message: 'ID da pessoa é obrigatório.' });
         }
-
+    
         const con = await conectarBancoDeDados();
         try {
-            const [rows] = await con.query(`SELECT * FROM tbl_ordem_de_serviço WHERE id_veiculo = ?`, [idVei]);
-            if (rows.length > 0) {
-                const dataFormatada = rows.map(servico => {
-                    const dataUTC = new Date(servico.data);
-
-                    const opcoes = {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit'
-                    };
-
-                    const data = dataUTC.toLocaleString('pt-BR', opcoes);
-                    const [dia, mes, ano] = data.split('/'); 
-
-                    return {
-                        ...servico,
-                        data: `${dia}/${mes}/${ano}`
-                    };
-                });
-                return res.json(dataFormatada);
-            } else {
-                return res.status(404).json({ message: 'Nenhum OS encontrada para este veiculo.' });
-            }
+            const [veiculos] = await con.query(`SELECT * FROM tbl_veiculo WHERE id_pessoa = ?`, [idPessoa]);
+            const [ordensServico] = await con.query(`SELECT * FROM tbl_ordem_de_serviço WHERE id_pessoa_veiculo = ?`, [idPessoa]);
+    
+            return res.json({ veiculos, ordensServico });
         } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: `Erro ao buscar OS: ${error.message}` });
+            console.error('Erro ao buscar orçamento:', error);
+            return res.status(500).json({ message: `Erro ao buscar orçamento: ${error.message}` });
         }
     },
-
-
-
-
-
+    
+    
 
     async editarOS(req, res) {
         const idOS = req.params.id;
