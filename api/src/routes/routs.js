@@ -72,8 +72,10 @@ router.delete('/Os/:id', autenticarToken, OsController.deletarOS);
 
 // rota para Cadastro de AGENDAMENTO
 router.post('/agendar', autenticarToken, agendamentoController.registroDeAgendamento);
-// rota para Busca de AGENDAMENTO
-router.get('/agendar', autenticarToken, agendamentoController.buscarAgendamentoPorPessoa);
+// Rota para Busca de AGENDAMENTO por ID da pessoa
+router.get('/agendar/pessoa/:idPessoa', autenticarToken, agendamentoController.buscarAgendamentoPorPessoa);
+// Rota para listar todos os agendamentos
+router.get('/agendamentos',  autenticarToken, agendamentoController.listarAgendamentos);
 // Rota para editar AGENDAMENTO
 router.put('/agendar/:id', autenticarToken, agendamentoController.editarAgendamento);
 // Rota para deletar AGENDAMENTO 
