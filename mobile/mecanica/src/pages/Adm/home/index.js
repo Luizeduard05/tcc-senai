@@ -3,9 +3,11 @@ import { View, Text, Image, StyleSheet, Platform, StatusBar, TouchableOpacity } 
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
 import carro3 from '../../../assets/carro3.png'; 
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function AdminHome() { 
     const navigation = useNavigation()
+    const { nome } = useAuth()
     return ( 
         <LinearGradient 
             colors={['#000000', 'rgba(0, 0, 0, 0.5)']} 
@@ -15,7 +17,7 @@ export default function AdminHome() {
                 colors={['#FF0000', '#000000']} 
                 style={styles.container} 
             > 
-                <Text style={styles.greetingText}>Olá Luiz!</Text> 
+                <Text style={styles.greetingText}>Olá {nome}!</Text> 
                 <Text style={styles.helpText}>Como podemos ajudar hoje?</Text> 
 
                 {/* Área para a imagem */} 
