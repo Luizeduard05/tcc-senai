@@ -1,19 +1,54 @@
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Text, View, Platform, StyleSheet, StatusBar, Pressable, Image, TouchableOpacity, TextInput } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context";
-import CadastroUser from "../cadastroUser";
+import { useAuth } from "../../context/AuthContext";
+
+import api from "../../services/api/api";
+import { useState } from "react";
 
 export default function Login() {
-    const navigation = useNavigation()
+    const {login, userType} = useAuth();
+    const navigation = useNavigation();
 
-    const navegaHome = () => {
-        navigation.navigate("Drawer")
-    }
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState("");
+    const [token, setToken] = useState("")
+
+    const handleLogin = async () => {
+        try {
+            const response = await api.post("/login", {
+                login: email,
+                senha: senha
+            }); 
+            // console.log(response.data);
+    
+            if (response.data) {
+                setToken(response.data.token);
+                const userType = response.data.tipo; // Utilize diretamente o valor da resposta
+                // console.log(`tipo : ${userType}`);
+                
+                // Faz o login e passa o tipo do usuário
+                login(userType);
+    
+                // Realiza a navegação com base no tipo do usuário
+                if (userType === "MEC") {
+                    navigation.navigate("MechanicStack");
+                } else if (userType === "CLI") {
+                    navigation.navigate("UserStack");
+                } else if (userType === "ADM") {
+                    navigation.navigate("AdminStack");
+                }
+                
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const navegaCadastroUser = () => {
         navigation.navigate("CadastroUser")
     }
+
     return (
         <LinearGradient
             colors={['#000000', 'rgba(0, 0, 0, 0.5)']}
@@ -26,13 +61,14 @@ export default function Login() {
 
                 <TextInput
                     style={styles.inputs}
-                    keyboardType="numeric"
-                    placeholder="Digite seu CPF"
-                    maxLength={11}
+                    value={email}
+                    onChangeText={setEmail}
+                    placeholder="Digite seu e-mail"
                 ></TextInput>
                 <TextInput
                     style={styles.inputs}
-                    maxLength={11}
+                    value={senha}
+                    onChangeText={setSenha}
                     secureTextEntry
                     placeholder="Digite sua Senha"
                 ></TextInput>
@@ -44,7 +80,7 @@ export default function Login() {
                     <Text style={styles.text}  >Cadastre-se</Text>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.btnAcessar} onPress={navegaHome}>
+                <TouchableOpacity style={styles.btnAcessar} onPress={handleLogin}>
                     <Text style={styles.textBtn}>Acessar</Text>
                 </TouchableOpacity>
             </View>
@@ -125,75 +161,3 @@ const styles = StyleSheet.create({
     }
 
 });
-
-
-{/* <View style={styles.container}>
-
-<Text style={styles.title}>Rota Car</Text>
-
-<Text style={styles.text}>Entre na sua conta para acessar as informações</Text>
-<Text style={styles.text}>Preencha todos os campos abaixo para realizar login</Text>
-
-<TextInput
-    keyboardType="numeric"
-    placeholder="Digite seu CPF"
-    maxLength={11}
-    style={styles.inputs}
-></TextInput>
-<TextInput
-    maxLength={11}
-    secureTextEntry
-    placeholder="Digite sua Senha"
-    style={styles.inputs}
-></TextInput>
-
-<TouchableOpacity style={styles.btnAcessar}>
-    <Text style={styles.textBtn}>Acessar</Text>
-</TouchableOpacity>
-
-</View> */}
-
-// container: {
-//     flex: 1,
-//     backgroundColor: "#90B7CF",
-//     alignItems: "center",
-//     justifyContent: "center"
-//     // justifyContent: "space-evenly",
-// },
-// title: {
-//     textAlign: "center",
-//     fontWeight: "bold",
-//     fontSize: 25,
-//     color: "#cb3256",
-// },
-// text: {
-//     textAlign: "center",
-//     color: "#022135",
-//     fontSize: 16,
-//     fontWeight: 'bold',
-//     margin: 10
-// },
-// inputs: {
-//     width: "90%",
-//     height: 50,
-//     backgroundColor: "#fff",
-//     padding: 10,
-//     fontSize: 16,
-//     borderRadius: 10,
-//     margin: 10
-// },
-// btnAcessar: {
-//     width: "90%",
-//     height: 50,
-//     backgroundColor: "#2188C7",
-//     justifyContent: "center",
-//     marginBottom: 30,
-//     alignItems: "center",
-//     borderRadius: 10,
-//     marginTop: 10
-// },
-// textBtn: {
-//     fontSize: 20,
-//     color: "#022135",
-//     fontWeight: "bold",
-// },
