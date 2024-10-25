@@ -1,44 +1,37 @@
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
-import { Text, View, Platform, StyleSheet, StatusBar, Pressable, Image, TouchableOpacity, TextInput } from "react-native"
+import { Text, View, Platform, StyleSheet, StatusBar, TouchableOpacity, TextInput } from "react-native"
+import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 
 import api from "../../services/api/api";
-import { useState } from "react";
 
 export default function Login() {
-    const {login, userType} = useAuth();
     const navigation = useNavigation();
+
+    const { login } = useAuth(); // Declarando context para capturar dados do usuario
 
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState("");
-    const [token, setToken] = useState("")
 
-    const handleLogin = async () => {
+    const handleLogin = async () => { // Requisicao de realizar login
         try {
             const response = await api.post("/login", {
                 login: email,
                 senha: senha
-            }); 
+            });
             // console.log(response.data);
-    
-            if (response.data) {
-                setToken(response.data.token);
-                const userType = response.data.tipo; // Utilize diretamente o valor da resposta
-                // console.log(`tipo : ${userType}`);
-                
-                // Faz o login e passa o tipo do usuário
-                login(userType);
-    
-                // Realiza a navegação com base no tipo do usuário
-                if (userType === "MEC") {
-                    navigation.navigate("MechanicStack");
-                } else if (userType === "CLI") {
-                    navigation.navigate("UserStack");
-                } else if (userType === "ADM") {
-                    navigation.navigate("AdminStack");
+            if (response.data) { // Capturando dados da resposta
+                const { id, nome, tipo, token } = response.data;
+                login(tipo, token, id, nome); // Armazenando dados no contexto
+
+                if (tipo === 'MEC') { // Navegando de acordo com tipo de usuario
+                    navigation.navigate('MechanicStack');
+                } else if (tipo === 'CLI') {
+                    navigation.navigate('UserStack');
+                } else if (tipo === 'ADM') {
+                    navigation.navigate('AdminStack');
                 }
-                
             }
         } catch (error) {
             console.log(error);
@@ -77,7 +70,7 @@ export default function Login() {
 
                     <Text style={styles.text}>Esqueci minha senha</Text>
                     <TouchableOpacity onPress={navegaCadastroUser}>
-                    <Text style={styles.text}  >Cadastre-se</Text>
+                        <Text style={styles.text}  >Cadastre-se</Text>
                     </TouchableOpacity>
                 </View>
                 <TouchableOpacity style={styles.btnAcessar} onPress={handleLogin}>
