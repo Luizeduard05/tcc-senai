@@ -48,6 +48,22 @@ const PecasController = {
         }
     },
 
+    async listarPecas(req, res) {
+        const con = await conectarBancoDeDados();
+        try {
+            const [rows] = await con.query(`SELECT * FROM tbl_produtos`);
+            if (rows.length > 0) {
+                return res.json(rows);
+            } else {
+                return res.status(404).json({ message: 'Nenhuma peça cadastrada.' });
+            }
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: `Erro ao listar peças: ${error.message}` });
+        }
+    },
+    
+
     async editarPecas(req, res) {
         const idPro = req.params.id;
         const { nome_produto, marca_produto, valor_produto } = req.body;

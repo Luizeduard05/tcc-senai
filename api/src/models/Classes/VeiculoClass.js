@@ -1,6 +1,5 @@
 import conectarBancoDeDados from '../../config/db.js';
 
-
 class Veiculo {
     constructor(pVei) {
         this.id = pVei.id ?? null; 
