@@ -37,24 +37,12 @@ const agendamentoController = {
             return res.status(500).json({ message: 'Erro ao registrar agendamento. Por favor, tente novamente.' });
         }
     },
-   
-
-    async buscarAgendamentoPorPessoa(req, res) {
-        const { idOS, idVeiOs, idPessoaVeiOs } = req.query;
     
-        if (!idOS) {
-            return res.status(400).json({ message: 'ID da Ordem de Serviço é obrigatório.' });
-        }
-        if (!idVeiOs) {
-            return res.status(400).json({ message: 'ID do Veículo é obrigatório.' });
-        }
-        if (!idPessoaVeiOs) {
-            return res.status(400).json({ message: 'ID da Pessoa é obrigatório.' });
-        }
-    
+    async listarAgendamentos(req, res) {
         const con = await conectarBancoDeDados();
         try {
-            const [rows] = await con.query(`SELECT * FROM tbl_agendamento WHERE id_os = ? AND id_veiculo_os = ? AND id_pessoa_veiculo_os = ?`, [idOS, idVeiOs, idPessoaVeiOs]);
+            const [rows] = await con.query(`SELECT * FROM tbl_agendamento`);
+            
             if (rows.length > 0) {
                 const agendamentosFormatados = rows.map(agendamento => {
                     const dataUTC = new Date(agendamento.data_e_hora);
@@ -81,9 +69,60 @@ const agendamentoController = {
             }
         } catch (error) {
             console.error(error);
-            return res.status(500).json({ message: 'Erro ao buscar agendamento. Por favor, tente novamente.' });
+            return res.status(500).json({ message: 'Erro ao buscar agendamentos. Por favor, tente novamente.' });
         }
     },
+    
+
+    async buscarAgendamentoPorPessoa(req, res) {
+        const { idPessoa } = req.params; 
+    
+        if (!idPessoa) {
+            return res.status(400).json({ message: 'ID da Pessoa é obrigatório.' });
+        }
+    
+        const con = await conectarBancoDeDados();
+        try {
+            const query = `
+                SELECT a.*, o.*, v.*, p.*
+                FROM tbl_agendamento a
+                JOIN tbl_ordem_de_serviço o ON a.id_os = o.id
+                JOIN tbl_veiculo_os v ON a.id_veiculo_os = v.id
+                JOIN tbl_pessoa_veiculo_os p ON a.id_pessoa_veiculo_os = p.id
+                WHERE a.id_pessoa_veiculo_os = ?`;
+    
+            const [rows] = await con.query(query, [idPessoa]);
+    
+            if (rows.length > 0) {
+                const agendamentosFormatados = rows.map(agendamento => {
+                    const dataUTC = new Date(agendamento.data_e_hora);
+                    const opcoes = {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false,
+                    };
+                    const dataLocal = dataUTC.toLocaleString('pt-BR', opcoes);
+                    const [data, hora] = dataLocal.split(', ');
+                    const [dia, mes, ano] = data.split('/');
+    
+                    return {
+                        ...agendamento,
+                        data_e_hora: `${dia}/${mes}/${ano} ${hora}`
+                    };
+                });
+                return res.json(agendamentosFormatados);
+            } else {
+                return res.status(404).json({ message: 'Nenhum agendamento encontrado.' });
+            }
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Erro ao buscar agendamentos. Por favor, tente novamente.' });
+        }
+    },
+    
     
     async editarAgendamento(req, res) {
         const idAge = req.params.id;
