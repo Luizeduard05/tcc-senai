@@ -1,6 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient"; 
 import { View, Text, Image, StyleSheet, Platform, StatusBar, TouchableOpacity } from "react-native"; 
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import carro3 from '../../../assets/carro3.png'; 
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../context/AuthContext";
@@ -44,7 +45,7 @@ export default function MecanicoHome() {
                         onPress={() => navigation.navigate('MontarOrcamentoMecanico')} 
                     > 
                         <View style={styles.menuLine} /> 
-                        <Icon name="table-chart" color="#ccc" size={30} style={styles.icon} /> 
+                        <MaterialCommunityIcons name="cash-plus" color="#ccc" size={30} style={styles.icon} /> 
                         <Text style={styles.iconText}>Montar orçamento</Text> 
                     </TouchableOpacity> 
                 </View> 

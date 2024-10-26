@@ -1,6 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient"; 
 import { View, Text, Image, StyleSheet, Platform, StatusBar, TouchableOpacity } from "react-native"; 
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
+import FontAwesome6 from "react-native-vector-icons/FontAwesome6"
 import carro3 from '../../../assets/carro3.png'; 
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useAuth } from "../../../context/AuthContext";
@@ -44,7 +45,7 @@ export default function Home() {
                         onPress={() => navigation.navigate('Historico')} 
                     > 
                         <View style={styles.menuLine} /> 
-                        <Icon name="table-chart" color="#ccc" size={30} style={styles.icon} /> 
+                        <FontAwesome6 name="money-check-dollar" color="#ccc" size={30} style={styles.icon} /> 
                         <Text style={styles.iconText}>Orçamentos</Text> 
                     </TouchableOpacity> 
                 </View> 

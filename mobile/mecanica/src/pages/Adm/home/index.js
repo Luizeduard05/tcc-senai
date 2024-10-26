@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import carro3 from '../../../assets/carro3.png'; 
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../context/AuthContext";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 
 export default function AdminHome() { 
     const navigation = useNavigation()
@@ -44,7 +45,7 @@ export default function AdminHome() {
                         onPress={() => navigation.navigate('NovosOrcamentoADM')} 
                     > 
                         <View style={styles.menuLine} /> 
-                        <Icon name="table-chart" color="#ccc" size={30} style={styles.icon} /> 
+                        <MaterialCommunityIcons name="cash-plus" color="#ccc" size={30} style={styles.icon} /> 
                         <Text style={styles.iconText}>Montar orçamento</Text> 
                     </TouchableOpacity> 
                 </View> 
