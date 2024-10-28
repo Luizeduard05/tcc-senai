@@ -13,8 +13,8 @@ const agendamentoController = {
         const con = await conectarBancoDeDados();
         try {
             const [osExists] = await con.query(`SELECT * FROM tbl_ordem_de_serviço WHERE id = ?`, [idOS]);
-            const [veiculoExists] = await con.query(`SELECT * FROM tbl_veiculo_os WHERE id = ?`, [idVeiOs]);
-            const [pessoaExists] = await con.query(`SELECT * FROM tbl_pessoa_veiculo_os WHERE id = ?`, [idPessoaVeiOs]);
+            const [veiculoExists] = await con.query(`SELECT * FROM tbl_veiculo WHERE id = ?`, [idVeiOs]);
+            const [pessoaExists] = await con.query(`SELECT * FROM tbl_pessoa WHERE id = ?`, [idPessoaVeiOs]);
 
             if (!osExists.length) {
                 return res.status(404).json({ message: 'ID da Ordem de Serviço não encontrado.' });
@@ -26,8 +26,7 @@ const agendamentoController = {
                 return res.status(404).json({ message: 'ID da Pessoa não encontrado.' });
             }
 
-            const dataFormatada = formatarDataEHora(data_e_hora);
-            const agendamento = new novoAgendamento({ data_e_hora: dataFormatada, observacao });
+            const agendamento = new novoAgendamento({ data_e_hora, observacao });
 
             await agendamento.novoRegistroAgendamento(idOS, idVeiOs, idPessoaVeiOs);
             return res.status(201).json({ message: 'Agendamento registrado com sucesso!' });
