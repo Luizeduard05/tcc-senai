@@ -9,6 +9,7 @@ import Intranet from './routes/Intranet.jsx'
 import Historico from './routes/Historico.jsx'
 import Login from './routes/Login.jsx'
 import HomeAdm from './routes/HomeADM.jsx'
+import CadastroOs from './routes/CadastroOs.jsx'
 // import Agendamento from './routes/historico.jsx'
 
 
@@ -23,7 +24,8 @@ const router = createBrowserRouter([
       { path: "/intranet", element: <Intranet/> },
       { path: "/historico", element: <Historico/> },
       { path: "/login", element: <Login/> },
-      {path: "/homeAdm", element: <HomeAdm/>}
+      {path: "/homeAdm", element: <HomeAdm/>},
+      {path: "/cadastroOs", element: <CadastroOs/>},
       // { path: "/agendamento", element: <Agendamentos/> }
 
 

@@ -1,96 +1,86 @@
-.sectionTitle h2 {
-    position: relative;
-    text-align: center;
-    font-size: 36px;
-    font-weight: 400;
-    text-transform: uppercase;
-    margin-top: 35px;
-    color: red;
-    /* Título em vermelho */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@100..900&display=swap');
+
+.container {
+  font-family: "Inter", sans-serif;
+  padding: 20px;
+  margin: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 
-.sectionTitle p {
-    font-size: 18px;
-    line-height: 28px;
-    text-align: center;
-    margin-top: 40px;
-    color: black;
-    /* Texto em preto */
+.cbox {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  font-family: 'Poppins', sans-serif;
+  width: 233px;
+  height: 260px;
+  background: #ffdddd; /* Fundo vermelho claro */
+  padding: 20px;
+  position: relative;
+  border-radius: 20px;
+  margin: 20px;
+  transition: 0.2s ease;
+  box-shadow: 0px 3px 6px #aaa;
 }
 
-.buttonGroup {
-    text-align: center;
+.cbox:hover {
+  background: #e25858; /* Vermelho escuro ao passar o mouse */
 }
 
-.button {
-    display: inline-block;
-    font-family: sans-serif;
-    font-size: 16px;
-    cursor: pointer;
-    color: black;
-    /* Preto para os botões */
-    border: none;
-    background: none;
-    text-transform: lowercase;
+.cbox:hover .fTxt {
+  color: #fff; /* Texto branco ao passar o mouse */
 }
 
-.button:hover,
-.button.is-checked {
-    color: red;
-    /* Botões em vermelho ao clicar ou passar o mouse */
+.cbox:hover .icon {
+  background: #ffdddd; /* Ícone em vermelho claro */
+  transition: 0.2s ease;
+  color: #e25858; /* Cor do ícone ao passar o mouse */
+  margin-left: 20px;
 }
 
-.card {
-    margin: 25px 0px;
-    border: 1px solid black;
-    /* Borda preta */
+.icon {
+  padding: 8px;
+  width: 60px;
+  height: 60px;
+  background: #e25858; /* Ícone em vermelho */
+  font-size: 55px !important;
+  border-radius: 50%;
+  color: #fff; /* Branco para o ícone */
+  transition: 0.4s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.cardBlock {
-    height: 120px;
-    padding: 25px;
-    background-color: white;
+.descr {
+  display: flex;
+  justify-content: left;
+  align-items: center;
 }
 
-.cardImgTop {
-    border-radius: 50%;
-    align-self: center;
-    width: 250px;
-    height: 250px;
-    padding: 20px;
-    z-index: 1;
-    margin-top: 15px;
+.fTxt {
+  display: flex;
+  flex-direction: column;
+  text-align: justify;
+  height: 100%;
+  color: black; /* Texto preto padrão */
 }
 
-.circle {
-    border-radius: 50%;
-    width: 80px;
-    height: 80px;
-    border: 15px solid red;
-    /* Círculo vermelho */
-    position: absolute;
-    top: 15px;
-    left: 40px;
-    z-index: 0;
+h3 {
+  padding: 0px;
+  margin: 4px;
 }
 
-.cardTitle {
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 18px;
-    color: black;
-    /* Título do card em preto */
+h4 {
+  color: black; /* Descrição preta padrão */
 }
 
-.infoText {
-    float: left;
-    color: red;
-    /* Informação em vermelho */
-}
-
-.priceText {
-    float: right;
-    color: red;
-    /* Preço em vermelho */
+@media (max-width: 768px) {
+  .cbox {
+    height: 100%;
+  }
 }
