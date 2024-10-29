@@ -33,7 +33,7 @@ export default function NovaPeca() {
                 }
             );
             Alert.alert(`Peça ${nome} cadastrada`);
-            console.log(response.data);
+            // console.log(response.data);
             navegaVisualizaPecas()
         } catch (error) {
             console.log("Erro ao cadastrar a peça:", error);

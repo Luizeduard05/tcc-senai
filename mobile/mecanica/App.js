@@ -22,6 +22,7 @@ import HistoricoADM from './src/pages/Adm/historico';
 import VisualizaOrcamentoADM from './src/pages/Adm/visualizaOrcamento';
 import NovaPeca from './src/pages/Adm/novaPeca';
 import VisualizaPeca from './src/pages/Adm/VisualizaPeca';
+import AddCarro from './src/pages/Usuario/AddCarro';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -69,6 +70,18 @@ function UserDrawer({ navigation }) { // Drawer para o usuário
         component={Historico}
         options={{
           title: 'Historico',
+          headerTintColor: "#fff",
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#000'
+          },
+        }}
+      />
+      <Drawer.Screen
+        name="VeiculosDrawer"
+        component={AddCarro}
+        options={{
+          title: 'Meus veiculos',
           headerTintColor: "#fff",
           headerShown: true,
           headerStyle: {

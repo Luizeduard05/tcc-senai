@@ -64,7 +64,7 @@ export default function Historico() {
                         );
                     })
                 ) : (
-                    <Text>Nenhum orçamento encontrado</Text>
+                    <Text style={styles.textDados}>Nenhum orçamento encontrado</Text>
                 )}
             </View>
         </LinearGradient>
