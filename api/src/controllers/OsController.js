@@ -4,9 +4,9 @@ import Os from '../models/Classes/OsClass.js';
 
 const osController = {
     async registroDeOS(req, res) {
-        const { data, status, mo, itens } = req.body; 
-        const idVei = req.query.idVei; 
-        const idPessoaVei = req.query.idPessoaVei; 
+        const { data, status, mo, itens } = req.body;
+        const idVei = req.query.idVei;
+        const idPessoaVei = req.query.idPessoaVei;
 
         if (!data || !status || !mo || !Array.isArray(itens)) {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
@@ -36,12 +36,12 @@ const osController = {
 
         const total = moFormatado;
 
-        const ordemServico = new Os({ 
-            data: dataFormatada, 
-            status: statusCodigo, 
-            mo: moFormatado, 
-            total, 
-            itens 
+        const ordemServico = new Os({
+            data: dataFormatada,
+            status: statusCodigo,
+            mo: moFormatado,
+            total,
+            itens
         });
 
         try {
@@ -56,24 +56,24 @@ const osController = {
 
     async buscarOrcamentoPorPessoa(req, res) {
         const idPessoa = req.params.idPessoa;
-    
+
         if (!idPessoa) {
             return res.status(400).json({ message: 'ID da pessoa é obrigatório.' });
         }
-    
+
         const con = await conectarBancoDeDados();
         try {
             const [veiculos] = await con.query(`SELECT * FROM tbl_veiculo WHERE id_pessoa = ?`, [idPessoa]);
             const [ordensServico] = await con.query(`SELECT * FROM tbl_ordem_de_serviço WHERE id_pessoa_veiculo = ?`, [idPessoa]);
-    
+
             return res.json({ veiculos, ordensServico });
         } catch (error) {
             console.error('Erro ao buscar orçamento:', error);
             return res.status(500).json({ message: `Erro ao buscar orçamento: ${error.message}` });
         }
     },
-    
-    
+
+
 
     async editarOS(req, res) {
         const idOS = req.params.id;
@@ -85,11 +85,11 @@ const osController = {
 
         const formatarData = (data) => {
             const partes = data.split('/');
-            return `${partes[2]}-${partes[1]}-${partes[0]}`; 
+            return `${partes[2]}-${partes[1]}-${partes[0]}`;
         };
 
         const dataFormatada = formatarData(data);
-        console.log('Data formatada:', dataFormatada); 
+        console.log('Data formatada:', dataFormatada);
 
         const statusMap = {
             'Aguardando Retorno': 0,

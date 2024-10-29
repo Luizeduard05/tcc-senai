@@ -57,13 +57,13 @@ router.delete('/veiculos/:id', autenticarToken, veiculoControllers.deletarVeicul
 // ROTAS : OS
 
 // rota para Cadastro de OS
-router.post('/Os', autenticarToken, OsController.registroDeOS);
+router.post('/os', autenticarToken, OsController.registroDeOS);
 // rota para Busca de OSs
-router.get('/os/pessoa/:idPessoa', autenticarToken, osController.buscarOrcamentoPorPessoa);
+router.get('/os/:idPessoa', autenticarToken, osController.buscarOrcamentoPorPessoa);
 // Rota para editar OS
-router.put('/Os/:id', autenticarToken, OsController.editarOS);
+router.put('/os/:id', autenticarToken, OsController.editarOS);
 // Rota para deletar OS 
-router.delete('/Os/:id', autenticarToken, OsController.deletarOS);
+router.delete('/os/:id', autenticarToken, OsController.deletarOS);
 
 
 
