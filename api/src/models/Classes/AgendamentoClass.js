@@ -15,8 +15,8 @@ class novoAgendamento {
     get Data_e_hora() { return this.data_e_hora; }
     set Data_e_hora(value) { this.data_e_hora = value; }
 
-    get Observaçao() { return this.observacao; }
-    set Observaçao(value) { this.observacao = value; }
+    get Observação() { return this.observacao; }
+    set Observação(value) { this.observacao = value; }
 
     get Id_os() { return this.id_os; }
     set Id_os(value) { this.id_os = value; }
@@ -30,7 +30,7 @@ class novoAgendamento {
     validarCampos() {
         const campos = {
             Data_e_hora: this.data_e_hora,
-            Observaçao: this.observacao
+            Observação: this.observacao
         };
         for (const [key, value] of Object.entries(campos)) {
             if (!value || (key === 'data_e_hora' && isNaN(value))) {
@@ -45,8 +45,8 @@ class novoAgendamento {
         try {
             this.validarCampos();
             const result = await con.query(
-                `INSERT INTO tbl_agendamento (data_e_hora, observacao, id_os, id_veiculo_os, id_pessoa_veiculo_os) VALUES (?, ?, ?, ?, ?)`,
-                [this.data_e_hora, this.observacao, idOS, idVeiOs, idPessoaVeiOs]
+                `INSERT INTO tbl_agendamento (data_e_hora, Observação, id_os, id_veiculo_os, id_pessoa_veiculo_os) VALUES (?, ?, ?, ?, ?)`,
+                [this.data_e_hora, this.Observação, idOS, idVeiOs, idPessoaVeiOs]
             );
             return result[0].insertId;
         } catch (error) {

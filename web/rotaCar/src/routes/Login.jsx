@@ -35,6 +35,10 @@ const Login = () => {
                 navigate('/intranet')
             }
 
+            if (tipouser === 'ADM') {
+                navigate('/homeAdm')
+            }
+
         } catch (error) {
             console.log(error);
 
