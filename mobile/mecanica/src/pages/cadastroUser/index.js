@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
-import { View, Text, StyleSheet, StatusBar, Platform, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, StatusBar, Platform, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import api from "../../services/api/api";
 import { useState } from "react";
@@ -25,17 +25,17 @@ export default function CadastroUser() {
     const addNovoUsuario = async () => {
         try {
             const response = await api.post("/usuarios", {
-                nome: nome,
-                cpf: cpf,
-                email: email,
-                logradouro: logradouro,
-                bairro: bairro,
-                estado: estado,
-                numero: numero,
-                complemento: complemento,
-                cep: cep,
-                telefone: telefone,
-                senha: senha
+                nome,
+                cpf,
+                email,
+                logradouro,
+                bairro,
+                estado,
+                numero,
+                complemento,
+                cep,
+                telefone,
+                senha
             });
             alert("Usuário cadastrado com sucesso");
             navegaLogin();
@@ -50,125 +50,123 @@ export default function CadastroUser() {
 
     return (
         <LinearGradient colors={['#000000', 'rgba(0, 0, 0, 0.5)']} style={styles.androidSafeArea}>
-            <View style={styles.container}>
-                <Text style={styles.title}>Seja bem-vindo!</Text>
-                <Text style={styles.textStart}>Preencha os campos abaixo para realizar seu cadastro.</Text>
-                <Text style={styles.stepText}>Passo {step} de 3</Text>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                keyboardVerticalOffset={80}
+            >
+                <ScrollView contentContainerStyle={styles.scrollContainer}>
+                    <View style={styles.container}>
+                        <Text style={styles.title}>Seja bem-vindo!</Text>
+                        <Text style={styles.textStart}>Preencha os campos abaixo para realizar seu cadastro.</Text>
+                        <Text style={styles.stepText}>Passo {step} de 3</Text>
 
-                {step === 1 && (
-                    <>
-                        <TextInput
-                            value={nome}
-                            onChangeText={setNome}
-                            style={styles.inputs}
-                            placeholder="Digite seu nome"
-                        />
-                        <TextInput
-                            value={cpf}
-                            onChangeText={setCpf}
-                            style={styles.inputs}
-                            keyboardType="numeric"
-                            placeholder="Digite seu CPF"
-                            maxLength={11}
-                        />
-                        <TextInput
-                            value={email}
-                            onChangeText={setEmail}
-                            style={styles.inputs}
-                            placeholder="Digite seu email"
-                        />
+                        {step === 1 && (
+                            <>
+                                <TextInput
+                                    value={nome}
+                                    onChangeText={setNome}
+                                    style={styles.inputs}
+                                    placeholder="Digite seu nome"
+                                />
+                                <TextInput
+                                    value={cpf}
+                                    onChangeText={setCpf}
+                                    style={styles.inputs}
+                                    keyboardType="numeric"
+                                    placeholder="Digite seu CPF"
+                                    maxLength={11}
+                                />
+                                <TextInput
+                                    value={email}
+                                    onChangeText={setEmail}
+                                    style={styles.inputs}
+                                    placeholder="Digite seu email"
+                                />
 
-                        <View style={styles.alinha}>
-                            <Text style={styles.text}>Possui login?</Text>
-                            <TouchableOpacity onPress={navegaLogin}>
-                                <Text style={styles.text}>Ir para login</Text>
-                            </TouchableOpacity>
-                        </View>
+                                <View style={styles.alinha}>
+                                    <Text style={styles.text}>Possui login?</Text>
+                                    <TouchableOpacity onPress={navegaLogin}>
+                                        <Text style={styles.text}>Ir para login</Text>
+                                    </TouchableOpacity>
+                                </View>
 
-                        <View style={styles.navigationButtons}>
-                            <TouchableOpacity style={styles.btnNext} onPress={nextStep}>
-                                <FontAwesome name="arrow-right" size={20} color="#FFFFFF" />
-                            </TouchableOpacity>
-                        </View>
-                    </>
-                )}
+                                <View style={styles.navigationButtons}>
+                                    <TouchableOpacity style={styles.btnNext} onPress={nextStep}>
+                                        <FontAwesome name="arrow-right" size={20} color="#FFFFFF" />
+                                    </TouchableOpacity>
+                                </View>
+                            </>
+                        )}
 
-                {step === 2 && (
-                    <>
-                        <TextInput
-                            value={logradouro}
-                            onChangeText={setLogradouro}
-                            style={styles.inputs}
-                            placeholder="Digite seu logradouro"
-                        />
-                        <TextInput
-                            value={bairro}
-                            onChangeText={setBairro}
-                            style={styles.inputs}
-                            placeholder="Digite seu bairro"
-                        />
-                        <TextInput
-                            value={estado}
-                            onChangeText={setEstado}
-                            style={styles.inputs}
-                            placeholder="Digite seu estado"
-                        />
-                        <TextInput
-                            value={numero}
-                            onChangeText={setNumero}
-                            style={styles.inputs}
-                            placeholder="Número da residência"
-                        />
-                        <TextInput
-                            value={complemento}
-                            onChangeText={setComplemento}
-                            style={styles.inputs}
-                            placeholder="Complemento"
-                        />
+                        {step === 2 && (
+                            <>
+                                <TextInput
+                                    value={logradouro}
+                                    onChangeText={setLogradouro}
+                                    style={styles.inputs}
+                                    placeholder="Digite seu logradouro"
+                                />
+                                <TextInput
+                                    value={bairro}
+                                    onChangeText={setBairro}
+                                    style={styles.inputs}
+                                    placeholder="Digite seu bairro"
+                                />
+                                <TextInput
+                                    value={estado}
+                                    onChangeText={setEstado}
+                                    style={styles.inputs}
+                                    placeholder="Digite seu estado"
+                                />
 
-                        <View style={styles.navigationButtons}>
-                            <TouchableOpacity style={styles.btnBack} onPress={previousStep}>
-                                <FontAwesome name="arrow-left" size={20} color="#FFFFFF" />
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.btnNext} onPress={nextStep}>
-                                <FontAwesome name="arrow-right" size={20} color="#FFFFFF" />
-                            </TouchableOpacity>
-                        </View>
-                    </>
-                )}
+                                <View style={styles.navigationButtons}>
+                                    <TouchableOpacity style={styles.btnBack} onPress={previousStep}>
+                                        <FontAwesome name="arrow-left" size={20} color="#FFFFFF" />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.btnNext} onPress={nextStep}>
+                                        <FontAwesome name="arrow-right" size={20} color="#FFFFFF" />
+                                    </TouchableOpacity>
+                                </View>
+                            </>
+                        )}
 
-                {step === 3 && (
-                    <>
-                        <TextInput
-                            value={cep}
-                            onChangeText={setCep}
-                            style={styles.inputs}
-                            placeholder="Digite seu CEP"
-                        />
-                        <TextInput
-                            value={telefone}
-                            onChangeText={setTelefone}
-                            style={styles.inputs}
-                            placeholder="Digite seu telefone"
-                        />
-                        <TextInput
-                            value={senha}
-                            onChangeText={setSenha}
-                            style={styles.inputs}
-                            secureTextEntry
-                            placeholder="Digite sua Senha"
-                        />
-                        <TouchableOpacity style={styles.btnCadastrar} onPress={addNovoUsuario}>
-                            <Text style={styles.textBtn}>Cadastrar-se</Text>
-                        </TouchableOpacity>
-                        <View style={styles.navigationButtons}>
-                            <TouchableOpacity style={styles.btnBack} onPress={previousStep}>
-                                <FontAwesome name="arrow-left" size={20} color="#FFFFFF" />
-                            </TouchableOpacity>
-                        </View>
-                    </>
-                )}
-            </View>
+                        {step === 3 && (
+                            <>
+                                <TextInput
+                                    value={cep}
+                                    onChangeText={setCep}
+                                    style={styles.inputs}
+                                    placeholder="Digite seu CEP"
+                                />
+                                <TextInput
+                                    value={telefone}
+                                    onChangeText={setTelefone}
+                                    style={styles.inputs}
+                                    keyboardType="phone-pad"
+                                    placeholder="Digite seu telefone"
+                                />
+                                <TextInput
+                                    value={senha}
+                                    onChangeText={setSenha}
+                                    style={styles.inputs}
+                                    secureTextEntry
+                                    placeholder="Digite sua senha"
+                                />
+
+                                <View style={styles.navigationButtons}>
+                                    <TouchableOpacity style={styles.btnBack} onPress={previousStep}>
+                                        <FontAwesome name="arrow-left" size={20} color="#FFFFFF" />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={styles.btnCadastrar} onPress={addNovoUsuario}>
+                                        <Text style={styles.textBtn}>Cadastrar</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </>
+                        )}
+                    </View>
+                </ScrollView>
+            </KeyboardAvoidingView>
         </LinearGradient>
     );
 }
@@ -176,25 +174,23 @@ export default function CadastroUser() {
 const styles = StyleSheet.create({
     androidSafeArea: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     },
-    container: {
-        flex: 0,
-        width: "80%",
-        height: "70%",
+    scrollContainer: {
+        flexGrow: 1,
         justifyContent: "center",
         alignItems: "center",
+    },
+    container: {
+        width: "90%",
+        padding: 20,
         backgroundColor: "#383838",
-        margin: 30,
-        elevation: 7,
         borderRadius: 10,
+        alignItems: "center",
         shadowColor: '#ffffff',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 6,
-        padding: 20,
     },
     title: {
         fontSize: 25,
@@ -216,13 +212,13 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     inputs: {
-        width: "90%",
+        width: "100%",
         height: 50,
         backgroundColor: "#fff",
         padding: 10,
         fontSize: 16,
         borderRadius: 10,
-        margin: 10,
+        marginVertical: 10,
     },
     btnNext: {
         width: 50,
