@@ -1,50 +1,60 @@
-import { Link, useNavigate } from 'react-router-dom';
-import styleLogin from './Login.module.css';
-import api from '../../service/api';
-import { useState } from 'react';
-import { useAuth } from '../Context/ContextUser';
+import React, { useState } from "react";
+import api from "../../service/api";
+import styleCadVeiculo from "./Cadastro.module.css";
+import { useAuth } from "../Context/ContextUser";
 
-const Login = () => {
-    const { login } = useAuth(); 
 
-    const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
 
-    const navigate = useNavigate();
+const CadastroVeiculo = () => {
+    const { id } = useAuth();
+    const {token} = useAuth();
+   
 
-    const handleChangeEmail = (e) => {
-        setEmail(e.target.value);
+    const [formData, setFormData] = useState({
+        placa: "",
+        marca: "",
+        modelo: "",
+        ano: ""
+    });
+
+
+
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
     };
 
-    const handleChangeSenha = (e) => {
-        setSenha(e.target.value);
-    };
-
-    const hendleSubmit = async (e) => {
+    console.log(formData)
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+
         try {
-            const response = await api.post('/login', { login: email, senha: senha });
-            const { id, nome, tipo, token } = response.data;
-            login(tipo, token, id, nome);
-
-            if (tipo === 'CLI') {
-                navigate('/intranet');
-            }
-
-            if (tipo === 'ADM') {
-                navigate('/homeAdm');
-            }
+            const response = await api.post(`/veiculos/${id}`, formData,{
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            })
+            
+            console.log(response.data);
+            console.log(formData.id)
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
 
-    return (
-        <section className={styleLogin.PaiLogin}>
-            
 
-            <section className={styleLogin.conteinerLoginn}>
-            <span></span>
+    return (
+
+        <section className={styleCadVeiculo.pai}>
+
+
+
+            <section className={styleCadVeiculo.containerCad}>
+
                 <span></span>
                 <span></span>
                 <span></span>
@@ -304,26 +314,37 @@ const Login = () => {
                 <span></span>
                 <span></span>
                 <span></span>
-                
-                <div className={styleLogin.loginSection}>
-                    <div className={styleLogin.loginContent}>
-                        <h2>Bem-vindo de volta</h2>
-                        <div className={styleLogin.loginForm}>
-                            <div className={styleLogin.inputWrapper}>
-                                <input type="email" name='email' value={email} onChange={handleChangeEmail} required />
-                                <i>Email</i>
+                <span></span>
+
+                <div className={styleCadVeiculo.signin}>
+                    <div className={styleCadVeiculo.content}>
+                        <h2>Agora Prencha os dados do seu veiculo</h2>
+                        <form className={styleCadVeiculo.form} onSubmit={handleSubmit}>
+                            <div className={styleCadVeiculo.inputLeft}>
+                                <div className={styleCadVeiculo.inputBox}>
+                                    <input type="text" name="placa" value={formData.placa} required onChange={handleChange} />
+                                    <i>placa</i>
+                                </div>
+                                <div className={styleCadVeiculo.inputBox}>
+                                    <input type="text" name="marca" value={formData.marca} required onChange={handleChange} />
+                                    <i>marca</i>
+                                </div>
+                                <div className={styleCadVeiculo.inputBox}>
+                                    <input type="text" name="modelo" value={formData.modelo} required onChange={handleChange} />
+                                    <i>modelo</i>
+                                </div>
+                                <div className={styleCadVeiculo.inputBox}>
+                                    <input type="text" name="ano" value={formData.ano} required onChange={handleChange} />
+                                    <i>ano</i>
+                                </div>
                             </div>
-                            <div className={styleLogin.inputWrapper}>
-                                <input type="password" name='senha' value={senha} onChange={handleChangeSenha} required />
-                                <i>Senha</i>
+
+
+                            <div className={styleCadVeiculo.buttonCad}>
+                                <input type="submit" value="Cadastrar" />
                             </div>
-                            <div className={styleLogin.loginLinks}>
-                                <Link to={"/cadastro"}>Cadastre-se</Link>
-                            </div>
-                            <div className={styleLogin.inputWrapper}>
-                                <input type="submit" value='Entrar' onClick={hendleSubmit} />
-                            </div>
-                        </div>
+                        </form>
+
                     </div>
                 </div>
             </section>
@@ -331,4 +352,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default CadastroVeiculo;

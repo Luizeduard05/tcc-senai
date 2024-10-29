@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import api from "../../service/api";
 import styleCad from "./Cadastro.module.css";
+import { useNavigate } from "react-router-dom";
 
 const Cadastro = () => {
+    const navigate = useNavigate()
     const [formData, setFormData] = useState({
         nome: "",
         cpf: "",
@@ -35,9 +37,14 @@ const Cadastro = () => {
         try {
             const response = await api.post("/usuarios", formData);
             console.log(response.data);
-            console.log(formData.nome)
+            console.log(formData.nome);
+
+            navigate('/cadastroveiculo')
         } catch (error) {
+
+
             console.error(error);
+
         }
     };
 

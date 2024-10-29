@@ -25,17 +25,19 @@ const HomeADM = () => {
             </Link>
 
             {/* Cbox 2 */}
-            <div className={styleHomeAdm.cbox}>
-                <div className={styleHomeAdm.icon}>
-                    <i className="fa fa-desktop" styleHomeAdm={{ fontSize: '42px' }}></i>
-                </div>
-                <div className={styleHomeAdm.descr}>
-                    <div className={styleHomeAdm.fTxt}>
-                        <h3>Web Development</h3>
-                        <h4>Web development is key to making websites interactive and user-friendly.</h4>
+       
+                <div className={styleHomeAdm.cbox}>
+                    <div className={styleHomeAdm.icon}>
+                        <i className="fa fa-desktop" styleHomeAdm={{ fontSize: '42px' }}></i>
+                    </div>
+                    <div className={styleHomeAdm.descr}>
+                        <div className={styleHomeAdm.fTxt}>
+                            <h3>Cadastrar um veiculo</h3>
+                            <h4>Web development is key to making websites interactive and user-friendly.</h4>
+                        </div>
                     </div>
                 </div>
-            </div>
+        
 
             {/* Cbox 3 */}
             <div className={styleHomeAdm.cbox}>
