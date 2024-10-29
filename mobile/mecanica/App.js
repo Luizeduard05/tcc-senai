@@ -23,6 +23,7 @@ import VisualizaOrcamentoADM from './src/pages/Adm/visualizaOrcamento';
 import NovaPeca from './src/pages/Adm/novaPeca';
 import VisualizaPeca from './src/pages/Adm/VisualizaPeca';
 import AddCarro from './src/pages/Usuario/AddCarro';
+import CadastroAdmMec from './src/pages/Adm/cadastroAdmMec';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -353,6 +354,17 @@ function AdminDrawer() { // Drawer para administrador
           },
           headerTintColor: '#fff',
           title: 'Estoque de peças',
+        }}
+      />
+      <Drawer.Screen
+        name="CadastroTipo"
+        component={CadastroAdmMec}
+        options={{
+          headerStyle: {
+            backgroundColor: '#000',
+          },
+          headerTintColor: '#fff',
+          title: 'Cadastro Funcionario',
         }}
       />
       <Drawer.Screen
