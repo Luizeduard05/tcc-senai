@@ -3,7 +3,7 @@ import conectarBancoDeDados from '../../config/db.js';
 class novoAgendamento {
     constructor(pAge) {
         this.id = (pAge.id !== null || pAge.id > 0) ? pAge.id : null;
-        this.data_e_hora = pAge.data_e_hora;
+        this.DataConvert(pAge.data_e_hora);
         this.observacao = pAge.observacao;
         this.id_os = (pAge.id_os !== null || pAge.id_os > 0) ? pAge.id_os : null;
         this.id_veiculo_os = (pAge.id_veiculo_os !== null || pAge.id_veiculo_os > 0) ? pAge.id_veiculo_os : null;
@@ -40,12 +40,20 @@ class novoAgendamento {
         return true;
     }
 
+    DataConvert(value) {
+        const [data, hora] = value.split(' ');
+        let [dia, mes, ano] = data.split('/');
+        let dataFormatada = `${ano}-${mes}-${dia}T${hora}`;
+        this.Data_e_hora = new Date(dataFormatada);
+        return this.Data_e_hora
+    }
+
     novoRegistroAgendamento = async (idOS, idVeiOs, idPessoaVeiOs) => {
         const con = await conectarBancoDeDados();
         try {
             this.validarCampos();
             const result = await con.query(
-                `INSERT INTO tbl_agendamento (data_e_hora, Observação, id_os, id_veiculo_os, id_pessoa_veiculo_os) VALUES (?, ?, ?, ?, ?)`,
+                `INSERT INTO tbl_agendamento (Data_e_hora, Observação, id_os, id_veiculo_os, id_pessoa_veiculo_os) VALUES (?, ?, ?, ?, ?)`,
                 [this.data_e_hora, this.Observação, idOS, idVeiOs, idPessoaVeiOs]
             );
             return result[0].insertId;
