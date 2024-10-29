@@ -40,32 +40,17 @@ const agendamentoController = {
     async listarAgendamentos(req, res) {
         const con = await conectarBancoDeDados();
         try {
-            const [rows] = await con.query(`SELECT * FROM tbl_agendamento`);
-            
-            if (rows.length > 0) {
-                const agendamentosFormatados = rows.map(agendamento => {
-                    const dataUTC = new Date(agendamento.data_e_hora);
-                    const opcoes = {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: false,
-                    };
-                    const dataLocal = dataUTC.toLocaleString('pt-BR', opcoes);
-                    const [data, hora] = dataLocal.split(', ');
-                    const [dia, mes, ano] = data.split('/');
-    
-                    return {
-                        ...agendamento,
-                        data_e_hora: `${dia}/${mes}/${ano} ${hora}`
-                    };
-                });
-                return res.json(agendamentosFormatados);
-            } else {
-                return res.status(404).json({ message: 'Nenhum agendamento encontrado.' });
+            let [rows] = await con.query(`SELECT * FROM tbl_agendamento`);
+
+            for (let i = 0; i < rows.length; i++) {
+                const newDate = new Date (rows[i].Data_e_hora);
+                const dataBr = newDate.toLocaleString("pt-BR")
+                rows[i].Data_e_hora = dataBr;
+                
             }
+            return res.json(rows);
+
+           
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: 'Erro ao buscar agendamentos. Por favor, tente novamente.' });
@@ -86,36 +71,18 @@ const agendamentoController = {
                 SELECT a.*, o.*, v.*, p.*
                 FROM tbl_agendamento a
                 JOIN tbl_ordem_de_serviço o ON a.id_os = o.id
-                JOIN tbl_veiculo_os v ON a.id_veiculo_os = v.id
-                JOIN tbl_pessoa_veiculo_os p ON a.id_pessoa_veiculo_os = p.id
+                JOIN tbl_veiculo v ON a.id_veiculo_os = v.id
+                JOIN tbl_pessoa p ON a.id_pessoa_veiculo_os = p.id
                 WHERE a.id_pessoa_veiculo_os = ?`;
     
             const [rows] = await con.query(query, [idPessoa]);
-    
-            if (rows.length > 0) {
-                const agendamentosFormatados = rows.map(agendamento => {
-                    const dataUTC = new Date(agendamento.data_e_hora);
-                    const opcoes = {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        hour12: false,
-                    };
-                    const dataLocal = dataUTC.toLocaleString('pt-BR', opcoes);
-                    const [data, hora] = dataLocal.split(', ');
-                    const [dia, mes, ano] = data.split('/');
-    
-                    return {
-                        ...agendamento,
-                        data_e_hora: `${dia}/${mes}/${ano} ${hora}`
-                    };
-                });
-                return res.json(agendamentosFormatados);
-            } else {
-                return res.status(404).json({ message: 'Nenhum agendamento encontrado.' });
+
+            for (let i = 0; i < rows.length; i++) {
+                const newDate = new Date (rows[i].Data_e_hora);
+                const dataBr = newDate.toLocaleString("pt-BR")
+                rows[i].Data_e_hora = dataBr;
             }
+            return res.json(rows);
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: 'Erro ao buscar agendamentos. Por favor, tente novamente.' });
