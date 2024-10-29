@@ -24,7 +24,7 @@ const Intranet = () => {
           </div>
           <div className={styles.buttons}>
             <Link to="/cadastroveiculo">
-            <button className={styles.button}>Orçamentos</button>
+            <button className={styles.button}>Veiculos</button>
             </Link>
             
             <button className={styles.button}>Agendamentos</button>

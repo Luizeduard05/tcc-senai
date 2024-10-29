@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import api from "../../service/api";
 import styleCad from "./Cadastro.module.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Cadastro = () => {
     const navigate = useNavigate()
@@ -39,7 +39,7 @@ const Cadastro = () => {
             console.log(response.data);
             console.log(formData.nome);
 
-            navigate('/cadastroveiculo')
+            navigate('/login')
         } catch (error) {
 
 
@@ -320,6 +320,11 @@ const Cadastro = () => {
 
                 <div className={styleCad.signin}>
                     <div className={styleCad.content}>
+                        
+                        <Link to="/">
+                        <h3>voltar</h3>
+                        </Link>
+                        
                         <h2>Olá, seja Bem vindo</h2>
                         <form className={styleCad.form} onSubmit={handleSubmit}>
                             <div className={styleCad.inputLeft}>
@@ -375,7 +380,7 @@ const Cadastro = () => {
                             </div>
 
                             <div className={styleCad.buttonCad}>
-                                <input type="submit" value="Cadastrar" />
+                                <input className={styleCad.inputCad} type="submit" value="Cadastrar" />
                             </div>
                         </form>
 

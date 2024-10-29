@@ -340,8 +340,8 @@ const CadastroVeiculo = () => {
                             </div>
 
 
-                            <div className={styleCadVeiculo.buttonCad}>
-                                <input type="submit" value="Cadastrar" />
+                            <div className={styleCadVeiculo.buttonCadVei}>
+                                <input className={styleCadVeiculo.inputCadVei} type="submit" value="Cadastrar" />
                             </div>
                         </form>
 

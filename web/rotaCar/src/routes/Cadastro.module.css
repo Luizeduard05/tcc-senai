@@ -192,10 +192,27 @@ input[type="submit"]:active {
 }
 
 .buttonCad{
-
+    width: 211%;
+    display: flex;
+    justify-content: center;
 }
 
 .Cepcontent{
     display: flex;
     gap: 21px;
+}
+
+h3{
+    color: #fff;
+}
+
+.inputCad {
+    width: 50%;
+    border-radius: 50px;
+    border: none;
+    padding: 10px 10px;
+    cursor: pointer;
+    background: red;
+    color: white;
+    font-size: 16px;
 }
