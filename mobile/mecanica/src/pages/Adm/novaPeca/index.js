@@ -1,7 +1,46 @@
 import { LinearGradient } from "expo-linear-gradient"
-import { StyleSheet, Platform, StatusBar, View, Text, TouchableOpacity, TextInput } from "react-native"
+import { useState } from "react"
+import { StyleSheet, Platform, StatusBar, View, Text, TouchableOpacity, TextInput, Alert } from "react-native"
+import api from "../../../services/api/api"
+import { useAuth } from "../../../context/AuthContext"
+import { useNavigation } from "@react-navigation/native"
 
 export default function NovaPeca() {
+    const navigation = useNavigation()
+    const {token} = useAuth()
+
+    const [nome, setNome] = useState("")
+    const [marca, setMarca] = useState("")
+    const [valor, setValor] = useState("");
+
+    const navegaVisualizaPecas = () => {
+    navigation.navigate("VisualizaPecaADM")
+    }
+
+    const postPeca = async () => {
+        try {
+            const response = await api.post(
+                "/pecas",
+                {
+                    nome_produto: nome,
+                    marca_produto: marca,
+                    valor_produto: valor,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+            Alert.alert(`Peça ${nome} cadastrada`);
+            // console.log(response.data);
+            navegaVisualizaPecas()
+        } catch (error) {
+            console.log("Erro ao cadastrar a peça:", error);
+        }
+    };
+
+
     return (
         <LinearGradient colors={
             ['#000000', 'rgba(0, 0, 0, 0.5)']}
@@ -11,20 +50,20 @@ export default function NovaPeca() {
 
                 <View style={styles.inputGroup}>
                     <Text style={styles.label}>Nome da peça:</Text>
-                    <TextInput style={styles.input} />
+                    <TextInput style={styles.input} value={nome} onChangeText={setNome} />
+                </View>
+
+                <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Marca:</Text>
+                    <TextInput style={styles.input} value={marca} onChangeText={setMarca} />
                 </View>
 
                 <View style={styles.inputGroup}>
                     <Text style={styles.label}>Valor:</Text>
-                    <TextInput style={styles.input} />
+                    <TextInput style={styles.input} value={valor} onChangeText={setValor} />
                 </View>
 
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Quantidade:</Text>
-                    <TextInput style={styles.input} />
-                </View>
-
-                <TouchableOpacity style={styles.btnConfirmar}>
+                <TouchableOpacity style={styles.btnConfirmar}  onPress={postPeca}>
                     <Text style={styles.textBtn}>Confirmar</Text>
                 </TouchableOpacity>
 

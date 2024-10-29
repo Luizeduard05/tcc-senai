@@ -1,17 +1,29 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [userType, setUserType] = useState(null);
+    const [token, setToken] = useState(null); 
+    const [id, setId] = useState(null); 
+    const [nome, setNome] = useState(null);
 
-    const login = (type) => {
-        // Logica para autentificar o tipo de usuario
+    const login = (type, token, id, nome) => {
         setUserType(type);
+        setToken(token);
+        setId(id); 
+        setNome(nome);
+    };
+
+    const logout = () => {
+        setUserType(null);
+        setToken(null);
+        setId(null); 
+        setNome(null); 
     };
 
     return (
-        <AuthContext.Provider value={{ userType, login }}>
+        <AuthContext.Provider value={{ userType, token, id, nome, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
