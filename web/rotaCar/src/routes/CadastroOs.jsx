@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import api from "../../service/api";
 import styleCadOs from "./Cadastro.module.css";
+import { useNavigate } from "react-router-dom";
 
 const CadastroOs = () => {
+    
     const [formData, setFormData] = useState({
         nome: "",
         cpf: "",
@@ -36,6 +38,7 @@ const CadastroOs = () => {
             const response = await api.post("/usuarios", formData);
             console.log(response.data);
             console.log(formData.nome)
+    
         } catch (error) {
             console.error(error);
         }
