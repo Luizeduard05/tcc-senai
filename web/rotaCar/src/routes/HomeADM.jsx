@@ -18,7 +18,7 @@ const HomeADM = () => {
                     <div className={styleHomeAdm.descr}>
                         <div className={styleHomeAdm.fTxt}>
                             <h3>Novo Orçamento</h3>
-                            <h4>Web design is the best way to design the website easy and user friendly for all platforms.</h4>
+                            <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptates expedita corporis, culpa atque ducimus..</h4>
                         </div>
                     </div>
                 </div>
@@ -33,7 +33,7 @@ const HomeADM = () => {
                     <div className={styleHomeAdm.descr}>
                         <div className={styleHomeAdm.fTxt}>
                             <h3>Cadastrar um veiculo</h3>
-                            <h4>Web development is key to making websites interactive and user-friendly.</h4>
+                            <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptates expedita corporis, culpa atque ducimus..</h4>
                         </div>
                     </div>
                 </div>
@@ -46,8 +46,8 @@ const HomeADM = () => {
                 </div>
                 <div className={styleHomeAdm.descr}>
                     <div className={styleHomeAdm.fTxt}>
-                        <h3>JavaScript</h3>
-                        <h4>JavaScript is essential for building dynamic and interactive web applications.</h4>
+                        <h3>...</h3>
+                        <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptates expedita corporis, culpa atque ducimus...</h4>
                     </div>
                 </div>
             </div>
@@ -59,8 +59,8 @@ const HomeADM = () => {
                 </div>
                 <div className={styleHomeAdm.descr}>
                     <div className={styleHomeAdm.fTxt}>
-                        <h3>Mobile App</h3>
-                        <h4>Mobile app development ensures seamless functionality on mobile devices.</h4>
+                        <h3>...</h3>
+                        <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptates expedita corporis, culpa atque ducimus...</h4>
                     </div>
                 </div>
             </div>
