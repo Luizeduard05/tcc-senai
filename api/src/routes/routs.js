@@ -8,7 +8,6 @@ import jwt from 'jsonwebtoken';
 import authMiddleware from "../../Middlewares/authMiddlewares.js";
 import osController from '../controllers/OsController.js';
 
-
 const router = Router();
 
 const autenticarToken = (req, res, next) => {
@@ -53,6 +52,8 @@ router.get('/veiculos/:idPessoa', autenticarToken, veiculoControllers.buscarVeic
 router.put('/veiculos/:id', autenticarToken, veiculoControllers.editarVeiculo);
 // Rota para deletar veículo 
 router.delete('/veiculos/:id', autenticarToken, veiculoControllers.deletarVeiculo);
+//Rota para Buscar veículo por placa
+router.post('/veiculo/placa', autenticarToken, veiculoControllers.buscarVeiculoPorPlaca);
 
 // ROTAS : OS
 
@@ -64,9 +65,6 @@ router.get('/os/:idPessoa', autenticarToken, osController.buscarOrcamentoPorPess
 router.put('/os/:id', autenticarToken, OsController.editarOS);
 // Rota para deletar OS 
 router.delete('/os/:id', autenticarToken, OsController.deletarOS);
-
-
-
 
 // ROTAS : AGENDAMENTO
 
