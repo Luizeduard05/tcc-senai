@@ -73,7 +73,17 @@ const osController = {
         }
     },
 
-
+    async buscarTodosOrcamentos(req, res) {
+        const con = await conectarBancoDeDados();
+        try {
+            const [ordensServico] = await con.query(`SELECT * FROM tbl_ordem_de_serviço`);
+            return res.json(ordensServico);
+        } catch (error) {
+            console.error('Erro ao buscar orçamentos:', error);
+            return res.status(500).json({ message: `Erro ao buscar orçamentos: ${error.message}` });
+        }
+    },
+    
 
     async editarOS(req, res) {
         const idOS = req.params.id;
