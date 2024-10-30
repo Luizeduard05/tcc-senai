@@ -1,22 +1,20 @@
 import React, { useState } from "react";
 import api from "../../service/api";
-import styleCadOs from "./Cadastro.module.css";
-import { useNavigate } from "react-router-dom";
+import styleCadVeiculo from "./Cadastro.module.css";
+import { useAuth } from "../Context/ContextUser";
 
-const CadastroOs = () => {
-    
+
+
+const CadastroVeiculo = () => {
+    const { id } = useAuth();
+    const {token} = useAuth();
+   
+
     const [formData, setFormData] = useState({
-        nome: "",
-        cpf: "",
-        email: "",
-        telefone: "",
-        senha: "",
-        complemento: "",
-        cep: "",
-        numero: "",
-        logradouro: "",
-        bairro: "",
-        estado: ""
+        placa: "",
+        marca: "",
+        modelo: "",
+        ano: ""
     });
 
 
@@ -35,10 +33,14 @@ const CadastroOs = () => {
 
 
         try {
-            const response = await api.post("/usuarios", formData);
+            const response = await api.post(`/veiculos/${id}`, formData,{
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            })
+            
             console.log(response.data);
-            console.log(formData.nome)
-    
+            console.log(formData.id)
         } catch (error) {
             console.error(error);
         }
@@ -47,11 +49,11 @@ const CadastroOs = () => {
 
     return (
 
-        <section className={styleCadOs.pai}>
+        <section className={styleCadVeiculo.pai}>
 
 
 
-            <section className={styleCadOs.containerCad}>
+            <section className={styleCadVeiculo.containerCad}>
 
                 <span></span>
                 <span></span>
@@ -314,53 +316,32 @@ const CadastroOs = () => {
                 <span></span>
                 <span></span>
 
-                <div className={styleCadOs.signin}>
-                    <div className={styleCadOs.content}>
-                        <h2>Olá, seja Bem vindo</h2>
-                        <form className={styleCadOs.form} onSubmit={handleSubmit}>
-                            <div className={styleCadOs.inputLeft}>
-                                <div className={styleCadOs.inputBox}>
-                                    <input type="text" name="nome" value={formData.nome} required onChange={handleChange} />
-                                    <i>Nome</i>
+                <div className={styleCadVeiculo.signin}>
+                    <div className={styleCadVeiculo.content}>
+                        <h2>Agora Prencha os dados do seu veiculo</h2>
+                        <form className={styleCadVeiculo.form} onSubmit={handleSubmit}>
+                            <div className={styleCadVeiculo.inputLeft}>
+                                <div className={styleCadVeiculo.inputBox}>
+                                    <input type="text" name="placa" value={formData.placa} required onChange={handleChange} />
+                                    <i>placa</i>
                                 </div>
-                                <div className={styleCadOs.inputBox}>
-                                    <input type="number" name="cpf" value={formData.cpf} required onChange={handleChange} />
-                                    <i>CPF</i>
+                                <div className={styleCadVeiculo.inputBox}>
+                                    <input type="text" name="marca" value={formData.marca} required onChange={handleChange} />
+                                    <i>marca</i>
                                 </div>
-                                <div className={styleCadOs.inputBox}>
-                                    <input type="email" name="email" value={formData.email} required onChange={handleChange} />
-                                    <i>Email</i>
+                                <div className={styleCadVeiculo.inputBox}>
+                                    <input type="text" name="modelo" value={formData.modelo} required onChange={handleChange} />
+                                    <i>modelo</i>
                                 </div>
-                                <div className={styleCadOs.inputBox}>
-                                    <input type="number" name="telefone" value={formData.telefone} required onChange={handleChange} />
-                                    <i>Telefone</i>
-                                </div>
-                                <div className={styleCadOs.inputBox}>
-                                    <input type="password" name="senha" value={formData.senha} required onChange={handleChange} />
-                                    <i>Senha</i>
+                                <div className={styleCadVeiculo.inputBox}>
+                                    <input type="text" name="ano" value={formData.ano} required onChange={handleChange} />
+                                    <i>ano</i>
                                 </div>
                             </div>
 
-                            <div className={styleCadOs.inputRight}>
-                                <div className={styleCadOs.inputBox}>
-                                    <input type="text" name="complemento" value={formData.complemento} required onChange={handleChange} />
-                                    <i>Complemento</i>
-                                </div>
-                                <div className={styleCadOs.Cepcontent}>
-                                    <div className={styleCadOs.inputBox}>
-                                        <input type="number" name="cep" value={formData.cep} required onChange={handleChange} />
-                                        <i>CEP</i>
-                                    </div>
-                                    <div className={styleCadOs.inputBox}>
-                                        <input type="text" name="numero" value={formData.numero} required onChange={handleChange} />
-                                        <i>Número</i>
-                                    </div>
-                                </div>
 
-                            </div>
-
-                            <div className={styleCadOs.buttonCad}>
-                                <input type="submit" value="Cadastrar" />
+                            <div className={styleCadVeiculo.buttonCadVei}>
+                                <input className={styleCadVeiculo.inputCadVei} type="submit" value="Cadastrar" />
                             </div>
                         </form>
 
@@ -371,4 +352,4 @@ const CadastroOs = () => {
     );
 };
 
-export default CadastroOs;
+export default CadastroVeiculo;

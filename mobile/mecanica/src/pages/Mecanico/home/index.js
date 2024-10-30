@@ -1,11 +1,14 @@
 import { LinearGradient } from "expo-linear-gradient"; 
 import { View, Text, Image, StyleSheet, Platform, StatusBar, TouchableOpacity } from "react-native"; 
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import carro3 from '../../../assets/carro3.png'; 
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function MecanicoHome() { 
     const navigation = useNavigation()
+    const  { nome } = useAuth();
     return ( 
         <LinearGradient 
             colors={['#000000', 'rgba(0, 0, 0, 0.5)']} 
@@ -15,7 +18,7 @@ export default function MecanicoHome() {
                 colors={['#FF0000', '#000000']} 
                 style={styles.container} 
             > 
-                <Text style={styles.greetingText}>Olá Luiz!</Text> 
+                <Text style={styles.greetingText}>Olá {nome}!</Text> 
                 <Text style={styles.helpText}>Como podemos ajudar hoje?</Text> 
 
                 {/* Área para a imagem */} 
@@ -42,7 +45,7 @@ export default function MecanicoHome() {
                         onPress={() => navigation.navigate('MontarOrcamentoMecanico')} 
                     > 
                         <View style={styles.menuLine} /> 
-                        <Icon name="table-chart" color="#ccc" size={30} style={styles.icon} /> 
+                        <MaterialCommunityIcons name="cash-plus" color="#ccc" size={30} style={styles.icon} /> 
                         <Text style={styles.iconText}>Montar orçamento</Text> 
                     </TouchableOpacity> 
                 </View> 

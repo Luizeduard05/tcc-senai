@@ -1,11 +1,14 @@
 import { LinearGradient } from "expo-linear-gradient"; 
 import { View, Text, Image, StyleSheet, Platform, StatusBar, TouchableOpacity } from "react-native"; 
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
+import FontAwesome6 from "react-native-vector-icons/FontAwesome6"
 import carro3 from '../../../assets/carro3.png'; 
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { useAuth } from "../../../context/AuthContext";
 
 export default function Home() { 
     const navigation = useNavigation()
+    const { nome } = useAuth(); // Trazendo variavel salva no contexto
     return ( 
         <LinearGradient 
             colors={['#000000', 'rgba(0, 0, 0, 0.5)']} 
@@ -15,7 +18,7 @@ export default function Home() {
                 colors={['#FF0000', '#000000']} 
                 style={styles.container} 
             > 
-                <Text style={styles.greetingText}>Olá Luiz!</Text> 
+                <Text style={styles.greetingText}>Olá {nome}!</Text> 
                 <Text style={styles.helpText}>Como podemos ajudar hoje?</Text> 
 
                 {/* Área para a imagem */} 
@@ -42,8 +45,8 @@ export default function Home() {
                         onPress={() => navigation.navigate('Historico')} 
                     > 
                         <View style={styles.menuLine} /> 
-                        <Icon name="table-chart" color="#ccc" size={30} style={styles.icon} /> 
-                        <Text style={styles.iconText}>Histórico</Text> 
+                        <FontAwesome6 name="money-check-dollar" color="#ccc" size={30} style={styles.icon} /> 
+                        <Text style={styles.iconText}>Orçamentos</Text> 
                     </TouchableOpacity> 
                 </View> 
             </LinearGradient> 

@@ -22,12 +22,15 @@ import HistoricoADM from './src/pages/Adm/historico';
 import VisualizaOrcamentoADM from './src/pages/Adm/visualizaOrcamento';
 import NovaPeca from './src/pages/Adm/novaPeca';
 import VisualizaPeca from './src/pages/Adm/VisualizaPeca';
+import AddCarro from './src/pages/Usuario/AddCarro';
+import CadastroAdmMec from './src/pages/Adm/cadastroAdmMec';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 // INICIO NAVEGAÇÃO USUARIO
 function UserDrawer({ navigation }) { // Drawer para o usuário
+  const { logout } = useAuth()
   return (
     <Drawer.Navigator
       initialRouteName="Home"
@@ -76,10 +79,30 @@ function UserDrawer({ navigation }) { // Drawer para o usuário
         }}
       />
       <Drawer.Screen
-        name='Sair'
-        component={Intranet}
+        name="VeiculosDrawer"
+        component={AddCarro}
         options={{
-          headerShown: false
+          title: 'Meus veiculos',
+          headerTintColor: "#fff",
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#000'
+          },
+        }}
+      />
+      <Drawer.Screen
+        name="Sair"
+        component={Login}
+        options={{
+          headerShown: false,
+          title: 'Sair',
+        }}
+        listeners={{
+          tabPress: e => {
+            e.preventDefault(); // Evitar o comportamento padrão
+            logout(); // Executa o logout
+            navigation.navigate('Login'); // Navega para a tela Intranet
+          },
         }}
       />
     </Drawer.Navigator>
@@ -119,6 +142,7 @@ function UserStack() { // Stack para o usuario
 
 // INICIO NAVEGAÇÃO MECANICO
 function MechanicDrawer() { // Drawer para mecânico
+  const { logout } = useAuth()
   return (
     <Drawer.Navigator
       initialRouteName="MecanicoHome"
@@ -190,6 +214,21 @@ function MechanicDrawer() { // Drawer para mecânico
           },
         }}
       />
+      <Drawer.Screen
+        name="Sair"
+        component={Login}
+        options={{
+          headerShown: false,
+          title: 'Sair',
+        }}
+        listeners={{
+          tabPress: e => {
+            e.preventDefault(); // Evitar o comportamento padrão
+            logout(); // Executa o logout
+            navigation.navigate('Login'); // Navega para a tela Intranet
+          },
+        }}
+      />
     </Drawer.Navigator>
   );
 }
@@ -227,6 +266,7 @@ function MechanicStack() { // Stack de mecânico
 
 // INICIO NAVEGAÇAO ADM
 function AdminDrawer() { // Drawer para administrador
+  const { logout } = useAuth()
   return (
     <Drawer.Navigator
       initialRouteName="AdminHome"
@@ -314,6 +354,32 @@ function AdminDrawer() { // Drawer para administrador
           },
           headerTintColor: '#fff',
           title: 'Estoque de peças',
+        }}
+      />
+      <Drawer.Screen
+        name="CadastroTipo"
+        component={CadastroAdmMec}
+        options={{
+          headerStyle: {
+            backgroundColor: '#000',
+          },
+          headerTintColor: '#fff',
+          title: 'Cadastro Funcionario',
+        }}
+      />
+      <Drawer.Screen
+        name="Sair"
+        component={Login}
+        options={{
+          headerShown: false,
+          title: 'Sair',
+        }}
+        listeners={{
+          tabPress: e => {
+            e.preventDefault(); // Evitar o comportamento padrão
+            logout(); // Executa o logout
+            navigation.navigate('Login'); // Navega para a tela Intranet
+          },
         }}
       />
     </Drawer.Navigator>

@@ -1,44 +1,52 @@
 import { LinearGradient } from "expo-linear-gradient"
 import { StyleSheet, Platform, StatusBar, View, Text, TouchableOpacity, TextInput } from "react-native"
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons"
+import api from "../../../services/api/api"
+import { useAuth } from "../../../context/AuthContext"
+import { useEffect, useState } from "react"
 
 export default function VisualizaPeca() {
-    return(
+    const { token } = useAuth()
+    const [pecas, setPecas] = useState([])
+
+    const getPecas = async () => {
+        try {
+            const response = await api.get("/pecas", {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            })
+            setPecas(response.data)
+            console.log(response.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        getPecas()
+    }, [])
+
+    return (
         <LinearGradient colors={
             ['#000000', 'rgba(0, 0, 0, 0.5)']}
             style={styles.androidSafeArea}>
             <View style={styles.container}>
 
-                <View style={styles.historicoItem}>
-                    <Text style={styles.textVeiculo}>Biela Ford KA</Text>
-                    <View style={styles.alinha}>
-                        <Text style={styles.textDados}>QTD: 5</Text>
-                        <Text style={styles.textDados}>R$610,00</Text>
+                {pecas.length > 0 ? (pecas.map((peca) => (
+                    <View style={styles.historicoItem} key={peca.id}>
+                        <Text style={styles.textVeiculo}>{peca.nome_produto}</Text>
+                        <View style={styles.alinha}>
+                            <Text style={styles.textDados}>{peca.marca_produto}</Text>
+                            <Text style={styles.textDados}>{peca.valor_produto}</Text>
+                        </View>
+                        <TouchableOpacity style={styles.icon}>
+                            <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={32} color="white" />
+                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity style={styles.icon}>
-                        <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={32} color="white" />
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.historicoItem}>
-                    <Text style={styles.textVeiculo}>Pastilhas de Freio</Text>
-                    <View style={styles.alinha}>
-                        <Text style={styles.textDados}>QTD: 5</Text>
-                        <Text style={styles.textDados}>R$350,00</Text>
-                    </View>
-                    <TouchableOpacity style={styles.icon}>
-                        <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={32} color="white" />
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.historicoItem}>
-                    <Text style={styles.textVeiculo}>Bateria Heliar</Text>
-                    <View style={styles.alinha}>
-                        <Text style={styles.textDados}>QTD: 5</Text>
-                        <Text style={styles.textDados}>R$250,00</Text>
-                    </View>
-                    <TouchableOpacity style={styles.icon}>
-                        <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={32} color="white" />
-                    </TouchableOpacity>
-                </View>
+                ))
+                ) : (<Text>Nenhuma em estoque</Text>)}
+
             </View>
 
         </LinearGradient>

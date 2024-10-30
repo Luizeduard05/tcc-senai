@@ -61,6 +61,8 @@ router.post('/veiculo/placa', autenticarToken, veiculoControllers.buscarVeiculoP
 router.post('/os', autenticarToken, OsController.registroDeOS);
 // rota para Busca de OSs
 router.get('/os/:idPessoa', autenticarToken, osController.buscarOrcamentoPorPessoa);
+// rota para buscar todos os os 
+router.get('/orcamentos', autenticarToken, osController.buscarTodosOrcamentos);
 // Rota para editar OS
 router.put('/os/:id', autenticarToken, OsController.editarOS);
 // Rota para deletar OS 
