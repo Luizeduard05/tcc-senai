@@ -35,7 +35,7 @@ router.post('/usuarios', pessoaControllers.registroDeAdm);
 // Rotas protegidas (exige token)
 router.post('/adm/usuarios', authMiddleware, pessoaControllers.registroDeAdm); 
 // rota para buscar uma pessoa cadastrada
-router.get('/usuarios/:id', autenticarToken, pessoaControllers.selecionarUsuario);
+router.get('/usuario/email/:email', authMiddleware, pessoaControllers.selecionarUsuarioPorEmail);
 // rota para editar uma pessoa cadastrada
 router.put('/usuarios/:id', autenticarToken, pessoaControllers.editarUsuario);
 // rora para deletar uma pessoa cadastrada
