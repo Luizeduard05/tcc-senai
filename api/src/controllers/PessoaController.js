@@ -97,13 +97,13 @@ const pessoaControllers = {
   },
 
 
-  selecionarUsuario: async (req, res) => {
+  selecionarUsuarioPorEmail: async (req, res) => {
     try {
-      const id = req.params.id;
-      console.log(`Buscando usuário com ID: ${id}`);
-
-      const result = await Pessoa.selectRegistroPessoa(id);
-
+      const email = req.params.email; 
+      console.log(`Buscando usuário com e-mail: ${email}`);
+  
+      const result = await Pessoa.selectRegistroPessoaPorEmail(email); 
+  
       if (result.length > 0) {
         return res.json({
           selectMessage: `Usuário localizado`,
@@ -117,7 +117,7 @@ const pessoaControllers = {
       return res.json({ selectMessage: `Usuário não foi localizado, motivo: ${e.message}` });
     }
   },
-
+  
 
 
   editarUsuario: async (req, res) => {
@@ -190,17 +190,17 @@ const pessoaControllers = {
 
   loginUsuario: async (req, res) => {
     try {
-      const { login, senha } = req.body;
+        const { login, senha } = req.body;
 
-      const usuario = await Login.selecionarUsuarioPorLogin(login);
-      if (!usuario || usuario.length === 0) {
-        return res.status(401).json({ message: 'Credenciais inválidas' });
-      }
+        const usuario = await Pessoa.selectRegistroPessoaPorEmail(login);
+        if (!usuario || usuario.length === 0) {
+            return res.status(401).json({ message: 'Credenciais inválidas' });
+        }
 
-      const senhaValida = await bcrypt.compare(senha, usuario[0].senha);
-      if (!senhaValida) {
-        return res.status(401).json({ message: 'Credenciais inválidas' });
-      }
+        const senhaValida = await bcrypt.compare(senha, usuario[0].senha);
+        if (!senhaValida) {
+            return res.status(401).json({ message: 'Credenciais inválidas' });
+        }
 
         dotenv.config();
 
@@ -209,18 +209,18 @@ const pessoaControllers = {
             perfil: usuario[0].perfil
         }, process.env.JWT_SECRET, { expiresIn: '2h' });
 
-        const pessoa = await Pessoa.selectRegistroPessoa(usuario[0].id_pessoa);
-
         return res.json({
             token,
             tipo: usuario[0].perfil,
-            id: pessoa[0].pessoa_id, 
-            nome: pessoa[0].nome
+            id: usuario[0].pessoa_id, 
+            nome: usuario[0].nome
         });
     } catch (e) {
+        console.error(e); 
         return res.status(400).json({ message: 'Erro ao fazer login' });
     }
 }
+
 
 
 
