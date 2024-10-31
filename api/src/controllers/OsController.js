@@ -8,6 +8,13 @@ const osController = {
         const idVei = req.query.idVei;
         const idPessoaVei = req.query.idPessoaVei;
 
+        let valorTotal = 0;
+        itens.forEach(item => {
+            valorTotal += (item.quantidade * item.valor);
+        })
+        let valorMo = parseFloat(mo.replace(',', '.'));
+        valorTotal += valorMo;
+
         console.log(itens)
         if (!data || !status || !mo || !Array.isArray(itens)) {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
@@ -41,7 +48,7 @@ const osController = {
             data: dataFormatada,
             status: statusCodigo,
             mo: moFormatado,
-            total,
+            total: valorTotal,
             itens
         });
 
@@ -93,8 +100,6 @@ const osController = {
             INNER JOIN tbl_veiculo v ON o.id_veiculo = v.id
             INNER JOIN tbl_pessoa p ON o.id_pessoa_veiculo = p.id;
           `);
-          
-
 
             for (let i = 0; i < ordensServico.length; i++) {
                 const newDate = new Date(ordensServico[i].data);
@@ -109,7 +114,27 @@ const osController = {
         }
     },
 
-
+    async buscarItensOs(req, res) {
+        const con = await conectarBancoDeDados();
+        const idOS = req.params.id;
+        try {
+            const [pecasOs] = await con.query(`
+            SELECT 
+              o.id AS id_os, 
+              i.id AS id_itens_os,
+              p.nome_produto, 
+              p.marca_produto, 
+              p.valor_produto
+            FROM tbl_ordem_de_serviço o
+            INNER JOIN tbl_itens_os i ON o.id = i.id_os
+            INNER JOIN tbl_produtos p ON i.id_produto = p.id          
+            WHERE o.id = ?;`,[idOS]);
+            return res.json({ pecasOs });
+        } catch (error) {
+            console.error('Erro ao buscar peças dessa Os:', error);
+            return res.status(500).json({ message: `Erro ao buscar peças dessa Os: ${error.message}`});
+        }
+    },
 
     async editarOS(req, res) {
         const idOS = req.params.id;
