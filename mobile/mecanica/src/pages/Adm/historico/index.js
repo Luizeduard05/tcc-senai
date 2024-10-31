@@ -5,6 +5,8 @@ import { useAuth } from "../../../context/AuthContext";
 import { useEffect, useState } from "react";
 import api from "../../../services/api/api";
 
+// OBSERVAÇÃO: A ideia é após o usuario clicar na icone da prancheta aparecer as proximas informações de agendamento dados como email do dono do carro, modelo do veiculo, e se for possivel trazer as pecas que foram usadas na mão de obra
+
 export default function HistoricoADM() {
     const { token } = useAuth();
     const [historico, setHistorico] = useState([]);
@@ -16,7 +18,7 @@ export default function HistoricoADM() {
                     Authorization: `Token ${token}`
                 }
             });
-            console.log(response.data);
+            // console.log(response.data);
             setHistorico(response.data.ordensServico);  // Armazena apenas ordensServico
         } catch (error) {
             console.log("Erro ao buscar histórico:", error);
@@ -39,11 +41,11 @@ export default function HistoricoADM() {
                 {historico.map((item) => (
                     <View key={item.id_os} style={styles.historicoItem}>
                         <Text style={styles.textVeiculo}>Veículo: {item.placa}</Text>
-                        <Text style={styles.textVeiculo}>Modelo: {item.modelo}</Text>
-                        <Text style={styles.textVeiculo}>Email Cliente: {item.email}</Text>
+                        {/* <Text style={styles.textVeiculo}>Modelo: {item.modelo}</Text> */}
+                        {/* <Text style={styles.textVeiculo}>Email Cliente: {item.email}</Text> */}
                         <View style={styles.alinha}>
-                            <Text style={styles.textDados}>Data: {item.data}</Text>
-                            <Text style={styles.textDados}>Total: R${item.total}</Text>
+                            <Text style={styles.textDados}>{item.data.slice(0,10)}</Text>
+                            <Text style={styles.textDados}>R${item.total}</Text>
                         </View>
                         <TouchableOpacity style={styles.icon}>
                             <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={32} color="white" />
