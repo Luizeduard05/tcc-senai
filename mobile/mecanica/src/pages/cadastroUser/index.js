@@ -114,10 +114,22 @@ export default function CadastroUser() {
                                     placeholder="Digite seu bairro"
                                 />
                                 <TextInput
+                                    value={complemento}
+                                    onChangeText={setComplemento}
+                                    style={styles.inputs}
+                                    placeholder="Digite seu complemento"
+                                />
+                                <TextInput
                                     value={estado}
                                     onChangeText={setEstado}
                                     style={styles.inputs}
                                     placeholder="Digite seu estado"
+                                />
+                                <TextInput
+                                    value={numero}
+                                    onChangeText={setNumero}
+                                    style={styles.inputs}
+                                    placeholder="Digite seu numero"
                                 />
 
                                 <View style={styles.navigationButtons}>
