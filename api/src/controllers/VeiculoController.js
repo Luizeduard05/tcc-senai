@@ -49,6 +49,27 @@ const VeiculoController = {
         }
     },
 
+    async buscarVeiculoPorPlaca(req, res) {
+        const placa = req.body.placa;
+    
+        if (!placa) {
+            return res.status(400).json({ message: 'Placa é obrigatória.' });
+        }
+    
+        const con = await conectarBancoDeDados();
+        try {
+            const [rows] = await con.query(`SELECT * FROM tbl_veiculo WHERE placa = ?`, [placa]);
+            if (rows.length > 0) {
+                return res.json(rows); 
+            } else {
+                return res.status(404).json({ message: 'Nenhum veículo encontrado com esta placa.' });
+            }
+        } catch (error) {
+            console.error(error); 
+            return res.status(400).json({ message: `Erro ao buscar placa: ${error.message}` });
+        }
+    },
+
     async editarVeiculo(req, res) {
         const idVei = req.params.id; 
         const { placa, marca, ano, modelo } = req.body;

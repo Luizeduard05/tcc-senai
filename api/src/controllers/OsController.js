@@ -8,6 +8,7 @@ const osController = {
         const idVei = req.query.idVei;
         const idPessoaVei = req.query.idPessoaVei;
 
+        console.log(itens)
         if (!data || !status || !mo || !Array.isArray(itens)) {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
         }
@@ -75,15 +76,40 @@ const osController = {
 
     async buscarTodosOrcamentos(req, res) {
         const con = await conectarBancoDeDados();
+
         try {
-            const [ordensServico] = await con.query(`SELECT * FROM tbl_ordem_de_serviço`);
-            return res.json(ordensServico);
+            const [ordensServico] = await con.query(`
+            SELECT 
+              o.id AS id_os, 
+              o.data, 
+              o.status, 
+              o.total, 
+              o.mo,
+              v.placa, 
+              v.modelo, 
+              p.id AS id_pessoa,
+              p.email
+            FROM tbl_ordem_de_serviço o
+            INNER JOIN tbl_veiculo v ON o.id_veiculo = v.id
+            INNER JOIN tbl_pessoa p ON o.id_pessoa_veiculo = p.id;
+          `);
+          
+
+
+            for (let i = 0; i < ordensServico.length; i++) {
+                const newDate = new Date(ordensServico[i].data);
+                const dataBr = newDate.toLocaleString("pt-BR")
+                ordensServico[i].data = dataBr;
+            }
+
+            return res.json({ ordensServico });
         } catch (error) {
             console.error('Erro ao buscar orçamentos:', error);
             return res.status(500).json({ message: `Erro ao buscar orçamentos: ${error.message}` });
         }
     },
-    
+
+
 
     async editarOS(req, res) {
         const idOS = req.params.id;
@@ -127,10 +153,6 @@ const osController = {
             return res.status(500).json({ message: `Erro ao atualizar a OS: ${error.message}` });
         }
     },
-
-
-
-
 
 
     async deletarOS(req, res) {
