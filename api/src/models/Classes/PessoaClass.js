@@ -41,41 +41,41 @@ class Pessoa {
     };
 
 
-    static selectRegistroPessoa = async (idPessoa) => {
+    static selectRegistroPessoaPorEmail = async (email) => {
         const con = await conectarBancoDeDados();
         try {
-            const query = `
+          const query = `
             SELECT 
-  p.id AS pessoa_id, 
-  p.nome, 
-  p.cpf, 
-  p.email, 
-  p.tipo,
-  e.logradouro, 
-  e.bairro, 
-  e.estado, 
-  e.numero, 
-  e.complemento, 
-  e.cep,
-  t.telefone,
-  l.perfil,
-  l.login,
-  l.senha
-FROM tbl_pessoa p
-INNER JOIN tbl_endereco e ON p.id = e.id_pessoa
-INNER JOIN tbl_telefone t ON p.id = t.id_pessoa
-INNER JOIN tbl_login l ON p.id = l.id_pessoa
-WHERE p.id = ?;
-
+              p.id AS pessoa_id, 
+              p.nome, 
+              p.cpf, 
+              p.email, 
+              p.tipo,
+              e.logradouro, 
+              e.bairro, 
+              e.estado, 
+              e.numero, 
+              e.complemento, 
+              e.cep,
+              t.telefone,
+              l.perfil,
+              l.login,
+              l.senha
+            FROM tbl_pessoa p
+            INNER JOIN tbl_endereco e ON p.id = e.id_pessoa
+            INNER JOIN tbl_telefone t ON p.id = t.id_pessoa
+            INNER JOIN tbl_login l ON p.id = l.id_pessoa
+            WHERE p.email = ?;
           `;
-            const [rows] = await con.query(query, [idPessoa]);
-            return rows;
+          const [rows] = await con.query(query, [email]);
+          return rows;
         } catch (error) {
-            throw new Error(`Erro ao selecionar: ${error.message}`);
+          throw new Error(`Erro ao selecionar: ${error.message}`);
         } finally {
-            await con.release();
+          await con.release();
         }
-    };
+      };
+      
 
     atualizarRegistroPessoa = async () => {
         const con = await conectarBancoDeDados();
