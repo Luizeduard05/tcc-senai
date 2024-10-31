@@ -51,9 +51,7 @@ class Os {
                 `INSERT INTO tbl_ordem_de_serviço (data, status, mo, total, id_veiculo, id_pessoa_veiculo) VALUES (?, ?, ?, ?, ?, ?)`,
                 [this.data, this.status, this.mo, this.total, idVei, idPessoaVei]
             );
-
             const idOs = result[0].insertId;
-
             for (const item of this.itens) {
                 const itemOs = new ItemOs({ 
                     quantidade: item.quantidade, 
