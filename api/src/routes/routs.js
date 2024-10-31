@@ -68,6 +68,8 @@ router.put('/os/:id', autenticarToken, OsController.editarOS);
 // Rota para deletar OS 
 router.delete('/os/:id', autenticarToken, OsController.deletarOS);
 
+router.get('/osPecas/:id', autenticarToken, OsController.buscarItensOs);
+
 // ROTAS : AGENDAMENTO
 
 // rota para Cadastro de AGENDAMENTO
