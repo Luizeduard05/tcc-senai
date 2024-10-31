@@ -19,7 +19,7 @@ import VisualizaOrcamentoMecanico from './src/pages/Mecanico/visualizaOrcamento'
 import AgendamentosADM from './src/pages/Adm/agendamentos';
 import NovoOrcamentoADM from './src/pages/Adm/novoOrcamento';
 import HistoricoADM from './src/pages/Adm/historico';
-import VisualizaOrcamentoADM from './src/pages/Adm/visualizaOrcamento';
+
 import NovaPeca from './src/pages/Adm/novaPeca';
 import VisualizaPeca from './src/pages/Adm/VisualizaPeca';
 import AddCarro from './src/pages/Usuario/AddCarro';
@@ -321,17 +321,6 @@ function AdminDrawer() { // Drawer para administrador
           },
           headerTintColor: '#fff',
           title: 'Novo Orçamento',
-        }}
-      />
-      <Drawer.Screen
-        name="VisualizaOrcamentoADM"
-        component={VisualizaOrcamentoADM}
-        options={{
-          headerStyle: {
-            backgroundColor: '#000',
-          },
-          headerTintColor: '#fff',
-          title: 'Visualiza Orçamento',
         }}
       />
       <Drawer.Screen
