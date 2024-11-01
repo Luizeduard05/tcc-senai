@@ -29,22 +29,21 @@ const PecasController = {
 
     async buscarPecas(req, res) {
         const idPro = req.params.idPro;
-
+        const result = await Produtos.selecionarRegistroPecas(idPro);
         if (!idPro) {
             return res.status(400).json({ message: 'ID da peça é obrigatório.' });
         }
-
-        const con = await conectarBancoDeDados();
         try {
-            const [rows] = await con.query(`SELECT * FROM tbl_produtos WHERE id = ?`, [idPro]);
-            if (rows.length > 0) {
-                return res.json(rows);
+            if (result.length > 0) {
+                return res.json({
+                    person: result[0]
+                });
             } else {
-                return res.status(404).json({ message: 'Nenhuma peça encontrada.' });
+                return res.json({ selectMessage: `Peça não encontrado` });
             }
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: `Erro ao buscar peça: ${error.message}` });
+        } catch (e) {
+            console.error(e);
+            return res.json({ selectMessage: `Peça não foi localizado, motivo: ${e.message}` });
         }
     },
 
