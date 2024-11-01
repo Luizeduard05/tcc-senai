@@ -1,14 +1,26 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, Platform, StatusBar, View, Text, TextInput, TouchableOpacity } from "react-native";
+import { StyleSheet, Platform, StatusBar, View, Text, TextInput, TouchableOpacity, FlatList } from "react-native";
+import CheckBox from "expo-checkbox";
+import { Picker } from '@react-native-picker/picker';
 import { useAuth } from "../../../context/AuthContext";
 import api from "../../../services/api/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function NovoOrcamentoADM() {
-    const {token} = useAuth();
+    const { token } = useAuth();
     const [email, setEmail] = useState("luiz@gmail.com");
-    const [idCliente, setIdCliente] = useState();
+    const [idCliente, setIdCliente] = useState(); // Capturando id do cliente para usar na requisição
     const [carros, setCarros] = useState([]); // Carros do cliente
+    const [idCarroSelecionado, setIdCarroSelecionado] = useState(null); // Carro selecionado para orçamento
+    const [pecas, setPecas] = useState([]); // Variavel para armazenar pecas do estoque
+    const [pecasSelecionadas, setPecasSelecionadas] = useState([]) // Variavel para armazenar peças usadas no orçamento
+
+    const [data, setData] = useState("")
+    const status = "Aguardando Retorno"
+    const [mo, setMo]= useState("")
+
+    console.log(pecas)
+    console.log(`id ${idCarroSelecionado}` )
 
     const getCliente = async () => { // Requisição para buscar o cliente
         try {
@@ -33,10 +45,66 @@ export default function NovoOrcamentoADM() {
                 }
             })
             console.log(response.data)
+            setCarros(response.data)
         } catch (error) {
             console.log(error)
         }
-    }    
+    }
+
+    const getPecas = async () => { // Requisição para busca de peças no orcamento
+        try {
+            const response = await api.get("/pecas", {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            })
+            console.log(response.data)
+            setPecas(response.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const postOS = async () => { // Requisição para cadastro de um novo orçamento
+        try {
+            const response = await api.post("/os", {
+                data: data,
+                status: status,
+                mo: mo,
+                itens: pecasSelecionadas
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            },
+            {
+                params: {
+                    idVei : idCarroSelecionado,
+                    idPessoaVei: idCliente
+                }
+            }
+        )
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => { // Toda vez que o id do cliente é setado a bsuca por carros é chamada
+        getCarros()
+        getPecas()
+    }, [idCliente])
+
+    const togglePecaSelection = (pecaId) => { // Função marcar e desmarcar peças selecionadas
+        setPecasSelecionadas((prevSelecionadas) => { // Atualiza o estado 'pecasSelecionadas' com base na seleção atual
+            if (prevSelecionadas.includes(pecaId)) { // Verifica se o ID da peça já está na lista de peças selecionadas
+                return prevSelecionadas.filter((id) => id !== pecaId);  // Se o ID já estiver na lista, cria uma nova lista sem esse ID, removendo a peça da seleção
+            } else { // Se o ID não estiver na lista, adiciona o ID à lista, mantendo a peça selecionada
+                return [...prevSelecionadas, pecaId];
+            }
+        });
+    };
+
 
     return (
         <LinearGradient
@@ -50,13 +118,44 @@ export default function NovoOrcamentoADM() {
                     <TextInput style={styles.input} placeholder="Digite o email do cliente" value={email} onChangeText={setEmail} />
 
                     <TouchableOpacity onPress={getCliente}>
-                    <Text>Buscar usuario</Text>
-                </TouchableOpacity>
+                        <Text>Buscar usuario</Text>
+                    </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity onPress={getCarros}>
-                    <Text>Buscar Veiculo</Text>
-                </TouchableOpacity>
+                <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Selecionar Veículo:</Text>
+                    <Picker
+                        selectedValue={idCarroSelecionado}
+                        onValueChange={(itemValue) => setIdCarroSelecionado(itemValue)}
+                        style={styles.input}
+                    >
+                        <Picker.Item label="Selecione um veículo" value={null} />
+                        {carros.map((carro) => (
+                            <Picker.Item
+                                key={carro.id}
+                                label={`${carro.modelo} - ${carro.placa}`}
+                                value={carro.id}
+                            />
+                        ))}
+                    </Picker>
+                </View>
+
+                <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Selecionar Peças:</Text>
+                    <FlatList
+                        data={pecas}
+                        keyExtractor={(peca) => peca.id.toString()}
+                        renderItem={({ item }) => (
+                            <View style={styles.pecaItem}>
+                                <CheckBox
+                                    value={pecasSelecionadas.includes(item.id)}
+                                    onValueChange={() => togglePecaSelection(item.id)}
+                                />
+                                <Text style={styles.pecaLabel}>{item.nome_produto} - R$ {item.valor_produto}</Text>
+                            </View>
+                        )}
+                    />
+                </View>
 
 
                 <View style={styles.inputGroup}>
@@ -65,21 +164,11 @@ export default function NovoOrcamentoADM() {
                 </View>
 
                 <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Placa:</Text>
+                    <Text style={styles.label}>Mão de Obra:</Text>
                     <TextInput style={styles.input} />
                 </View>
 
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Observação:</Text>
-                    <TextInput style={styles.input} />
-                </View>
-
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Orçamento:</Text>
-                    <TextInput style={styles.input} />
-                </View>
-
-                <TouchableOpacity style={styles.btnConfirmar}>
+                <TouchableOpacity style={styles.btnConfirmar} onPress={postOS} >
                     <Text style={styles.textBtn}>Confirmar</Text>
                 </TouchableOpacity>
 
@@ -114,7 +203,7 @@ const styles = StyleSheet.create({
         shadowRadius: 6,
     },
     inputGroup: {
-        width: '90%', 
+        width: '90%',
         marginBottom: 15,
     },
     label: {
@@ -131,7 +220,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     btnConfirmar: {
-        width: "90%", 
+        width: "90%",
         height: 50,
         backgroundColor: "#FFF",
         justifyContent: "center",
