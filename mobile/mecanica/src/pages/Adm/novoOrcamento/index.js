@@ -1,13 +1,63 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, Platform, StatusBar, View, Text, TextInput, TouchableOpacity } from "react-native";
+import { useAuth } from "../../../context/AuthContext";
+import api from "../../../services/api/api";
+import { useState } from "react";
 
 export default function NovoOrcamentoADM() {
+    const {token} = useAuth();
+    const [email, setEmail] = useState("luiz@gmail.com");
+    const [idCliente, setIdCliente] = useState();
+    const [carros, setCarros] = useState([]); // Carros do cliente
+
+    const getCliente = async () => { // Requisição para buscar o cliente
+        try {
+            const response = await api.get(`/usuario/email/${email}`, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            })
+            // console.log(response.data.person);
+            setIdCliente(response.data.person.pessoa_id)
+            console.log(response.data.person.pessoa_id)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getCarros = async () => { // Requisição para trazer os carros do cliente
+        try {
+            const response = await api.get(`/veiculos/${idCliente}`, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            })
+            console.log(response.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }    
+
     return (
         <LinearGradient
             colors={['#000000', 'rgba(0, 0, 0, 0.5)']}
             style={styles.androidSafeArea}
         >
             <View style={styles.container}>
+
+                <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Buscar cliente:</Text>
+                    <TextInput style={styles.input} placeholder="Digite o email do cliente" value={email} onChangeText={setEmail} />
+
+                    <TouchableOpacity onPress={getCliente}>
+                    <Text>Buscar usuario</Text>
+                </TouchableOpacity>
+                </View>
+
+                <TouchableOpacity onPress={getCarros}>
+                    <Text>Buscar Veiculo</Text>
+                </TouchableOpacity>
+
 
                 <View style={styles.inputGroup}>
                     <Text style={styles.label}>Data:</Text>
