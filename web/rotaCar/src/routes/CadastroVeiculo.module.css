@@ -64,9 +64,7 @@ section .containerCad .signin {
     width: 629px;
     background: #222;
     z-index: 1000;
-    display: flex;
     justify-content: center;
-    flex-direction: 1rf;
     align-items: center;
     padding: 40px;
     border-radius: 4px;
@@ -87,13 +85,14 @@ section .containerCad .signin .content h2 {
     font-size: 2em;
     color: rgb(255, 255, 255);
     text-transform: uppercase;
+    padding-bottom: 0;
 }
 
 /* Para a formatação em grid */
 section .containerCad .signin .content .form {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
+    /* grid-template-columns: repeat(2, 1fr);
+    gap: 25px; */
     width: 104%;
 }
 
@@ -210,4 +209,39 @@ input[type="submit"]:active {
     color: white;
     font-size: 16px;
 
+}
+
+.colunasVei{
+    
+    display: flex;
+    width: 100%;
+    gap: 35px;
+}
+
+
+.veiculosCadastrados{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+
+.buttonCadVei{
+    text-align: center;
+
+}
+
+.veiculosCadastrados p {
+    color: #787878;
+}
+
+.TextsVei{
+    color: #787878;
+}
+
+.voltar{
+    color: #ffffff;
+    display: flex;
+    cursor: pointer;
 }
