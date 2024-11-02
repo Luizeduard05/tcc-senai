@@ -64,21 +64,22 @@ const osController = {
 
     async buscarOrcamentoPorPessoa(req, res) {
         const idPessoa = req.params.idPessoa;
-
+        const result = await Os.selecionarRegistroOs(idPessoa);
         if (!idPessoa) {
             return res.status(400).json({ message: 'ID da pessoa é obrigatório.' });
         }
-
-        const con = await conectarBancoDeDados();
         try {
-            const [veiculos] = await con.query(`SELECT * FROM tbl_veiculo WHERE id_pessoa = ?`, [idPessoa]);
-            const [ordensServico] = await con.query(`SELECT * FROM tbl_ordem_de_serviço WHERE id_pessoa_veiculo = ?`, [idPessoa]);
-
-            return res.json({ veiculos, ordensServico });
-        } catch (error) {
-            console.error('Erro ao buscar orçamento:', error);
-            return res.status(500).json({ message: `Erro ao buscar orçamento: ${error.message}` });
-        }
+            if (result.length > 0) {
+                return res.json({
+                    person: result[0]
+                });
+            } else {
+                return res.json({ selectMessage: `Usuário não encontrado` });
+            }
+        } catch (e) {
+            console.error(e);
+            return res.json({ selectMessage: `Usuário não foi localizado, motivo: ${e.message}` });
+        }  
     },
 
     async buscarTodosOrcamentos(req, res) {

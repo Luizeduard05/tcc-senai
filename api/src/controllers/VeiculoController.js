@@ -45,25 +45,24 @@ const VeiculoController = {
             return res.json({ selectMessage: `Usuário não foi localizado, motivo: ${e.message}` });
         }
     },
-
+    
     async buscarVeiculoPorPlaca(req, res) {
         const placa = req.body.placa;
-
+        const result = await Veiculo.selecionarRegistroVeiculoPorPlaca(placa);
         if (!placa) {
-            return res.status(400).json({ message: 'Placa é obrigatória.' });
+            return res.status(400).json({ message: 'Placa do veiculo é obrigatório.' });
         }
-
-        const con = await conectarBancoDeDados();
         try {
-            const [rows] = await con.query(`SELECT * FROM tbl_veiculo WHERE placa = ?`, [placa]);
-            if (rows.length > 0) {
-                return res.json(rows);
+            if (result.length > 0) {
+                return res.json({
+                    person: result[0]
+                });
             } else {
-                return res.status(404).json({ message: 'Nenhum veículo encontrado com esta placa.' });
+                return res.json({ selectMessage: `Veiculo não encontrado` });
             }
-        } catch (error) {
-            console.error(error);
-            return res.status(400).json({ message: `Erro ao buscar placa: ${error.message}` });
+        } catch (e) {
+            console.error(e);
+            return res.json({ selectMessage: `Veiculo não foi localizado, motivo: ${e.message}` });
         }
     },
 

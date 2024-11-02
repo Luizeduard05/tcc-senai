@@ -78,6 +78,18 @@ class Veiculo {
         }
     }
 
+    static selecionarRegistroVeiculoPorPlaca = async (placa) => {
+        const con = await conectarBancoDeDados();
+        try {
+            const [rows] = await con.query(`SELECT * FROM tbl_veiculo WHERE placa = ?`, [placa]);
+            return rows;
+        } catch (error) {
+          throw new Error(`Erro ao selecionar: ${error.message}`);
+        } finally {
+          await con.release();
+        }
+    }
+
     atualizarRegistroVeiculo = async () => {
         const con = await conectarBancoDeDados();
         try {

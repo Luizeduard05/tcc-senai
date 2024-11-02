@@ -67,6 +67,19 @@ class Os {
         } catch (error) {
             throw new Error(`Erro ao registrar OS: ${error.message}`);
         }
+    };
+
+    static selecionarRegistroOs = async (idPessoa) => {
+        const con = await conectarBancoDeDados();
+        try {
+            const [veiculos] = await con.query(`SELECT * FROM tbl_veiculo WHERE id_pessoa = ?`, [idPessoa]);
+            const [ordensServico] = await con.query(`SELECT * FROM tbl_ordem_de_serviço WHERE id_pessoa_veiculo = ?`, [idPessoa]);
+
+            return veiculos, ordensServico;
+        } catch (error) {
+            console.error('Erro ao buscar orçamento:', error);
+            return res.status(500).json({ message: `Erro ao buscar orçamento: ${error.message}` });
+        }
     }
 
     atualizarRegistroOs = async (idOS) => {
