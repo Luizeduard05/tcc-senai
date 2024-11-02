@@ -26,10 +26,26 @@ const PecasController = {
         }
     },
 
+    async listarPecas(req, res) {
+        try {
+            const result = await Produtos.selecionarRegistroPecas();
 
-    async buscarPecas(req, res) {
+            if (result.length > 0) {
+                return res.json({
+                    pecas: result
+                });
+            } else {
+                return res.json({ selectMessage: `Peça não encontrada` });
+            }
+        } catch (e) {
+            console.error(e);
+            return res.json({ selectMessage: `Peça não foi localizada, motivo: ${e.message}` });
+        }
+    },
+
+    async listarPecasPorId(req, res) {
         const idPro = req.params.idPro;
-        const result = await Produtos.selecionarRegistroPecas(idPro);
+        const result = await Produtos.selecionarRegistroPecasPorId(idPro);
         if (!idPro) {
             return res.status(400).json({ message: 'ID da peça é obrigatório.' });
         }
@@ -46,22 +62,6 @@ const PecasController = {
             return res.json({ selectMessage: `Peça não foi localizado, motivo: ${e.message}` });
         }
     },
-
-    async listarPecas(req, res) {
-        const con = await conectarBancoDeDados();
-        try {
-            const [rows] = await con.query(`SELECT * FROM tbl_produtos`);
-            if (rows.length > 0) {
-                return res.json(rows);
-            } else {
-                return res.status(404).json({ message: 'Nenhuma peça cadastrada.' });
-            }
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: `Erro ao listar peças: ${error.message}` });
-        }
-    },
-    
 
     async editarPecas(req, res) {
         const idPro = req.params.id;

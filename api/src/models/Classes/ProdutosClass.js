@@ -33,19 +33,6 @@ class Produtos {
         return true;
     }
 
-    static selecionarRegistroPecas = async (idPro) => {
-
-        const con = await conectarBancoDeDados();
-        try {
-            const [rows] = await con.query(`SELECT * FROM tbl_produtos WHERE id = ?`, [idPro]);          
-                return rows
-        }catch (error) {
-            throw new Error(`Erro ao selecionar: ${error.message}`);
-          } finally {
-            await con.release();
-          }
-    }
-    
     novoRegistroPecas = async () => {
         const con = await conectarBancoDeDados();
         try {
@@ -59,6 +46,30 @@ class Produtos {
             throw new Error(`Erro ao registrar peça: ${error.message}`);
         }
     };
+
+    static selecionarRegistroPecas = async () => {
+        const con = await conectarBancoDeDados();
+        try {
+            const [rows] = await con.query(`SELECT * FROM tbl_produtos`);
+            return rows;
+        } catch (error) {
+            throw new Error(`Erro ao selecionar: ${error.message}`);
+        } finally {
+            await con.release();
+        }
+    };
+
+    static selecionarRegistroPecasPorId = async (idPro) => {
+        const con = await conectarBancoDeDados();
+        try {
+            const [rows] = await con.query(`SELECT * FROM tbl_produtos WHERE id = ?`, [idPro]);
+            return rows
+        } catch (error) {
+            throw new Error(`Erro ao selecionar: ${error.message}`);
+        } finally {
+            await con.release();
+        }
+    }
 
     atualizarRegistroPecas = async (idPro) => {
         const con = await conectarBancoDeDados();
