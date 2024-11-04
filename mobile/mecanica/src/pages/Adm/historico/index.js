@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, Platform, StatusBar, View, Text, TouchableOpacity, TextInput } from "react-native";
+import { StyleSheet, Platform, StatusBar, View, Text, TouchableOpacity, TextInput, ScrollView } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useAuth } from "../../../context/AuthContext";
 import { useEffect, useState } from "react";
@@ -37,22 +37,26 @@ export default function HistoricoADM() {
                     placeholder="Buscar por placa"
                 />
             </View>
+
             <View style={styles.container}>
-                {historico.map((item) => (
-                    <View key={item.id_os} style={styles.historicoItem}>
-                        <Text style={styles.textVeiculo}>Veículo: {item.placa}</Text>
-                        {/* <Text style={styles.textVeiculo}>Modelo: {item.modelo}</Text> */}
-                        {/* <Text style={styles.textVeiculo}>Email Cliente: {item.email}</Text> */}
-                        <View style={styles.alinha}>
-                            <Text style={styles.textDados}>{item.data.slice(0,10)}</Text>
-                            <Text style={styles.textDados}>R${item.total}</Text>
+                <ScrollView>
+                    {historico.map((item) => (
+                        <View key={item.id_os} style={styles.historicoItem}>
+                            <Text style={styles.textVeiculo}>Veículo: {item.placa}</Text>
+                            {/* <Text style={styles.textVeiculo}>Modelo: {item.modelo}</Text> */}
+                            {/* <Text style={styles.textVeiculo}>Email Cliente: {item.email}</Text> */}
+                            <View style={styles.alinha}>
+                                <Text style={styles.textDados}>{item.data.slice(0, 10)}</Text>
+                                <Text style={styles.textDados}>R${item.total}</Text>
+                            </View>
+                            <TouchableOpacity style={styles.icon}>
+                                <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={32} color="white" />
+                            </TouchableOpacity>
                         </View>
-                        <TouchableOpacity style={styles.icon}>
-                            <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={32} color="white" />
-                        </TouchableOpacity>
-                    </View>
-                ))}
+                    ))}
+                </ScrollView>
             </View>
+
         </LinearGradient>
     );
 }
