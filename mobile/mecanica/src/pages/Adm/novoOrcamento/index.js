@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, Platform, StatusBar, View, Text, TextInput, TouchableOpacity, FlatList } from "react-native";
+import { StyleSheet, Platform, StatusBar, View, Text, TextInput, TouchableOpacity, FlatList, Modal } from "react-native";
 import CheckBox from "expo-checkbox";
 import { Picker } from '@react-native-picker/picker';
 import { useAuth } from "../../../context/AuthContext";
@@ -8,19 +8,18 @@ import { useEffect, useState } from "react";
 
 export default function NovoOrcamentoADM() {
     const { token } = useAuth();
-    const [email, setEmail] = useState("luiz@gmail.com");
-    const [idCliente, setIdCliente] = useState(); // Capturando id do cliente para usar na requisição
-    const [carros, setCarros] = useState([]); // Carros do cliente
-    const [idCarroSelecionado, setIdCarroSelecionado] = useState(null); // Carro selecionado para orçamento
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const [email, setEmail] = useState(""); // Variavel para buscar usuario
+    const [carros, setCarros] = useState([]); // Variavel para buscar os carros do cliente
     const [pecas, setPecas] = useState([]); // Variavel para armazenar pecas do estoque
-    const [pecasSelecionadas, setPecasSelecionadas] = useState([]) // Variavel para armazenar peças usadas no orçamento
 
-    const [data, setData] = useState("")
-    const status = "Aguardando Retorno"
-    const [mo, setMo]= useState("")
-
-    console.log(pecas)
-    console.log(`id ${idCarroSelecionado}` )
+    const [idCliente, setIdCliente] = useState(); // Capturando id do cliente para usar na requisição    
+    const [idCarroSelecionado, setIdCarroSelecionado] = useState(null); // Carro selecionado para orçamento na requisição
+    const [data, setData] = useState("") // Variavel para guardar a data que sera usada na requisição
+    const status = "Aguardando Retorno"  // Variavel para guardar o status que sera usado na requisição
+    const [mo, setMo] = useState("") // Variavel para guardar a mo inicial
+    const [pecasSelecionadas, setPecasSelecionadas] = useState([]); // Variavel para guardar as pecas que serao enviadas a requisicao
 
     const getCliente = async () => { // Requisição para buscar o cliente
         try {
@@ -29,11 +28,12 @@ export default function NovoOrcamentoADM() {
                     Authorization: `Token ${token}`
                 }
             })
-            // console.log(response.data.person);
-            setIdCliente(response.data.person.pessoa_id)
             console.log(response.data.person.pessoa_id)
+            setIdCliente(response.data.person.pessoa_id)
+            alert(`usuario ${response.data.person.nome} localizado`)
         } catch (error) {
             console.log(error)
+            alert(`usuario nao localizado`)
         }
     }
 
@@ -44,7 +44,7 @@ export default function NovoOrcamentoADM() {
                     Authorization: `Token ${token}`
                 }
             })
-            console.log(response.data)
+            // console.log(response.data)
             setCarros(response.data)
         } catch (error) {
             console.log(error)
@@ -58,53 +58,98 @@ export default function NovoOrcamentoADM() {
                     Authorization: `Token ${token}`
                 }
             })
-            console.log(response.data)
+            // console.log(response.data)
             setPecas(response.data)
         } catch (error) {
             console.log(error)
         }
     }
 
+
     const postOS = async () => { // Requisição para cadastro de um novo orçamento
+        const itensOrçamento = pecasSelecionadas.map(item => ({ // Percorrendo o array e pegando dados
+            id_produto: item.id,
+            quantidade: item.quantidade
+        }))
+
+        const body = {
+            data: data,
+            status: status,
+            mo: total().toString(), // Pegando o total mais a mao de obra
+            itens: itensOrçamento
+        }
+
         try {
-            const response = await api.post("/os", {
-                data: data,
-                status: status,
-                mo: mo,
-                itens: pecasSelecionadas
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            },
-            {
-                params: {
-                    idVei : idCarroSelecionado,
-                    idPessoaVei: idCliente
-                }
-            }
-        )
+            const response = await api.post("/os", body,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
+                    params: {
+                        idVei: idCarroSelecionado,
+                        idPessoaVei: idCliente
+                    }
+                },
+            )
+            alert("Orçamento criado com sucesso:", response.data)
+            // Limpando os campos
+            setEmail("")
+            setIdCarroSelecionado(null)
+            setPecasSelecionadas([])
+            setData("")
+            setMo("")
+
         } catch (error) {
             console.log(error)
         }
     }
 
     useEffect(() => { // Toda vez que o id do cliente é setado a bsuca por carros é chamada
-        getCarros()
-        getPecas()
+        if (idCliente != undefined) {
+            getCarros()
+            getPecas()
+        }
     }, [idCliente])
 
-    const togglePecaSelection = (pecaId) => { // Função marcar e desmarcar peças selecionadas
-        setPecasSelecionadas((prevSelecionadas) => { // Atualiza o estado 'pecasSelecionadas' com base na seleção atual
-            if (prevSelecionadas.includes(pecaId)) { // Verifica se o ID da peça já está na lista de peças selecionadas
-                return prevSelecionadas.filter((id) => id !== pecaId);  // Se o ID já estiver na lista, cria uma nova lista sem esse ID, removendo a peça da seleção
-            } else { // Se o ID não estiver na lista, adiciona o ID à lista, mantendo a peça selecionada
-                return [...prevSelecionadas, pecaId];
-            }
-        });
+    const handleSelectPeca = (peca) => { // Função para adicao de peca na lista de orcamento
+        const existingPeca = pecasSelecionadas.find(item => item.id === peca.id);
+        if (existingPeca) { // Se a peça já existe, aumenta a quantidade
+            setPecasSelecionadas(pecasSelecionadas.map(item =>
+                item.id === peca.id ? { ...item, quantidade: item.quantidade + 1 } : item
+            ));
+        } else {    // Adiciona uma nova peça com quantidade 1
+            setPecasSelecionadas([...pecasSelecionadas, { ...peca, quantidade: 1 }]);
+        }
+        setModalVisible(false);
     };
 
+    const handleRemovePeca = (index) => { // Função para remover peca na lista de orcamento
+        const updatedPecas = pecasSelecionadas.filter((_, i) => i !== index);
+        setPecasSelecionadas(updatedPecas);
+    };
+
+    const handleIncreaseQuantity = (index) => { // Função para adicionar quantidade de peca na lista de orcamento
+        const updatedPecas = [...pecasSelecionadas];
+        updatedPecas[index].quantidade += 1;
+        setPecasSelecionadas(updatedPecas);
+    };
+
+    const handleDecreaseQuantity = (index) => { // Função para remover quantidade de peca na lista de orcamento
+        const updatedPecas = [...pecasSelecionadas];
+        if (updatedPecas[index].quantidade > 1) {
+            updatedPecas[index].quantidade -= 1;
+            setPecasSelecionadas(updatedPecas);
+        }
+    };
+
+    const total = () => { // Função para somar a mão de obra e as pecas
+        const totalPecas = pecasSelecionadas.reduce((acc, peca) => {
+            return acc + (peca.valor_produto * peca.quantidade);
+        }, 0);
+        const maoDeObra = Number(mo);
+        const valorFinal = totalPecas + maoDeObra;
+        return valorFinal.toFixed(2);
+    }
 
     return (
         <LinearGradient
@@ -118,7 +163,7 @@ export default function NovoOrcamentoADM() {
                     <TextInput style={styles.input} placeholder="Digite o email do cliente" value={email} onChangeText={setEmail} />
 
                     <TouchableOpacity onPress={getCliente}>
-                        <Text>Buscar usuario</Text>
+                        <Text style={styles.label}>Buscar usuario</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -141,31 +186,67 @@ export default function NovoOrcamentoADM() {
                 </View>
 
                 <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Selecionar Peças:</Text>
+                    <Text style={styles.label}>Peças Selecionadas:</Text>
                     <FlatList
-                        data={pecas}
-                        keyExtractor={(peca) => peca.id.toString()}
-                        renderItem={({ item }) => (
+                        data={pecasSelecionadas}
+                        keyExtractor={(item, index) => index.toString()}
+                        renderItem={({ item, index }) => (
                             <View style={styles.pecaItem}>
-                                <CheckBox
-                                    value={pecasSelecionadas.includes(item.id)}
-                                    onValueChange={() => togglePecaSelection(item.id)}
-                                />
-                                <Text style={styles.pecaLabel}>{item.nome_produto} - R$ {item.valor_produto}</Text>
+                                <Text style={styles.pecaLabel}>{item.nome_produto} - {item.valor_produto}</Text>
+                                <Text style={styles.pecaQuantity}>Quantidade: {item.quantidade}</Text>
+                                <TouchableOpacity onPress={() => handleIncreaseQuantity(index)}>
+                                    <Text style={styles.quantityControl}>+</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => handleDecreaseQuantity(index)}>
+                                    <Text style={styles.quantityControl}>-</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => handleRemovePeca(index)}>
+                                    <Text style={styles.removeText}>Remover</Text>
+                                </TouchableOpacity>
                             </View>
                         )}
                     />
+                    <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.btnAdicionarPeca}>
+                        <Text style={styles.textBtn}>Adicionar Peça</Text>
+                    </TouchableOpacity>
                 </View>
 
+                <Modal visible={modalVisible} transparent={true} animationType="slide">
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <FlatList
+                                data={pecas}
+                                keyExtractor={(item) => item.id.toString()}
+                                renderItem={({ item }) => (
+                                    <TouchableOpacity onPress={() => handleSelectPeca(item)}>
+                                        <Text style={styles.pecaModalItem}>{item.nome_produto} - {item.valor_produto}</Text>
+                                    </TouchableOpacity>
+                                )}
+                            />
+                            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalCloseButton}>
+                                <Text style={styles.textBtnCancelar}>Fechar</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
 
                 <View style={styles.inputGroup}>
                     <Text style={styles.label}>Data:</Text>
-                    <TextInput style={styles.input} />
+                    <TextInput style={styles.input} value={data} onChangeText={setData} />
                 </View>
 
                 <View style={styles.inputGroup}>
                     <Text style={styles.label}>Mão de Obra:</Text>
-                    <TextInput style={styles.input} />
+                    <TextInput style={styles.input} value={mo} onChangeText={setMo} />
+                </View>
+
+                <View style={styles.inputGroup}>
+                    <Text style={styles.label}>Total:</Text>
+                    <TextInput
+                        style={styles.input}
+                        value={total().toString()}
+                        editable={false}
+                    />
                 </View>
 
                 <TouchableOpacity style={styles.btnConfirmar} onPress={postOS} >
@@ -190,15 +271,7 @@ const styles = StyleSheet.create({
         margin: 20,
         paddingVertical: 20,
         paddingHorizontal: 15,
-        height: '80%',
-        backgroundColor: "#383838",
-        borderRadius: 10,
         alignItems: "center",
-        elevation: 8,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.4,
-        shadowRadius: 5,
     },
     inputGroup: {
         width: '100%',
@@ -211,27 +284,87 @@ const styles = StyleSheet.create({
         marginBottom: 8,
     },
     input: {
-        backgroundColor: "#f5f5f5",
-        width: "100%",
-        height: 45,
+        height: 40,
+        backgroundColor: '#fff',
+        color: '#000',
         borderRadius: 8,
-        paddingHorizontal: 12,
-        fontSize: 16,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: '#aaa',
+        marginBottom: 10,
     },
     pecaItem: {
         flexDirection: 'row',
         alignItems: 'center',
+        backgroundColor: '#2C2C2C',
+        borderRadius: 8,
+        padding: 10,
         marginBottom: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
     },
     pecaLabel: {
         color: "#fff",
         fontSize: 16,
+        fontWeight: "500",
+        flex: 2,
+        paddingLeft: 10,
+    },
+    pecaQuantity: {
+        color: "#ffffffcc",
+        fontSize: 14,
+        fontWeight: "400",
+        paddingHorizontal: 10,
+        textAlign: "center",
+    },
+    quantityControl: {
+        fontSize: 20,
+        color: "#FFF",
+        backgroundColor: "#555",
+        borderRadius: 5,
+        paddingVertical: 2,
+        paddingHorizontal: 8,
+        textAlign: "center",
+        marginHorizontal: 5,
+        elevation: 3,
+    },
+    removeText: {
+        color: "#FF4444",
+        fontSize: 14,
+        fontWeight: "600",
+        padding: 8,
+        backgroundColor: "#2C2C2C",
+        borderRadius: 5,
         marginLeft: 10,
+        shadowColor: '#FF4444',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.4,
+        shadowRadius: 3,
+    },
+    btnAdicionarPeca: {
+        width: "90%",
+        height: 45,
+        backgroundColor: "#4CAF50",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 8,
+        marginVertical: 10,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+    },
+    textBtn: {
+        fontSize: 16,
+        color: "#FFF",
+        fontWeight: "600",
     },
     btnConfirmar: {
         width: "90%",
         height: 50,
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#007BFF",
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 8,
@@ -259,10 +392,34 @@ const styles = StyleSheet.create({
         color: "#FFF",
         fontWeight: "600",
     },
-    textBtn: {
-        fontSize: 18,
-        color: "#000",
-        fontWeight: "600",
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        padding: 20,
+    },
+    modalContent: {
+        width: '90%',
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 20,
+        alignItems: 'center',
+    },
+    modalCloseButton: {
+        marginTop: 15,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        backgroundColor: '#FF4444',
+        borderRadius: 8,
+    },
+    pecaModalItem: {
+        fontSize: 16,
+        color: 'black',
+        marginVertical: 10,
+        padding: 10,
+        backgroundColor: '#f0f0f0',
+        borderRadius: 5,
     },
 });
 
