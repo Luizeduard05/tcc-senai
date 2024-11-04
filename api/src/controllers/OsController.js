@@ -4,7 +4,7 @@ import Os from '../models/Classes/OsClass.js';
 
 const osController = {
     async registroDeOS(req, res) {
-        const { data, status, mo, itens } = req.body;
+        const { data, status, mo, itens, mecanico } = req.body;
         const idVei = req.query.idVei;
         const idPessoaVei = req.query.idPessoaVei;
 
@@ -49,7 +49,8 @@ const osController = {
             status: statusCodigo,
             mo: moFormatado,
             total: valorTotal,
-            itens
+            itens,
+            id_mecanico: mecanico
         });
 
         try {
