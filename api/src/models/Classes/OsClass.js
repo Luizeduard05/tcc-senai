@@ -11,6 +11,7 @@ class Os {
         this.id_veiculo = (pOs.id_veiculo !== null && pOs.id_veiculo > 0) ? pOs.id_veiculo : null;
         this.id_pessoa_veiculo = (pOs.id_pessoa_veiculo !== null && pOs.id_pessoa_veiculo > 0) ? pOs.id_pessoa_veiculo : null;
         this.itens = pOs.itens || [];
+        this.id_mecanico = (pOs.id_mecanico !== null && pOs.id_mecanico > 0) ? pOs.id_mecanico : null; 
     }
     get Id() { return this.id; }
     set Id(value) { this.id = value; }
@@ -48,8 +49,8 @@ class Os {
         try {
             this.validarCampos();
             const result = await con.query(
-                `INSERT INTO tbl_ordem_de_serviço (data, status, total, mo, id_veiculo, id_pessoa_veiculo) VALUES (?, ?, ?, ?, ?, ?)`,
-                [this.data, this.status, this.total, this.mo, idVei, idPessoaVei]
+                `INSERT INTO tbl_ordem_de_serviço (data, status, total, mo, id_veiculo, id_pessoa_veiculo, id_mecanico) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                [this.data, this.status, this.total, this.mo, idVei, idPessoaVei, this.id_mecanico] // Adiciona o ID do mecânico na inserção
             );
             const idOs = result[0].insertId;
             for (const item of this.itens) {
