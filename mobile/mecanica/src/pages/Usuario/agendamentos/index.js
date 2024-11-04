@@ -1,8 +1,32 @@
 import { LinearGradient } from "expo-linear-gradient"
 import { StyleSheet, Platform, StatusBar, View, Text } from "react-native"
+import { useAuth } from "../../../context/AuthContext";
+import { useEffect, useState } from "react";
+import api from "../../../services/api/api";
 
 
 export default function Agendamentos() {
+    const { token, id } = useAuth()
+
+    const [agendamentos, setAgendamentos] = useState([]) 
+
+    const getAgendamentos = async () => {
+        try {
+            const response = await api.get(`/agendar/pessoa/${id}`, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            })
+            console.log(response.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(()=> {
+        getAgendamentos()
+    },[])
+
     return (
         <LinearGradient colors={
             ['#000000', 'rgba(0, 0, 0, 0.5)']}
