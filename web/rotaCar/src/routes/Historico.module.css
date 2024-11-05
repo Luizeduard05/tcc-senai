@@ -117,7 +117,7 @@ section.dados {
   font-size: 1em;
   -webkit-box-shadow: 0 2px 2px -2px #FF0000;
   -moz-box-shadow: 0 2px 2px -2px #FF0000;
-  box-shadow: 0 2px 2px -2px #FF0000;
+  box-shadow: 0 2px 2px -2px #000000;
 }
 
 .container {
@@ -138,13 +138,13 @@ section.dados {
 
 
 .container tr:nth-child(odd) {
-  background-color: #000; 
+  background-color: #1c1c1c;
   color: white;
 }
 
 
 .container tr:nth-child(even) {
-  background-color: #000; 
+  background-color: #1c1c1c;
   color: white;
 }
 
@@ -173,10 +173,10 @@ button:hover {
 }
 
 .container tr:hover {
-  background-color: #FF0000; 
-  -webkit-box-shadow: 0 6px 6px -6px #FF0000;
+  background-color: #ff7e7e;
+  -webkit-box-shadow: 0px 2px 6px -6px #ffffff;
   -moz-box-shadow: 0 6px 6px -6px #FF0000;
-  box-shadow: 0 6px 6px -6px #FF0000;
+  box-shadow: 0 6px 6px -6px #ff0000;
 }
 
 .container td:hover {
