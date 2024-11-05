@@ -116,9 +116,30 @@ class Pessoa {
 
     static validarCPF(cpf) {
         if (cpf.length !== 11) return false;
+    
         if (/^(\d)\1{10}$/.test(cpf)) return false;
+    
+        let soma = 0;
+        let peso = 10;
+        for (let i = 0; i < 9; i++) {
+            soma += parseInt(cpf[i]) * peso--;
+        }
+        let digito1 = 11 - (soma % 11);
+        if (digito1 === 10 || digito1 === 11) digito1 = 0;
+    
+        soma = 0;
+        peso = 11;
+        for (let i = 0; i < 10; i++) {
+            soma += parseInt(cpf[i]) * peso--;
+        }
+        let digito2 = 11 - (soma % 11);
+        if (digito2 === 10 || digito2 === 11) digito2 = 0;
+    
+        if (cpf[9] != digito1 || cpf[10] != digito2) return false;
+    
         return true;
     }
+    
 
     static verificarCPFExistente = async (cpf, idAtual = null) => {
         const con = await conectarBancoDeDados();
