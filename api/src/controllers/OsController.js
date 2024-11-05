@@ -15,12 +15,10 @@ const osController = {
         let valorMo = parseFloat(mo.replace(',', '.'));
         valorTotal += valorMo;
     
-        // Validação dos campos obrigatórios
         if (!data || !status || !mo || !Array.isArray(itens)) {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
         }
     
-        // Função para formatar a data
         const formatarData = (data) => {
             const partes = data.split('/');
             return `${partes[2]}-${partes[1]}-${partes[0]}`;
@@ -28,7 +26,6 @@ const osController = {
     
         const dataFormatada = formatarData(data);
     
-        // Mapeamento de status
         const statusMap = {
             'Aguardando Retorno': 0,
             'Aprovado': 1,
@@ -39,7 +36,6 @@ const osController = {
             return res.status(400).json({ message: 'Status inválido.' });
         }
     
-        // Validação do valor de "mo" (mão de obra)
         const moFormatado = parseFloat(mo.replace(',', '.'));
         if (isNaN(moFormatado)) {
             return res.status(400).json({ message: 'O campo mo deve ser um valor decimal válido.' });
@@ -47,16 +43,13 @@ const osController = {
     
         const total = moFormatado;
     
-        // Verificar se o mecânico é válido
         if (mecanico) {
             try {
-                // Consulta para verificar o tipo de pessoa
                 const con = await conectarBancoDeDados();
                 const [pessoa] = await con.query(
                     `SELECT tipo FROM tbl_pessoa WHERE id = ?`, [mecanico]
                 );
     
-                // Verificar se a pessoa existe e é do tipo "MEC"
                 if (pessoa.length === 0 || pessoa[0].tipo !== 'MEC') {
                     return res.status(400).json({ message: 'ID de mecânico inválido. A pessoa não é um mecânico cadastrado.' });
                 }
@@ -66,7 +59,6 @@ const osController = {
             }
         }
     
-        // Criando a ordem de serviço
         const ordemServico = new Os({
             data: dataFormatada,
             status: statusCodigo,
@@ -77,7 +69,6 @@ const osController = {
         });
     
         try {
-            // Registrar a OS
             await ordemServico.novoRegistroOs(idVei, idPessoaVei);
             return res.status(201).json({ message: 'OS registrada com sucesso!' });
         } catch (error) {
