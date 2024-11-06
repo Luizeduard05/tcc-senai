@@ -160,14 +160,12 @@ const osController = {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
         }
     
-        // Formatar a data
         const formatarData = (data) => {
             const partes = data.split('/');
             return `${partes[2]}-${partes[1]}-${partes[0]}`;
         };
         const dataFormatada = formatarData(data);
     
-        // Mapear status
         const statusMap = {
             'Aguardando Retorno': 0,
             'Aprovado': 1,
@@ -183,7 +181,6 @@ const osController = {
             return res.status(400).json({ message: 'O campo mo deve ser um valor decimal válido.' });
         }
     
-        // Verificar se o mecânico é válido (se o campo foi passado)
         if (mecanico) {
             try {
                 const con = await conectarBancoDeDados();
@@ -200,7 +197,6 @@ const osController = {
             }
         }
     
-        // Atualizando a ordem de serviço
         const ordemServico = new Os({ data: dataFormatada, status: statusCodigo, mo: moFormatado, id_mecanico: mecanico });
     
         try {

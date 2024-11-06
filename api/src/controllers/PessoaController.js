@@ -96,6 +96,25 @@ const pessoaControllers = {
     }
   },
 
+  selecionarMecanicos: async (req, res) => {
+    try {
+        const mecanicos = await Pessoa.selecionarMecanicos();
+
+        if (mecanicos.length > 0) {
+            return res.json({
+                message: 'Mecânicos encontrados',
+                mecanicos
+            });
+        } else {
+            return res.json({ message: 'Nenhum mecânico encontrado' });
+        }
+    } catch (e) {
+        console.error(e);
+        return res.status(500).json({ message: `Erro ao buscar mecânicos, motivo: ${e.message}` });
+    }
+},
+
+  
 
   selecionarUsuarioPorEmail: async (req, res) => {
     try {
