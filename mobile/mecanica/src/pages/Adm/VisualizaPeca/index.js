@@ -11,13 +11,13 @@ export default function VisualizaPeca() {
 
     const getPecas = async () => {
         try {
-            const response = await api.get("/pecas", {
+            const response = await api.get("/todasPecas", {
                 headers: {
                     Authorization: `Token ${token}`
                 }
             })
-            setPecas(response.data)
-            console.log(response.data)
+            setPecas(response.data.pecas)
+            // console.log(response.data.pecas)
         } catch (error) {
             console.log(error)
         }
@@ -33,7 +33,7 @@ export default function VisualizaPeca() {
             style={styles.androidSafeArea}>
             <View style={styles.container}>
 
-                {pecas.length > 0 ? (pecas.map((peca) => (
+                {pecas != undefined ? (pecas.map((peca) => (
                     <View style={styles.historicoItem} key={peca.id}>
                         <Text style={styles.textVeiculo}>{peca.nome_produto}</Text>
                         <View style={styles.alinha}>
@@ -45,7 +45,7 @@ export default function VisualizaPeca() {
                         </TouchableOpacity>
                     </View>
                 ))
-                ) : (<Text>Nenhuma em estoque</Text>)}
+                ) : (<Text style={{backgroundColor: "#fff"}}>Nenhuma peça em estoque</Text>)}
 
             </View>
 

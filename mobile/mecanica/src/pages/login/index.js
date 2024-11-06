@@ -4,14 +4,29 @@ import { Text, View, Platform, StyleSheet, StatusBar, TouchableOpacity, TextInpu
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../services/api/api";
+import { validaEmail, validaSenha } from "../../utils/inputValidation";
 
 export default function Login() {
     const navigation = useNavigation();
     const { login } = useAuth();
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState("");
+    const [emailError, setEmailError] = useState(null); // Variavel responsavel por retornar o erro de validação dos inputs
+    const [senhaError, setSenhaError] = useState(null); // Variavel responsavel por retornar o erro de validação dos inputs
 
-    const handleLogin = async () => {
+    const handleLogin = async () => { // Realizando requisição de login
+        // Validando email e senha
+        const emailValidationError = validaEmail(email);
+        const senhaValidationError = validaSenha(senha);
+
+        // Atualizando os estados com as mensagens de erro da validação
+        setEmailError(emailValidationError);
+        setSenhaError(senhaValidationError);
+
+        if (emailValidationError || senhaValidationError) { // Caso ocorra erro de validação interompe o login
+            return;
+        }
+
         try {
             const response = await api.post("/login", { login: email, senha: senha });
             if (response.data) {
@@ -27,10 +42,11 @@ export default function Login() {
             }
         } catch (error) {
             console.log(error);
+            alert("Email ou senha incorretas")
         }
     };
 
-    const navegaCadastroUser = () => {
+    const navegaCadastroUser = () => { // Realizando navegação
         navigation.navigate("CadastroUser");
     };
 
@@ -46,18 +62,27 @@ export default function Login() {
                         <Text style={styles.textStart}>Realize login para acessar nosso serviços</Text>
 
                         <TextInput
-                            style={styles.inputs}
+                            style={[styles.inputs, emailError ? styles.inputError : null]}
                             value={email}
-                            onChangeText={setEmail}
+                            onChangeText={(text) => {
+                                setEmail(text);
+                                setEmailError(null); // Limpando o erro para proxima tentativa
+                            }}
                             placeholder="Digite seu e-mail"
                         />
+                        {emailError && <Text style={styles.errorText}>{emailError}</Text>}
+
                         <TextInput
-                            style={styles.inputs}
+                            style={[styles.inputs, senhaError ? styles.inputError : null]}
                             value={senha}
-                            onChangeText={setSenha}
+                            onChangeText={(text) => {
+                                setSenha(text);
+                                setSenhaError(null); // // Limpando o erro para proxima tentativa
+                            }}
                             secureTextEntry
                             placeholder="Digite sua Senha"
                         />
+                        {senhaError && <Text style={styles.errorText}>{senhaError}</Text>}
 
                         <View style={styles.alinha}>
                             <Text style={styles.text}>Esqueci minha senha</Text>
@@ -127,6 +152,16 @@ const styles = StyleSheet.create({
         fontSize: 16,
         borderRadius: 10,
         margin: 10,
+    },
+    inputError: {
+        borderColor: "red",
+        borderWidth: 1,
+    },
+    errorText: {
+        color: "red",
+        fontSize: 14,
+        alignSelf: "flex-start",
+        marginLeft: 20,
     },
     btnAcessar: {
         width: "70%",

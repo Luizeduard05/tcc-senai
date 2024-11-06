@@ -132,7 +132,7 @@ h1 {
 
 h4 {
     font-weight: 200;
-    color: white;
+    color: white !important;
 }
 
 img.carros {
