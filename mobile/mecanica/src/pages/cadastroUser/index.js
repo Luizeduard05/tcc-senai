@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, StatusBar, Platform, TextInput, TouchableOpacit
 import { FontAwesome } from "@expo/vector-icons";
 import api from "../../services/api/api";
 import { useEffect, useState } from "react";
+import { validaCPF, validaNome, validaTelefone } from "../../utils/inputValidation";
 
 export default function CadastroUser() {
     const navigation = useNavigation();
@@ -19,6 +20,11 @@ export default function CadastroUser() {
     const [cep, setCep] = useState('');
     const [telefone, setTelefone] = useState('');
     const [senha, setSenha] = useState('');
+
+    const [nomeError, setNomeError] = useState(null)// Variavel responsavel por retornar o erro de validação dos inputs
+    const [cpfError, setCpfError] = useState(null)// Variavel responsavel por retornar o erro de validação dos inputs
+    const [telefoneError, setTelefoneError] = useState(null)// Variavel responsavel por retornar o erro de validação dos inputs
+
 
     const navegaLogin = () => navigation.navigate("Login");
 
@@ -39,6 +45,20 @@ export default function CadastroUser() {
             });
             alert("Usuário cadastrado com sucesso");
             navegaLogin();
+            // limpando campos após envio de dados
+            setNome("")
+            setCpf("")
+            setEmail("")
+            setLogradouro("")
+            setBairro("")
+            setEstado("")
+            setNumero("")
+            setComplemento("")
+            setCep("")
+            setTelefone("")
+            setSenha("")
+            // Voltando o forms para a pagina inicial
+            setStep(1)
         } catch (error) {
             console.log(error);
             alert("Erro no cadastro");
@@ -64,7 +84,22 @@ export default function CadastroUser() {
     }
 
 
-    const nextStep = () => setStep(step + 1);
+    const nextStep = () => {
+        // Validando campos
+        const nomeValidationError = validaNome(nome);
+        const cpfValidationError = validaCPF(cpf);
+        const telefoneValidationError = validaTelefone(telefone);
+
+        // Atualização de mensagens de erro da validação
+        setNomeError(nomeValidationError)
+        setCpfError(cpfValidationError)
+        setTelefoneError(telefoneValidationError)
+
+        if (nomeValidationError || cpfValidationError || telefoneValidationError) {
+            return
+        }
+        setStep(step + 1)
+    }
     const previousStep = () => setStep(step - 1);
 
     return (
@@ -84,26 +119,39 @@ export default function CadastroUser() {
                             <>
                                 <TextInput
                                     value={nome}
-                                    onChangeText={setNome}
-                                    style={styles.inputs}
+                                    onChangeText={(text) => {
+                                        setNome(text);
+                                        setNomeError(null); // Limpando o erro para proxima tentativa
+                                    }}
+                                    style={[styles.inputs, nomeError ? styles.inputError : null]}
                                     placeholder="Digite seu nome"
                                 />
+                                {nomeError && <Text style={styles.errorText}>{nomeError}</Text>}
+
                                 <TextInput
                                     value={cpf}
-                                    onChangeText={setCpf}
-                                    style={styles.inputs}
+                                    onChangeText={(text) => {
+                                        setCpf(text);
+                                        setCpfError(null); // Limpando o erro para proxima tentativa
+                                    }}
+                                    style={[styles.inputs, cpfError ? styles.inputError : null]}
                                     keyboardType="numeric"
                                     placeholder="Digite seu CPF"
                                     maxLength={11}
                                 />
+                                {cpfError && <Text style={styles.errorText}>{cpfError}</Text>}
+
                                 <TextInput
                                     value={telefone}
-                                    onChangeText={setTelefone}
-                                    style={styles.inputs}
+                                    onChangeText={(text) => {
+                                        setTelefone(text);
+                                        setTelefoneError(null); // Limpando o erro para proxima tentativa
+                                    }}
+                                    style={[styles.inputs,telefoneError ? styles.inputError : null]}
                                     keyboardType="phone-pad"
                                     placeholder="Digite seu telefone"
                                 />
-
+                                {telefoneError && <Text style={styles.errorText}>{telefoneError}</Text>}
 
                                 <View style={styles.alinha}>
                                     <Text style={styles.text}>Possui login?</Text>
@@ -258,6 +306,16 @@ const styles = StyleSheet.create({
         fontSize: 16,
         borderRadius: 10,
         marginVertical: 10,
+    },
+    inputError: {
+        borderColor: "red",
+        borderWidth: 1,
+    },
+    errorText: {
+        color: "red",
+        fontSize: 14,
+        alignSelf: "flex-start",
+        marginLeft: 20,
     },
     btnNext: {
         width: 50,
