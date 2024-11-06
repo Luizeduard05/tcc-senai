@@ -31,7 +31,7 @@ const CadastroVeiculo = () => {
                 headers: { Authorization: `Token ${token}` }
             });
             setUserData({
-                veiculos: response.data
+                veiculos: response.data.person
             });
             console.log("Veículos retornados:", response.data);
         } catch (error) {
