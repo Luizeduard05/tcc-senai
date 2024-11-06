@@ -44,8 +44,8 @@ export default function NovoOrcamentoADM() {
                     Authorization: `Token ${token}`
                 }
             })
-            // console.log(response.data)
-            setCarros(response.data)
+            console.log(response.data.person)
+            setCarros(response.data.person)
         } catch (error) {
             console.log(error)
         }
@@ -53,13 +53,13 @@ export default function NovoOrcamentoADM() {
 
     const getPecas = async () => { // Requisição para busca de peças no orcamento
         try {
-            const response = await api.get("/pecas", {
+            const response = await api.get("/todasPecas", {
                 headers: {
                     Authorization: `Token ${token}`
                 }
             })
-            // console.log(response.data)
-            setPecas(response.data)
+            console.log(response.data.pecas)
+            setPecas(response.data.pecas)
         } catch (error) {
             console.log(error)
         }
