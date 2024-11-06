@@ -3,7 +3,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { View, Text, StyleSheet, StatusBar, Platform, TextInput, TouchableOpacity, ScrollView, KeyboardAvoidingView } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import api from "../../services/api/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function CadastroUser() {
     const navigation = useNavigation();
@@ -45,6 +45,25 @@ export default function CadastroUser() {
         }
     };
 
+    const buscarCep = async () => { // Função para busca de CEP
+        try {
+            const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            const data = await response.json()
+            // console.log(data)
+
+            if (!data.erro) { // Se a resposta for diferente de erro atrela os valores ao input
+                setLogradouro(data.logradouro);
+                setBairro(data.bairro);
+                setEstado(data.uf);
+            } else {
+                alert("CEP não encontrado");
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
     const nextStep = () => setStep(step + 1);
     const previousStep = () => setStep(step - 1);
 
@@ -78,11 +97,13 @@ export default function CadastroUser() {
                                     maxLength={11}
                                 />
                                 <TextInput
-                                    value={email}
-                                    onChangeText={setEmail}
+                                    value={telefone}
+                                    onChangeText={setTelefone}
                                     style={styles.inputs}
-                                    placeholder="Digite seu email"
+                                    keyboardType="phone-pad"
+                                    placeholder="Digite seu telefone"
                                 />
+
 
                                 <View style={styles.alinha}>
                                     <Text style={styles.text}>Possui login?</Text>
@@ -102,34 +123,46 @@ export default function CadastroUser() {
                         {step === 2 && (
                             <>
                                 <TextInput
-                                    value={logradouro}
-                                    onChangeText={setLogradouro}
+                                    value={cep}
+                                    onChangeText={setCep}
+                                    onBlur={buscarCep} // Sempre que clicar fora do campo a função é ativada
                                     style={styles.inputs}
-                                    placeholder="Digite seu logradouro"
+                                    placeholder="Digite seu CEP"
                                 />
                                 <TextInput
                                     value={bairro}
                                     onChangeText={setBairro}
                                     style={styles.inputs}
                                     placeholder="Digite seu bairro"
+                                    editable={false}
                                 />
+
                                 <TextInput
-                                    value={complemento}
-                                    onChangeText={setComplemento}
+                                    value={numero}
+                                    onChangeText={setNumero}
                                     style={styles.inputs}
-                                    placeholder="Digite seu complemento"
+                                    placeholder="Digite o numero da sua residencia"
                                 />
                                 <TextInput
                                     value={estado}
                                     onChangeText={setEstado}
                                     style={styles.inputs}
                                     placeholder="Digite seu estado"
+                                    editable={false}
+                                />
+
+                                <TextInput
+                                    value={logradouro}
+                                    onChangeText={setLogradouro}
+                                    style={styles.inputs}
+                                    placeholder="Digite seu logradouro"
+                                    editable={false}
                                 />
                                 <TextInput
-                                    value={numero}
-                                    onChangeText={setNumero}
+                                    value={complemento}
+                                    onChangeText={setComplemento}
                                     style={styles.inputs}
-                                    placeholder="Digite seu numero"
+                                    placeholder="Digite seu complemento"
                                 />
 
                                 <View style={styles.navigationButtons}>
@@ -145,18 +178,12 @@ export default function CadastroUser() {
 
                         {step === 3 && (
                             <>
+
                                 <TextInput
-                                    value={cep}
-                                    onChangeText={setCep}
+                                    value={email}
+                                    onChangeText={setEmail}
                                     style={styles.inputs}
-                                    placeholder="Digite seu CEP"
-                                />
-                                <TextInput
-                                    value={telefone}
-                                    onChangeText={setTelefone}
-                                    style={styles.inputs}
-                                    keyboardType="phone-pad"
-                                    placeholder="Digite seu telefone"
+                                    placeholder="Digite seu email"
                                 />
                                 <TextInput
                                     value={senha}
@@ -275,7 +302,7 @@ const styles = StyleSheet.create({
     navigationButtons: {
         flexDirection: "row",
         width: "90%",
-        justifyContent: "space-around", 
+        justifyContent: "space-around",
         marginTop: 20,
     }
 });
