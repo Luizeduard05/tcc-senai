@@ -35,7 +35,7 @@ const VeiculoController = {
         try {
             if (result.length > 0) {
                 return res.json({
-                    person: result[0]
+                    person: result
                 });
             } else {
                 return res.json({ selectMessage: `Usuário não encontrado` });
