@@ -35,6 +35,8 @@ router.post('/usuarios', pessoaControllers.registroDeAdm);
 router.post('/adm/usuarios', authMiddleware, pessoaControllers.registroDeAdm); 
 // rota para buscar uma pessoa cadastrada
 router.get('/usuario/email/:email', authMiddleware, pessoaControllers.selecionarUsuarioPorEmail);
+// rota para buscar todos os mecanicos cadastrados 
+router.get('/mecanicos', authMiddleware, pessoaControllers.selecionarMecanicos);
 // rota para editar uma pessoa cadastrada
 router.put('/usuarios/:id', autenticarToken, pessoaControllers.editarUsuario);
 // rora para deletar uma pessoa cadastrada
@@ -68,6 +70,8 @@ router.put('/os/:id', autenticarToken, OsController.editarOS);
 // Rota para deletar OS 
 router.delete('/os/:id', autenticarToken, OsController.deletarOS);
 
+router.get('/osPecas/:id', autenticarToken, OsController.buscarItensOs);
+
 // ROTAS : AGENDAMENTO
 
 // rota para Cadastro de AGENDAMENTO
@@ -86,9 +90,9 @@ router.delete('/agendar/:id', autenticarToken, agendamentoController.deletarAgen
 // rota para Cadastro de PEÇAS
 router.post('/pecas/', autenticarToken, PecasController.registroDePecas);
 // rota para Busca de  por id
-router.get('/pecas/:idPro', autenticarToken, PecasController.buscarPecas);
+router.get('/pecas/:idPro', autenticarToken, PecasController.listarPecasPorId);
 // rota para buscar todas as peças 
-router.get('/pecas', autenticarToken, PecasController.listarPecas);
+router.get('/todasPecas', autenticarToken, PecasController.listarPecas);
 // Rota para editar PEÇAS
 router.put('/pecas/:id', autenticarToken, PecasController.editarPecas);
 // Rota para deletar PEÇAS 

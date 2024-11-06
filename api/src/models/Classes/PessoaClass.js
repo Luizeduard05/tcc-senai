@@ -75,6 +75,29 @@ class Pessoa {
           await con.release();
         }
       };
+
+     
+      static selecionarMecanicos = async () => {
+        const con = await conectarBancoDeDados();
+        try {
+            const query = `
+                SELECT p.id AS pessoa_id, p.nome, p.cpf, p.email, p.tipo,
+                       e.logradouro, e.bairro, e.estado, e.numero, e.complemento, e.cep,
+                       t.telefone, l.perfil
+                FROM tbl_pessoa p
+                INNER JOIN tbl_endereco e ON p.id = e.id_pessoa
+                INNER JOIN tbl_telefone t ON p.id = t.id_pessoa
+                INNER JOIN tbl_login l ON p.id = l.id_pessoa
+                WHERE p.tipo = 'MEC';
+            `;
+            const [rows] = await con.query(query);
+            return rows; 
+        } catch (error) {
+            throw new Error(`Erro ao buscar mecânicos: ${error.message}`);
+        } finally {
+            con.release();
+        }
+    };
       
 
     atualizarRegistroPessoa = async () => {
@@ -116,9 +139,30 @@ class Pessoa {
 
     static validarCPF(cpf) {
         if (cpf.length !== 11) return false;
+    
         if (/^(\d)\1{10}$/.test(cpf)) return false;
+    
+        let soma = 0;
+        let peso = 10;
+        for (let i = 0; i < 9; i++) {
+            soma += parseInt(cpf[i]) * peso--;
+        }
+        let digito1 = 11 - (soma % 11);
+        if (digito1 === 10 || digito1 === 11) digito1 = 0;
+    
+        soma = 0;
+        peso = 11;
+        for (let i = 0; i < 10; i++) {
+            soma += parseInt(cpf[i]) * peso--;
+        }
+        let digito2 = 11 - (soma % 11);
+        if (digito2 === 10 || digito2 === 11) digito2 = 0;
+    
+        if (cpf[9] != digito1 || cpf[10] != digito2) return false;
+    
         return true;
     }
+    
 
     static verificarCPFExistente = async (cpf, idAtual = null) => {
         const con = await conectarBancoDeDados();
