@@ -70,6 +70,24 @@ export default function CadastroAdmMec() {
         }
     }
 
+    const buscarCep = async () => { // Função para busca de CEP
+        try {
+            const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            const data = await response.json()
+            // console.log(data)
+
+            if (!data.erro) { // Se a resposta for diferente de erro atrela os valores ao input
+                setLogradouro(data.logradouro);
+                setBairro(data.bairro);
+                setEstado(data.uf);
+            } else {
+                alert("CEP não encontrado");
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const nextStep = () => {
         setStep(step + 1)
     }
@@ -135,17 +153,21 @@ export default function CadastroAdmMec() {
                                 value={cep}
                                 onChangeText={setCep}
                                 style={styles.inputs}
+                                onBlur={buscarCep}
+                                maxLength={8}
                                 placeholder="Cep do funcionario"
                             />
                             <TextInput
                                 value={bairro}
                                 onChangeText={setBairro}
+                                editable={false}
                                 style={styles.inputs}
                                 placeholder="Bairro do funcionario"
                             />
                             <TextInput
                                 value={numero}
                                 onChangeText={setNumero}
+                                maxLength={6}
                                 style={styles.inputs}
                                 placeholder="Numero da sua residencia do funcionario"
                             />
@@ -153,12 +175,14 @@ export default function CadastroAdmMec() {
                                 value={estado}
                                 onChangeText={setEstado}
                                 style={styles.inputs}
+                                editable={false}
                                 placeholder="Estado do funcionario"
                             />
                             <TextInput
                                 value={logradouro}
                                 onChangeText={setLogradouro}
                                 style={styles.inputs}
+                                editable={false}
                                 placeholder="Logradouro do funcionario"
                             />
                             <TextInput
