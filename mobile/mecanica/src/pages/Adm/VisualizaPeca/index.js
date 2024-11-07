@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, Platform, StatusBar, View, Text, TouchableOpacity, Modal } from "react-native";
+import { StyleSheet, Platform, StatusBar, View, Text, TouchableOpacity, Modal, TextInput } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import api from "../../../services/api/api";
 import { useAuth } from "../../../context/AuthContext";
@@ -11,6 +11,13 @@ export default function VisualizaPeca() {
     const [pecas, setPecas] = useState([]); // Variavel para manipular todas as pecas em estoque
     const [modalVisible, setModalVisible] = useState(false); // Manipulando o Modal
     const [pecaSelecionada, setPecaSelecionada] = useState(null); // Variavel para capturar a peça selecionada
+
+    const [nome, setNome] = useState("");
+    const [marca, setMarca] = useState("");
+    const [valor, setValor] = useState("");
+
+    const [isEditing, setIsEditing] = useState(false); // estado para controlar o modo de edição
+
 
     const getPecas = async () => {  // Requisição para trazer as peças
         try {
@@ -32,9 +39,33 @@ export default function VisualizaPeca() {
                     Authorization: `Token ${token}`
                 }
             });
-            console.log(response.data);
+            // console.log(response.data);
             getPecas();
             setModalVisible(false);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const editPeca = async () => {
+        try {
+            const response = await api.put(
+                `/pecas/${pecaSelecionada.id}`,
+                {
+                    nome_produto: nome,
+                    marca_produto: marca,
+                    valor_produto: valor
+                },
+                {
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                }
+            );
+            // console.log(response.data);
+            setIsEditing(false);
+            setModalVisible(false);
+            getPecas();
         } catch (error) {
             console.log(error);
         }
@@ -48,6 +79,10 @@ export default function VisualizaPeca() {
 
     const handleOpenModal = (peca) => {
         setPecaSelecionada(peca); // Armazena a peça clicada
+        //Atribuindo os valores das peças existente para o input
+        setNome(peca.nome_produto);
+        setMarca(peca.marca_produto);
+        setValor(peca.valor_produto);
         setModalVisible(true);
     };
 
@@ -80,21 +115,48 @@ export default function VisualizaPeca() {
                         <View style={styles.modalContent}>
                             {pecaSelecionada && (
                                 <>
-                                    <Text style={styles.modalTitle}>{pecaSelecionada.nome_produto}</Text>
-                                    <Text style={styles.modalText}>Marca: {pecaSelecionada.marca_produto}</Text>
-                                    <Text style={styles.modalText}>Valor: R$ {pecaSelecionada.valor_produto}</Text>
-
-                                    <View style={styles.iconContainer}>
-                                        <TouchableOpacity style={styles.iconButton} onPress={deletePeca}>
-                                            <MaterialCommunityIcons name="delete" size={24} color="red" />
-                                            <Text style={styles.iconText}>Excluir</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.iconButton} onPress={() => {/* função para editar */ }}>
-                                            <MaterialCommunityIcons name="pencil" size={24} color="blue" />
-                                            <Text style={styles.iconText}>Editar</Text>
-                                        </TouchableOpacity>
-                                    </View>
-
+                                    {isEditing ? (
+                                        <>
+                                            <TextInput
+                                                style={styles.modalInput}
+                                                value={nome}
+                                                onChangeText={setNome}
+                                                placeholder="Nome do produto"
+                                            />
+                                            <TextInput
+                                                style={styles.modalInput}
+                                                value={marca}
+                                                onChangeText={setMarca}
+                                                placeholder="Marca do produto"
+                                            />
+                                            <TextInput
+                                                style={styles.modalInput}
+                                                value={valor}
+                                                onChangeText={setValor}
+                                                placeholder="Valor do produto"
+                                                keyboardType="numeric"
+                                            />
+                                            <TouchableOpacity onPress={editPeca} style={styles.modalSaveButton}>
+                                                <Text style={styles.modalSaveText}>Salvar</Text>
+                                            </TouchableOpacity>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Text style={styles.modalTitle}>{pecaSelecionada.nome_produto}</Text>
+                                            <Text style={styles.modalText}>Marca: {pecaSelecionada.marca_produto}</Text>
+                                            <Text style={styles.modalText}>Valor: R$ {pecaSelecionada.valor_produto}</Text>
+                                            <View style={styles.iconContainer}>
+                                                <TouchableOpacity style={styles.iconButton} onPress={deletePeca}>
+                                                    <MaterialCommunityIcons name="delete" size={24} color="red" />
+                                                    <Text style={styles.iconText}>Excluir</Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity style={styles.iconButton} onPress={() => setIsEditing(!isEditing)}>
+                                                    <MaterialCommunityIcons name="pencil" size={24} color="blue" />
+                                                    <Text style={styles.iconText}>Editar</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </>
+                                    )}
                                     <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalCloseButton}>
                                         <Text style={styles.modalCloseText}>Fechar</Text>
                                     </TouchableOpacity>
@@ -201,6 +263,27 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     modalCloseText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    modalInput: {
+        width: '100%',
+        borderColor: '#ccc',
+        borderWidth: 1,
+        borderRadius: 5,
+        padding: 10,
+        marginVertical: 8,
+        fontSize: 16,
+    },
+    modalSaveButton: {
+        backgroundColor: 'green',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        marginTop: 10,
+    },
+    modalSaveText: {
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
