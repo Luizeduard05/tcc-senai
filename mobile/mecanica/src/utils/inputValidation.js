@@ -38,6 +38,20 @@ const validaTelefone = (telefone) => {
     return null;
 };
 
+const validaCEP = (cep) => {
+    if(!cep) return 'O campo CEP não pode ser nulo';
+    if (!/^\d+$/.test(cep)) return 'Digite apenas numeros e sem espaço'
+    if (cep.length !== 8) return 'Quantidade incorreta de digitos'
+}
+
+const validaNumeroResidencia = (numero) => {
+    if(!numero) return 'O campo numero não pode ser nulo';
+}
+
+const validaComplemento = (complemento) => {
+    if(!complemento) return 'O campo complemento não pode ser nulo';
+}
+
 const validaEmail = (email) => {
     if (!email) return 'O campo email não pode ser nulo';
     if (!/\S+@\S+\.\S+/.test(email)) return "E-mail invalido" // verificando se possui caracteres antes de depois do @ e ponto apos o @
@@ -50,10 +64,24 @@ const validaSenha = (senha) => {
     return null;
 };
 
+const validaMarca = (marca) => {
+    if(!marca) return 'O campo marca não pode ser nulo'
+    if(marca.length < 2) return "nome curto para marca"
+}
+
+const validaValor = (valor) => {
+    if(!valor) return 'O campo valor não pode ser nulo'
+}
+
 export {
     validaSenha,
     validaEmail,
     validaNome,
     validaCPF,
-    validaTelefone
+    validaTelefone,
+    validaCEP,
+    validaNumeroResidencia,
+    validaComplemento,
+    validaMarca, 
+    validaValor
 }
