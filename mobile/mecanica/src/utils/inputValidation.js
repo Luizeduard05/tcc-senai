@@ -64,6 +64,15 @@ const validaSenha = (senha) => {
     return null;
 };
 
+const validaMarca = (marca) => {
+    if(!marca) return 'O campo marca não pode ser nulo'
+    if(marca.length < 2) return "nome curto para marca"
+}
+
+const validaValor = (valor) => {
+    if(!valor) return 'O campo valor não pode ser nulo'
+}
+
 export {
     validaSenha,
     validaEmail,
@@ -72,5 +81,7 @@ export {
     validaTelefone,
     validaCEP,
     validaNumeroResidencia,
-    validaComplemento
+    validaComplemento,
+    validaMarca, 
+    validaValor
 }
