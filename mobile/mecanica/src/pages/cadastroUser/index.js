@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, StatusBar, Platform, TextInput, TouchableOpacit
 import { FontAwesome } from "@expo/vector-icons";
 import api from "../../services/api/api";
 import { useEffect, useState } from "react";
-import { validaCPF, validaNome, validaTelefone } from "../../utils/inputValidation";
+import { validaCEP, validaComplemento, validaCPF, validaNome, validaNumeroResidencia, validaTelefone, validaEmail, validaSenha } from "../../utils/inputValidation";
 
 export default function CadastroUser() {
     const navigation = useNavigation();
@@ -25,10 +25,28 @@ export default function CadastroUser() {
     const [cpfError, setCpfError] = useState(null)// Variavel responsavel por retornar o erro de validação dos inputs
     const [telefoneError, setTelefoneError] = useState(null)// Variavel responsavel por retornar o erro de validação dos inputs
 
+    const [cepError, setCepError] = useState(null)// Variavel responsavel por retornar o erro de validação dos inputs
+    const [numeroError, setNumeroError] = useState(null)// Variavel responsavel por retornar o erro de validação dos inputs
+    const [complementoError, setComplementoError] = useState(null)// Variavel responsavel por retornar o erro de validação dos inputs
+
+    const [emailError, setEmailError] = useState(null); // Variavel responsavel por retornar o erro de validação dos inputs
+    const [senhaError, setSenhaError] = useState(null); // Variavel responsavel por retornar o erro de validação dos inputs
 
     const navegaLogin = () => navigation.navigate("Login");
 
     const addNovoUsuario = async () => {
+        // Validando email e senha
+        const emailValidationError = validaEmail(email);
+        const senhaValidationError = validaSenha(senha);
+
+        // Atualizando os estados com as mensagens de erro da validação
+        setEmailError(emailValidationError);
+        setSenhaError(senhaValidationError);
+
+        if (emailValidationError || senhaValidationError) { // Caso ocorra erro de validação interompe o login
+            return;
+        }
+
         try {
             const response = await api.post("/usuarios", {
                 nome,
@@ -85,20 +103,39 @@ export default function CadastroUser() {
 
 
     const nextStep = () => {
-        // Validando campos
-        const nomeValidationError = validaNome(nome);
-        const cpfValidationError = validaCPF(cpf);
-        const telefoneValidationError = validaTelefone(telefone);
+        switch (step) {
+            case 1:
+                // Validando campos
+                const nomeValidationError = validaNome(nome);
+                const cpfValidationError = validaCPF(cpf);
+                const telefoneValidationError = validaTelefone(telefone);
 
-        // Atualização de mensagens de erro da validação
-        setNomeError(nomeValidationError)
-        setCpfError(cpfValidationError)
-        setTelefoneError(telefoneValidationError)
+                // Atualização de mensagens de erro da validação
+                setNomeError(nomeValidationError)
+                setCpfError(cpfValidationError)
+                setTelefoneError(telefoneValidationError)
+                if (nomeValidationError || cpfValidationError || telefoneValidationError) { // Validando todos os campos
+                    return
+                }
+                setStep(step + 1)
+                break;
+            case 2:
+                // Validando campos
+                const cepValidationError = validaCEP(cep);
+                const numeroValidationError = validaNumeroResidencia(numero);
+                const complementoValidationError = validaComplemento(complemento);
 
-        if (nomeValidationError || cpfValidationError || telefoneValidationError) {
-            return
+                // Atualização de mensagens de erro da validação
+                setCepError(cepValidationError);
+                setNumeroError(numeroValidationError);
+                setComplementoError(complementoValidationError);
+
+                if (cepValidationError || numeroValidationError || complementoValidationError) { // Validando todos os campos
+                    return
+                }
+                setStep(step + 1)
+                break;
         }
-        setStep(step + 1)
     }
     const previousStep = () => setStep(step - 1);
 
@@ -147,9 +184,10 @@ export default function CadastroUser() {
                                         setTelefone(text);
                                         setTelefoneError(null); // Limpando o erro para proxima tentativa
                                     }}
-                                    style={[styles.inputs,telefoneError ? styles.inputError : null]}
-                                    keyboardType="phone-pad"
+                                    style={[styles.inputs, telefoneError ? styles.inputError : null]}
+                                    keyboardType="number-pad"
                                     placeholder="Digite seu telefone"
+                                    maxLength={11}
                                 />
                                 {telefoneError && <Text style={styles.errorText}>{telefoneError}</Text>}
 
@@ -172,11 +210,17 @@ export default function CadastroUser() {
                             <>
                                 <TextInput
                                     value={cep}
-                                    onChangeText={setCep}
+                                    onChangeText={(text) => {
+                                        setCep(text);
+                                        setCepError(null); // Limpando o erro para proxima tentativa
+                                    }}
+                                    style={[styles.inputs, cepError ? styles.inputError : null]}
                                     onBlur={buscarCep} // Sempre que clicar fora do campo a função é ativada
-                                    style={styles.inputs}
                                     placeholder="Digite seu CEP"
+                                    maxLength={8}
                                 />
+                                {cepError && <Text style={styles.errorText}>{cepError}</Text>}
+
                                 <TextInput
                                     value={bairro}
                                     onChangeText={setBairro}
@@ -187,10 +231,16 @@ export default function CadastroUser() {
 
                                 <TextInput
                                     value={numero}
-                                    onChangeText={setNumero}
-                                    style={styles.inputs}
+                                    onChangeText={(text) => {
+                                        setNumero(text);
+                                        setNumeroError(null); // Limpando o erro para proxima tentativa
+                                    }}
+                                    maxLength={6}
+                                    style={[styles.inputs, numeroError ? styles.inputError : null]}
                                     placeholder="Digite o numero da sua residencia"
                                 />
+                                {numeroError && <Text style={styles.errorText}>{numeroError}</Text>}
+
                                 <TextInput
                                     value={estado}
                                     onChangeText={setEstado}
@@ -208,10 +258,14 @@ export default function CadastroUser() {
                                 />
                                 <TextInput
                                     value={complemento}
-                                    onChangeText={setComplemento}
-                                    style={styles.inputs}
+                                    onChangeText={(text) => {
+                                        setComplemento(text);
+                                        setComplementoError(null); // Limpando o erro para proxima tentativa
+                                    }}
+                                    style={[styles.inputs, complementoError ? styles.inputError : null]}
                                     placeholder="Digite seu complemento"
                                 />
+                                {complementoError && <Text style={styles.errorText}>{complementoError}</Text>}
 
                                 <View style={styles.navigationButtons}>
                                     <TouchableOpacity style={styles.btnBack} onPress={previousStep}>
@@ -229,17 +283,26 @@ export default function CadastroUser() {
 
                                 <TextInput
                                     value={email}
-                                    onChangeText={setEmail}
-                                    style={styles.inputs}
+                                    onChangeText={(text) => {
+                                        setEmail(text);
+                                        setEmailError(null); // Limpando o erro para proxima tentativa
+                                    }}
+                                    style={[styles.inputs, emailError ? styles.inputError : null]}
                                     placeholder="Digite seu email"
                                 />
+                                {emailError && <Text style={styles.errorText}>{emailError}</Text>}
+
                                 <TextInput
                                     value={senha}
-                                    onChangeText={setSenha}
-                                    style={styles.inputs}
+                                    onChangeText={(text) => {
+                                        setSenha(text);
+                                        setSenhaError(null); // // Limpando o erro para proxima tentativa
+                                    }}
+                                    style={[styles.inputs, senhaError ? styles.inputError : null]}
                                     secureTextEntry
                                     placeholder="Digite sua senha"
                                 />
+                                {senhaError && <Text style={styles.errorText}>{senhaError}</Text>}
 
                                 <View style={styles.navigationButtons}>
                                     <TouchableOpacity style={styles.btnBack} onPress={previousStep}>
