@@ -5,6 +5,7 @@ import logoCarro from "../assets/logoCarro.png";
 import CarrosImg from "../assets/carros-imagem.png";
 import boschLogo from "../assets/Bosch-Logo-2002.png";
 import { Link } from "react-router-dom";
+import Header from "../component/Header";
 
 
 const Home = () => {
@@ -36,7 +37,8 @@ const Home = () => {
         <>
             <section className="topoPagina">
                 <div className="containerTp">
-                    <div className="navBar">
+                    <Header/>
+                    {/* <div className="navBar">
                         <div className="conteudoSuperior">
                             <div className="logo">
                                 <img src={logoCarro} alt="" />
@@ -53,7 +55,7 @@ const Home = () => {
                                 </a>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="textosBV">
                         <span className="texto1">olá Seja bem-vindo</span>
                         <h1>Tudo oque seu carro precisa</h1>

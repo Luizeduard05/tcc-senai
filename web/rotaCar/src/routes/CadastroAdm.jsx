@@ -1,48 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import api from "../../service/api";
-import styleCadVeiculo from "./CadastroVeiculo.module.css";
+import styleCadAdm from "./CadastroAdm.module.css";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../Context/ContextUser";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCar, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
 
+const CadastroAdm = () => {
+    const { token } = useAuth();
 
-
-
-
-
-const CadastroVeiculo = () => {
-    const { id, token, nome } = useAuth();
-    const [userData, setUserData] = useState({ nome: '', veiculos: [] });
+    const navigate = useNavigate()
     const [formData, setFormData] = useState({
-        placa: "",
-        marca: "",
-        modelo: "",
-        ano: ""
+        nome: "",
+        cpf: "",
+        email: "",
+        telefone: "",
+        senha: "",
+        complemento: "",
+        cep: "",
+        numero: "",
+        logradouro: "",
+        tipo: "",
+        bairro: "",
+        estado: ""
     });
 
-    const navigate = useNavigate();
 
-
-
-    const fetchUserData = async () => {
-        try {
-            const response = await api.get(`/veiculos/${id}`, {
-                headers: { Authorization: `Token ${token}` }
-            });
-            setUserData({
-                veiculos: response.data.person
-            });
-            console.log("Veículos retornados:", response.data);
-        } catch (error) {
-            console.error("Erro ao buscar dados do usuário:", error);
-        }
-    };
-
-
-    useEffect(() => {
-        fetchUserData()
-    }, []);
 
 
     const handleChange = (e) => {
@@ -52,29 +33,36 @@ const CadastroVeiculo = () => {
         });
     };
 
+    console.log(formData)
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+
         try {
-            const response = await api.post(`/veiculos/${id}`, formData, {
+            const response = await api.post('/adm/usuarios', formData, {
                 headers: { Authorization: `Token ${token}` }
             });
-            console.log("Veículo cadastrado:", response.data);
-            setFormData({
-                placa: "",
-                modelo: "",
-                ano: "",
-                marca: ""
-            });
-            fetchUserData();
+            console.log(response.data);
+            console.log(formData.nome);
 
+            navigate('/login')
         } catch (error) {
-            console.error("Erro ao cadastrar veículo:", error);
+
+
+            console.error(error);
+
         }
     };
 
+
     return (
-        <section className={styleCadVeiculo.pai}>
-            <section className={styleCadVeiculo.containerCad}>
+
+        <section className={styleCadAdm.pai}>
+
+
+
+            <section className={styleCadAdm.containerCad}>
+
                 <span></span>
                 <span></span>
                 <span></span>
@@ -336,64 +324,93 @@ const CadastroVeiculo = () => {
                 <span></span>
                 <span></span>
 
-                <div className={styleCadVeiculo.signin}>
-                    <div className={styleCadVeiculo.voltar}>
-                        <FontAwesomeIcon
-                            icon={faArrowLeft}
-                            onClick={() => navigate('/intranet')}
-                            style={{ cursor: 'pointer', marginBottom: '18px' }}
-                        />
-                        <p style={{ marginLeft: '8px' }}>Voltar</p>
-                    </div>
-                    <div className={styleCadVeiculo.content}>
+                <div className={styleCadAdm.signin}>
+                    <div className={styleCadAdm.content}>
 
-                        <h2>Preencha os dados do seu veículo</h2>
-                        <h3>Bem-vindo, {nome}!</h3>
+                        <Link to="/">
+                            <h3>voltar</h3>
+                        </Link>
 
-                        <div className={styleCadVeiculo.colunasVei}>
-                            <form className={styleCadVeiculo.form} onSubmit={handleSubmit}>
-                                <div className={styleCadVeiculo.inputLeft}>
-                                    <div className={styleCadVeiculo.inputBox}>
-                                        <input type="text" name="placa" value={formData.placa} required onChange={handleChange} />
-                                        <i>placa</i>
+                        <h2>Cadastro de usuarios</h2>
+                        <form className={styleCadAdm.form} onSubmit={handleSubmit}>
+                            <div className={styleCadAdm.inputLeft}>
+                                <div className={styleCadAdm.inputBox}>
+                                    <input type="text" name="nome" value={formData.nome} required onChange={handleChange} />
+                                    <i>Nome</i>
+                                </div>
+                                <div className={styleCadAdm.inputBox}>
+                                    <input type="number" name="cpf" value={formData.cpf} required onChange={handleChange} />
+                                    <i>CPF</i>
+                                </div>
+                                <div className={styleCadAdm.inputBox}>
+                                    <input type="email" name="email" value={formData.email} required onChange={handleChange} />
+                                    <i>Email</i>
+                                </div>
+                                <div className={styleCadAdm.inputBox}>
+                                    <input type="number" name="telefone" value={formData.telefone} required onChange={handleChange} />
+                                    <i>Telefone</i>
+                                </div>
+                                <div className={styleCadAdm.inputBox}>
+                                    <input type="password" name="senha" value={formData.senha} required onChange={handleChange} />
+                                    <i>Senha</i>
+                                </div>
+                            </div>
+
+                            <div className={styleCadAdm.inputRight}>
+                                <div className={styleCadAdm.inputBox}>
+                                    <input type="text" name="complemento" value={formData.complemento} required onChange={handleChange} />
+                                    <i>Complemento</i>
+                                </div>
+                                <div className={styleCadAdm.Cepcontent}>
+                                    <div className={styleCadAdm.inputBox}>
+                                        <input type="number" name="cep" value={formData.cep} required onChange={handleChange} />
+                                        <i>CEP</i>
                                     </div>
-                                    <div className={styleCadVeiculo.inputBox}>
-                                        <input type="text" name="marca" value={formData.marca} required onChange={handleChange} />
-                                        <i>marca</i>
-                                    </div>
-                                    <div className={styleCadVeiculo.inputBox}>
-                                        <input type="text" name="modelo" value={formData.modelo} required onChange={handleChange} />
-                                        <i>modelo</i>
-                                    </div>
-                                    <div className={styleCadVeiculo.inputBox}>
-                                        <input type="text" name="ano" value={formData.ano} required onChange={handleChange} />
-                                        <i>ano</i>
-                                    </div>
-                                    <div className={styleCadVeiculo.buttonCadVei}>
-                                        <input className={styleCadVeiculo.inputCadVei} type="submit" value="Cadastrar" />
+                                    <div className={styleCadAdm.inputBox}>
+                                        <input type="text" name="numero" value={formData.numero} required onChange={handleChange} />
+                                        <i>Número</i>
                                     </div>
                                 </div>
-                            </form>
+                                <div className={styleCadAdm.inputBox}>
+                                    <input type="text" name="logradouro" value={formData.logradouro} required onChange={handleChange} />
+                                    <i>Logradouro</i>
+                                </div>
+                                <div className={styleCadAdm.Cepcontent}>
+                                    <div className={styleCadAdm.inputBox}>
+                                        <input type="text" name="bairro" value={formData.bairro} required onChange={handleChange} />
+                                        <i>Bairro</i>
+                                    </div>
+
+                                    <div className={styleCadAdm.inputBox}>
+                                        <input type="text" name="estado" value={formData.estado} required onChange={handleChange} />
+                                        <i>Estado</i>
+                                    </div>
+                                </div>
+
+                                <div className={styleCadAdm.inputBox}>
+                                   
+                                    <select
+                                        name="tipo"
+                                        value={formData.tipo}
+                                        required
+                                        onChange={handleChange}
+                                        className={styleCadAdm.select}
+                                    >
+                                        <option value="">Tipo de Usuário</option>
+                                        <option value="MEC">Mecânico</option>
+                                        <option value="ADM">Administrador</option>
+                                        <option value="CLI">Cliente</option>
+                                    </select>
+                                </div>
 
 
-                            <div className={styleCadVeiculo.veiculosCadastrados}>
-                                <h3>Veículos cadastrados:</h3>
-                                {Array.isArray(userData.veiculos) && userData.veiculos.length > 0 ? (
-                                    <ul>
-                                        {userData.veiculos.map((veiculo, index) => (
-                                            <div key={index} className={styleCadVeiculo.TextsVei}>
-                                                <FontAwesomeIcon icon={faCar} style={{ marginRight: '8px', color: 'white' }} />
-                                                {veiculo.modelo} - {veiculo.placa}
-                                            </div>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    <p>Nenhum veículo cadastrado.</p>
-                                )}
                             </div>
-                        </div>
+                            <div className={styleCadAdm.buttonCad}>
+                                <input className={styleCadAdm.inputCad} type="submit" value="Cadastrar" />
+                            </div>
 
 
+                        </form>
 
                     </div>
                 </div>
@@ -402,4 +419,4 @@ const CadastroVeiculo = () => {
     );
 };
 
-export default CadastroVeiculo;
+export default CadastroAdm;

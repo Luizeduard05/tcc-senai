@@ -141,12 +141,6 @@ class Pessoa {
           await con.release();
         }
       };
-
-
-
-
-
-
       
 
     atualizarRegistroPessoa = async () => {

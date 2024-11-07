@@ -20,8 +20,8 @@ export default function AddCarro() {
                     Authorization: `Token ${token}`
                 }
             })
-            console.log(response.data);
-            setVeiculos(response.data)
+            // console.log(response.data.person);
+            setVeiculos(response.data.person)
         } catch (error) {
             console.log(error)
         }
@@ -103,7 +103,7 @@ export default function AddCarro() {
 
                 <Text style={styles.subTitle}>Seus Veículos</Text>
 
-                {veiculos.length > 0 ? (veiculos.map((veiculo) => (
+                {veiculos != undefined ? (veiculos.map((veiculo) => (
                     <View style={styles.vehicleList} key={veiculo.id}>
                         <Text style={styles.vehicleItem}>{veiculo.modelo} - {veiculo.placa}</Text>
                     </View>

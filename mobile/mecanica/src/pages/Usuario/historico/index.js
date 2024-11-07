@@ -12,7 +12,7 @@ export default function Historico() {
 
     const getOrcamentos = async () => {
         try {
-            const response = await api.get(`/Os/pessoa/${id}`, {
+            const response = await api.get(`/os/${id}`, {
                 headers: {
                     Authorization: `Token ${token}`
                 }

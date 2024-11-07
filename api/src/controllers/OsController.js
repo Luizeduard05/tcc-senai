@@ -162,6 +162,7 @@ const osController = {
         if (!data || !status || !mo || !Array.isArray(itens)) {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
         }
+    
 
         // Formatar a data
         const formatarData = (data) => {
@@ -169,6 +170,7 @@ const osController = {
             return `${partes[2]}-${partes[1]}-${partes[0]}`;
         };
         const dataFormatada = formatarData(data);
+    
 
         // Mapear status
         const statusMap = {
@@ -185,6 +187,7 @@ const osController = {
         if (isNaN(moFormatado)) {
             return res.status(400).json({ message: 'O campo mo deve ser um valor decimal válido.' });
         }
+    
 
         // Verificar se o mecânico é válido (se o campo foi passado)
         if (mecanico) {
@@ -198,7 +201,6 @@ const osController = {
                 return res.status(500).json({ message: 'Erro ao verificar mecânico.' });
             }
         }
-
         // Atualizando a ordem de serviço
         const ordemServico = new classOs({
             data: dataFormatada,

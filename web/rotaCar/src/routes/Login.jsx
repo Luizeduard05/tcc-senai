@@ -34,6 +34,10 @@ const Login = () => {
             if (tipo === 'ADM') {
                 navigate('/homeAdm');
             }
+
+            if (tipo === 'MEC') {
+                navigate('/homeAdm');
+            }
         } catch (error) {
             console.log(error);
         }
