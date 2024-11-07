@@ -3,6 +3,7 @@ import { useState } from "react";
 import { View, Text, StyleSheet, StatusBar, Platform, TextInput, TouchableOpacity, ScrollView } from "react-native";
 import api from "../../../services/api/api";
 import { useAuth } from "../../../context/AuthContext";
+import { Picker } from "@react-native-picker/picker";
 
 export default function CadastroAdmMec() {
     const {token} = useAuth()
@@ -10,7 +11,7 @@ export default function CadastroAdmMec() {
     const [nome, setNome] = useState();
     const [cpf, setCpf] = useState();
     const [email, setEmail] = useState();
-    const [tipo, setTipo] = useState();
+    // const [tipo, setTipo] = useState();
     const [logradouro, setLogradouro] = useState();
     const [bairro, setBairro] = useState();
     const [estado, setEstado] = useState();
@@ -20,13 +21,17 @@ export default function CadastroAdmMec() {
     const [telefone, setTelefone] = useState();
     const [senha, setSenha] = useState();
 
+    const [tiposUsuario, setTiposUsuario] = useState([{id: 1, tipo: "MEC"}, {id: 2, tipo: "ADM"}, {id: 3, tipo: "CLI"} ]);// Variavel para guardar os tipos de usuarios existentes na aplicação
+    const [tipoSelecionado, setTipoSelecionado] = useState(null); // Variavel para guarda o tipo de usuario que foi selecionado
+
     const addNovoFunc = async () => {
+        console.log(tipoSelecionado)
         try {
             const response = await api.post("/adm/usuarios", {
                 nome: nome,
                 cpf: cpf,
                 email: email,
-                tipo: tipo,
+                tipo: tipoSelecionado,
                 logradouro: logradouro,
                 bairro: bairro,
                 estado: estado,
@@ -42,13 +47,14 @@ export default function CadastroAdmMec() {
                 }
             }
         )
+
             console.log(response.data)
             alert("Usuario cadastrado")
 
             setNome('');
             setCpf('');
             setEmail('');
-            setTipo('')
+            setTipoSelecionado(null)
             setLogradouro('');
             setBairro('');
             setEstado('');
@@ -84,13 +90,21 @@ export default function CadastroAdmMec() {
                         placeholder="CPF do funcionario"
                         maxLength={11}
                     />
-                    <TextInput
-                        value={tipo}
-                        onChangeText={setTipo}
+                    
+                    <Picker
+                        selectedValue={tipoSelecionado}
+                        onValueChange={(itemValue) => setTipoSelecionado(itemValue)}
                         style={styles.inputs}
-                        placeholder="Tipo de funcionario"
-                        maxLength={11}
-                    />
+                    >
+                        {tiposUsuario.map((tipo) => (
+                        <Picker.Item
+                            key={tipo.id}
+                            label={`Tipo: ${tipo.tipo}`}
+                            value={tipo.tipo}
+                        />
+                        ))} 
+                    </Picker>
+                    
                     <TextInput
                         value={email}
                         onChangeText={setEmail}
