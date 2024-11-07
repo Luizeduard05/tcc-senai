@@ -24,6 +24,67 @@ class Pessoa {
     set Tipo(value) { this.tipo = value; }
 
 
+    validarCampos() {
+        return (
+            this.nome &&
+            this.cpf &&
+            this.email &&
+            (this.tipo !== undefined || this.tipo === null)
+        );
+    };
+
+    static validarCPF(cpf) {
+        if (cpf.length !== 11) return false;
+    
+        if (/^(\d)\1{10}$/.test(cpf)) return false;
+    
+        let soma = 0;
+        let peso = 10;
+        for (let i = 0; i < 9; i++) {
+            soma += parseInt(cpf[i]) * peso--;
+        }
+        let digito1 = 11 - (soma % 11);
+        if (digito1 === 10 || digito1 === 11) digito1 = 0;
+    
+        soma = 0;
+        peso = 11;
+        for (let i = 0; i < 10; i++) {
+            soma += parseInt(cpf[i]) * peso--;
+        }
+        let digito2 = 11 - (soma % 11);
+        if (digito2 === 10 || digito2 === 11) digito2 = 0;
+    
+        if (cpf[9] != digito1 || cpf[10] != digito2) return false;
+    
+        return true;
+    };
+
+    static verificarCPFExistente = async (cpf, idAtual = null) => {
+        const con = await conectarBancoDeDados();
+        try {
+            const query = `SELECT COUNT(*) as count FROM tbl_pessoa WHERE cpf = ?${idAtual ? ' AND id != ?' : ''}`;
+            const values = [cpf];
+            if (idAtual) values.push(idAtual);
+            
+            const [rows] = await con.query(query, values);
+            return rows[0].count > 0; 
+        } catch (error) {
+            throw new Error(`Erro ao verificar CPF: ${error.message}`);
+        } finally {
+            con.release();
+        }
+    };
+
+    static validarEmail(email) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
+
+
+
+
+
+
 
     novoRegistroPessoa = async () => {
         const con = await conectarBancoDeDados();
@@ -39,6 +100,11 @@ class Pessoa {
             con.release();
         }
     };
+
+
+
+
+
 
 
     static selectRegistroPessoaPorEmail = async (email) => {
@@ -75,6 +141,12 @@ class Pessoa {
           await con.release();
         }
       };
+
+
+
+
+
+
       
 
     atualizarRegistroPessoa = async () => {
@@ -93,6 +165,11 @@ class Pessoa {
 
 
 
+
+
+
+
+
     deleteRegistroPessoa = async (idPessoa) => {
         const con = await conectarBancoDeDados();
         try {
@@ -103,66 +180,6 @@ class Pessoa {
             throw new Error(`Erro ao registrar: ${error.message}`);
         }
     };
-
-
-    validarCampos() {
-        return (
-            this.nome &&
-            this.cpf &&
-            this.email &&
-            (this.tipo !== undefined || this.tipo === null)
-        );
-    }
-
-    static validarCPF(cpf) {
-        if (cpf.length !== 11) return false;
-    
-        if (/^(\d)\1{10}$/.test(cpf)) return false;
-    
-        let soma = 0;
-        let peso = 10;
-        for (let i = 0; i < 9; i++) {
-            soma += parseInt(cpf[i]) * peso--;
-        }
-        let digito1 = 11 - (soma % 11);
-        if (digito1 === 10 || digito1 === 11) digito1 = 0;
-    
-        soma = 0;
-        peso = 11;
-        for (let i = 0; i < 10; i++) {
-            soma += parseInt(cpf[i]) * peso--;
-        }
-        let digito2 = 11 - (soma % 11);
-        if (digito2 === 10 || digito2 === 11) digito2 = 0;
-    
-        if (cpf[9] != digito1 || cpf[10] != digito2) return false;
-    
-        return true;
-    }
-    
-
-    static verificarCPFExistente = async (cpf, idAtual = null) => {
-        const con = await conectarBancoDeDados();
-        try {
-            const query = `SELECT COUNT(*) as count FROM tbl_pessoa WHERE cpf = ?${idAtual ? ' AND id != ?' : ''}`;
-            const values = [cpf];
-            if (idAtual) values.push(idAtual);
-            
-            const [rows] = await con.query(query, values);
-            return rows[0].count > 0; 
-        } catch (error) {
-            throw new Error(`Erro ao verificar CPF: ${error.message}`);
-        } finally {
-            con.release();
-        }
-    };
-    
-    
-    static validarEmail(email) {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(email);
-    }
-
 }
 
 export default Pessoa;

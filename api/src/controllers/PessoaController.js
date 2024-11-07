@@ -97,6 +97,11 @@ const pessoaControllers = {
   },
 
 
+
+
+
+
+
   selecionarUsuarioPorEmail: async (req, res) => {
     try {
       const email = req.params.email; 
@@ -117,6 +122,12 @@ const pessoaControllers = {
       return res.json({ selectMessage: `Usuário não foi localizado, motivo: ${e.message}` });
     }
   },
+
+
+
+
+
+
   
 
 
@@ -165,9 +176,11 @@ const pessoaControllers = {
       return res.status(400).json({ message: `Erro ao atualizar usuário, motivo: ${e.message}` });
     }
   },
-  
-  
-  
+
+
+
+
+
 
 
   deletarUsuario: async (req, res) => {
@@ -185,6 +198,11 @@ const pessoaControllers = {
       res.status(500).json({ deletMessage: `Não foi possível excluir o usuário, motivo: ${e.message}` });
     }
   },
+
+
+
+
+  
 
 
 

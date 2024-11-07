@@ -11,9 +11,7 @@ const VeiculoController = {
         if (!placa || !marca || !ano || !modelo || !idPessoa) {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
         }
-
         const veiculo = new Veiculo({ placa, marca, ano, modelo });
-
         try {
             await veiculo.novoRegistroVeiculo(idPessoa);
             return res.status(201).json({ message: 'Veículo registrado com sucesso!' });
@@ -25,6 +23,11 @@ const VeiculoController = {
             return res.status(500).json({ message: 'Erro interno ao registrar veículo. Tente novamente mais tarde.' });
         }
     },
+
+
+
+
+
 
     async buscarVeiculosPorPessoa(req, res) {
         const idPessoa = req.params.idPessoa;
@@ -45,6 +48,11 @@ const VeiculoController = {
             return res.json({ selectMessage: `Usuário não foi localizado, motivo: ${e.message}` });
         }
     },
+
+
+
+
+
     
     async buscarVeiculoPorPlaca(req, res) {
         const placa = req.body.placa;
@@ -66,6 +74,12 @@ const VeiculoController = {
         }
     },
 
+
+
+
+
+
+
     async editarVeiculo(req, res) {
         const idVei = req.params.id;
         const { placa, marca, ano, modelo } = req.body;
@@ -86,6 +100,11 @@ const VeiculoController = {
             return res.status(400).json({ message: error.message });
         }
     },
+
+
+
+
+    
 
     async deletarVeiculo(req, res) {
         const idVei = req.params.id;
