@@ -3,7 +3,9 @@ import { StyleSheet, Platform, StatusBar, View, Text, TouchableOpacity, TextInpu
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons"
 import api from "../../../services/api/api"
 import { useAuth } from "../../../context/AuthContext"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
+import { useFocusEffect } from "@react-navigation/native";
+
 
 export default function VisualizaPeca() {
     const { token } = useAuth()
@@ -23,9 +25,11 @@ export default function VisualizaPeca() {
         }
     }
 
-    useEffect(() => {
-        getPecas()
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            getPecas();
+        }, [])
+    );
 
     return (
         <LinearGradient colors={
@@ -45,7 +49,7 @@ export default function VisualizaPeca() {
                         </TouchableOpacity>
                     </View>
                 ))
-                ) : (<Text style={{backgroundColor: "#fff"}}>Nenhuma peça em estoque</Text>)}
+                ) : (<Text style={{ backgroundColor: "#fff" }}>Nenhuma peça em estoque</Text>)}
 
             </View>
 
