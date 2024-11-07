@@ -25,7 +25,7 @@ export default function VisualizaPeca() {
         }
     }
 
-    useFocusEffect(
+    useFocusEffect( // Executa toda vez que a pagina é "focada"
         useCallback(() => {
             getPecas();
         }, [])
