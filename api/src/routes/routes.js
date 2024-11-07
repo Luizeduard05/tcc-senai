@@ -1,12 +1,12 @@
 import { Router } from "express";
 import veiculoControllers from "../controllers/VeiculoController.js";
 import pessoaControllers from "../controllers/PessoaController.js";
-import OsController from "../controllers/OsController.js";
+import osController from "../controllers/OsController.js";
 import PecasController from "../controllers/PecasController.js";
 import agendamentoController from "../controllers/AgendamentoController.js";
 import jwt from 'jsonwebtoken';
 import authMiddleware from "../../Middlewares/authMiddlewares.js";
-import osController from '../controllers/OsController.js';
+
 
 const router = Router();
 
@@ -32,7 +32,7 @@ const autenticarToken = (req, res, next) => {
 // rota para cadastrar uma pessoa 
 router.post('/usuarios', pessoaControllers.registroDeAdm);
 // Rotas protegidas (exige token)
-router.post('/adm/usuarios', authMiddleware, pessoaControllers.registroDeAdm); 
+router.post('/adm/usuarios', authMiddleware, pessoaControllers.registroDeAdm);
 // rota para buscar uma pessoa cadastrada
 router.get('/usuario/email/:email', authMiddleware, pessoaControllers.selecionarUsuarioPorEmail);
 // rota para buscar todos os mecanicos cadastrados 
@@ -43,6 +43,10 @@ router.put('/usuarios/:id', autenticarToken, pessoaControllers.editarUsuario);
 router.delete('/usuarios/:id', autenticarToken, pessoaControllers.deletarUsuario);
 // rota para efetuar o login de uma pessoa
 router.post('/login', pessoaControllers.loginUsuario);
+
+
+
+
 
 // ROTAS : VEICULO
 
@@ -57,20 +61,28 @@ router.delete('/veiculos/:id', autenticarToken, veiculoControllers.deletarVeicul
 //Rota para Buscar veículo por placa
 router.post('/veiculo/placa', autenticarToken, veiculoControllers.buscarVeiculoPorPlaca);
 
+
+
+
+
 // ROTAS : OS
 
 // rota para Cadastro de OS
-router.post('/os', autenticarToken, OsController.registroDeOS);
+router.post('/os', autenticarToken, osController.registroDeOS);
 // rota para Busca de OSs
 router.get('/os/:idPessoa', autenticarToken, osController.buscarOrcamentoPorPessoa);
-// rota para buscar todos os os 
+// rota para buscar todas as os 
 router.get('/orcamentos', autenticarToken, osController.buscarTodosOrcamentos);
 // Rota para editar OS
-router.put('/os/:id', autenticarToken, OsController.editarOS);
+router.put('/os/:id', autenticarToken, osController.editarOS);
 // Rota para deletar OS 
-router.delete('/os/:id', autenticarToken, OsController.deletarOS);
+router.delete('/os/:id', autenticarToken, osController.deletarOS);
+// Rota para buscar peças da os
+router.get('/osPecas/:idOS', autenticarToken, osController.buscarItensOs);
 
-router.get('/osPecas/:id', autenticarToken, OsController.buscarItensOs);
+
+
+
 
 // ROTAS : AGENDAMENTO
 
@@ -79,11 +91,15 @@ router.post('/agendar', autenticarToken, agendamentoController.registroDeAgendam
 // Rota para Busca de AGENDAMENTO por ID da pessoa
 router.get('/agendar/pessoa/:idPessoa', autenticarToken, agendamentoController.buscarAgendamentoPorPessoa);
 // Rota para listar todos os agendamentos
-router.get('/agendamentos',  autenticarToken, agendamentoController.listarAgendamentos);
+router.get('/agendamentos', autenticarToken, agendamentoController.listarAgendamentos);
 // Rota para editar AGENDAMENTO
 router.put('/agendar/:id', autenticarToken, agendamentoController.editarAgendamento);
 // Rota para deletar AGENDAMENTO 
 router.delete('/agendar/:id', autenticarToken, agendamentoController.deletarAgendamento);
+
+
+
+
 
 // ROTAS : PEÇAS
 

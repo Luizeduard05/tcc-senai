@@ -1,6 +1,6 @@
 import conectarBancoDeDados from '../../config/db.js';
 
-class novoAgendamento {
+class classAgendamento {
     constructor(pAge) {
         this.id = (pAge.id !== null || pAge.id > 0) ? pAge.id : null;
         this.DataConvert(pAge.data_e_hora);
@@ -48,6 +48,12 @@ class novoAgendamento {
         return this.Data_e_hora
     }
 
+
+
+
+
+
+    
     novoRegistroAgendamento = async (idOS, idVeiOs, idPessoaVeiOs) => {
         const con = await conectarBancoDeDados();
         try {
@@ -61,6 +67,68 @@ class novoAgendamento {
             throw new Error(`Erro ao realizar agendamento: ${error.message}`);
         }
     };
+
+
+
+
+
+
+    static selectAgendamentos = async () => {
+        const con = await conectarBancoDeDados()
+        try{
+            const [rows] = await con.query(`SELECT * FROM tbl_agendamento`);
+                return rows;
+        }catch (error) {
+            throw new Error(`Erro ao selecionar: ${error.message}`);
+        }
+    };
+
+
+
+
+
+
+    static selectAgendamentosPorPessoa = async (idPessoa) => {
+        const con = await conectarBancoDeDados()
+        try{
+            const result = await con.query(`SELECT a.*, o.*, v.*, p.*
+                FROM tbl_agendamento a
+                JOIN tbl_ordem_de_serviço o ON a.id_os = o.id
+                JOIN tbl_veiculo v ON a.id_veiculo_os = v.id
+                JOIN tbl_pessoa p ON a.id_pessoa_veiculo_os = p.id
+                WHERE a.id_pessoa_veiculo_os = ?`, [idPessoa]);
+                return result;
+        }catch (error) {
+            throw new Error(`Erro ao selecionar: ${error.message}`);
+        }
+    };
+
+
+
+
+
+
+    static verificaSeClienteOsVeiculoExiste = async (idOs) => {
+        const con = await conectarBancoDeDados();
+        try {
+            const result = await con.query(`select COUNT(*)
+            from tbl_ordem_de_serviço as OS 
+            inner join tbl_veiculo as V 
+            on OS.id_veiculo = V.id 
+            inner join tbl_pessoa as P 
+            on OS.id_pessoa_veiculo = P.id 
+            where OS.id = ? ;`, [idOs]);
+            return result;
+        } catch (error) {
+            throw new Error(`Erro ao excluir agendamento: ${error.message}`);
+        }
+    };
+
+
+
+
+
+
 
     atualizarRegistroAgendamento = async () => {
         const con = await conectarBancoDeDados();
@@ -76,6 +144,9 @@ class novoAgendamento {
     };
 
 
+
+
+
     static deleteRegistroAgendamento = async (idAge) => {
         const con = await conectarBancoDeDados();
         try {
@@ -85,6 +156,8 @@ class novoAgendamento {
             throw new Error(`Erro ao excluir agendamento: ${error.message}`);
         }
     };
+
+
 }
 
-export default novoAgendamento;
+export default classAgendamento;

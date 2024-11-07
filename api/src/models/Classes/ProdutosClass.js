@@ -31,7 +31,12 @@ class Produtos {
             }
         }
         return true;
-    }
+    };
+
+
+
+
+
 
     novoRegistroPecas = async () => {
         const con = await conectarBancoDeDados();
@@ -47,6 +52,12 @@ class Produtos {
         }
     };
 
+
+
+
+
+
+
     static selecionarRegistroPecas = async () => {
         const con = await conectarBancoDeDados();
         try {
@@ -59,6 +70,12 @@ class Produtos {
         }
     };
 
+
+
+
+
+
+
     static selecionarRegistroPecasPorId = async (idPro) => {
         const con = await conectarBancoDeDados();
         try {
@@ -69,7 +86,13 @@ class Produtos {
         } finally {
             await con.release();
         }
-    }
+    };
+
+
+
+
+
+
 
     atualizarRegistroPecas = async (idPro) => {
         const con = await conectarBancoDeDados();
@@ -83,6 +106,12 @@ class Produtos {
             throw new Error(`Erro ao atualizar peça: ${error.message}`);
         }
     };
+
+
+
+
+
+    
 
 
     static deleteRegistroPecas = async (idPro) => {

@@ -21,7 +21,20 @@ class Telefone {
             let newValue = value.replace(/[() -]/g, '');
             this.telefone = newValue;
         }
+    };
+
+    validarCampos() {
+        return this.telefone && Telefone.validarTelefone(this.telefone);
     }
+
+    static validarTelefone(telefone) {
+        const regex = /^\d{11}$/;
+        return regex.test(telefone);
+    }
+
+
+
+
 
     novoRegistroTel = async (idPessoa) => {
         const con = await conectarBancoDeDados();
@@ -35,6 +48,12 @@ class Telefone {
             con.release();
         }
     };
+
+
+
+
+
+
     static deleteRegistroTel = async (idTel) => {
         const con = await conectarBancoDeDados();
         try {
@@ -46,6 +65,11 @@ class Telefone {
         }
     };
 
+
+
+
+
+
     atualizarRegistroTel = async () => {
         const con = await conectarBancoDeDados();
         try {
@@ -55,17 +79,6 @@ class Telefone {
           throw new Error(`Erro ao atualizar: ${error.message}`);
         }
       };
-      
-
-    validarCampos() {
-        return this.telefone && Telefone.validarTelefone(this.telefone);
-    }
-    
-    static validarTelefone(telefone) {
-        const regex = /^\d{11}$/;
-        return regex.test(telefone);
-    }
-
 }
 
 export default Telefone;

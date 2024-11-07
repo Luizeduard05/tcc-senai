@@ -37,6 +37,28 @@ class Endereco {
     get Id_pessoa() { return this.id_pessoa; }
     set Id_pessoa(value) { this.id_pessoa = value; }
 
+
+
+    validarCampos() {
+        return (
+            this.logradouro &&
+            this.bairro &&
+            this.estado &&
+            this.numero &&
+            this.complemento &&
+            this.cep
+        );
+    };
+
+    static validarCEP(cep) {
+        return /^\d{8}$/.test(cep); 
+    };
+
+
+
+
+    
+
     novoRegistroEnd = async (idPessoa) => {
 
         const con = await conectarBancoDeDados();
@@ -52,6 +74,14 @@ class Endereco {
         }
     };
 
+
+
+
+
+
+
+
+
     static deleteRegistroEnd = async (idEndereco) => {
 
         const con = await conectarBancoDeDados();
@@ -64,6 +94,12 @@ class Endereco {
         }
     };
 
+
+
+
+
+
+
     atualizarRegistroEnd = async () => {
         const con = await conectarBancoDeDados();
         try {
@@ -72,24 +108,7 @@ class Endereco {
         } catch (error) {
           throw new Error(`Erro ao atualizar: ${error.message}`);
         }
-      };
-      
-
-    validarCampos() {
-        return (
-            this.logradouro &&
-            this.bairro &&
-            this.estado &&
-            this.numero &&
-            this.complemento &&
-            this.cep
-        );
-    }
-
-    static validarCEP(cep) {
-        return /^\d{8}$/.test(cep); 
-    }
-   
+      };  
 
 }
 

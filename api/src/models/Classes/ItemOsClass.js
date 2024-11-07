@@ -34,7 +34,12 @@ class ItemOs{
             }
         }
         return true;
-    }
+    };
+
+
+
+
+    
 
     adicionarPecaOs = async (idOS, idVeiOs, idPessoaVeiOs, idPro) => {
         const con = await conectarBancoDeDados();
@@ -49,6 +54,12 @@ class ItemOs{
             throw new Error(`Erro ao registrar peça: ${error.message}`);
         }
     };
+
+
+
+
+
+
 
 
     static deletePecaOs = async (idItem) => {
