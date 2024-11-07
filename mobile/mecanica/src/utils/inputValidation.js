@@ -49,7 +49,7 @@ const validaNumeroResidencia = (numero) => {
 }
 
 const validaComplemento = (complemento) => {
-    if(!complemento) return 'O campo numero não pode ser nulo';
+    if(!complemento) return 'O campo complemento não pode ser nulo';
 }
 
 const validaEmail = (email) => {

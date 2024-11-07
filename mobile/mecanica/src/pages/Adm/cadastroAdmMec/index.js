@@ -5,6 +5,7 @@ import api from "../../../services/api/api";
 import { useAuth } from "../../../context/AuthContext";
 import { Picker } from "@react-native-picker/picker";
 import { FontAwesome } from "@expo/vector-icons";
+import { validaCEP, validaComplemento, validaCPF, validaNome, validaNumeroResidencia, validaTelefone, validaEmail, validaSenha } from "../../../utils/inputValidation";
 
 export default function CadastroAdmMec() {
     const { token } = useAuth()
@@ -26,7 +27,29 @@ export default function CadastroAdmMec() {
     const [tiposUsuario, setTiposUsuario] = useState([{ id: 1, tipo: "MEC" }, { id: 2, tipo: "ADM" }, { id: 3, tipo: "CLI" }]);// Variavel para guardar os tipos de usuarios existentes na aplicação
     const [tipoSelecionado, setTipoSelecionado] = useState(null); // Variavel para guarda o tipo de usuario que foi selecionado
 
+    const [nomeError, setNomeError] = useState(null)// Variavel responsavel por retornar o erro de validação dos inputs
+    const [cpfError, setCpfError] = useState(null)// Variavel responsavel por retornar o erro de validação dos inputs
+    const [telefoneError, setTelefoneError] = useState(null)// Variavel responsavel por retornar o erro de validação dos inputs
+
+    const [cepError, setCepError] = useState(null)// Variavel responsavel por retornar o erro de validação dos inputs
+    const [numeroError, setNumeroError] = useState(null)// Variavel responsavel por retornar o erro de validação dos inputs
+    const [complementoError, setComplementoError] = useState(null)// Variavel responsavel por retornar o erro de validação dos inputs
+
+    const [emailError, setEmailError] = useState(null); // Variavel responsavel por retornar o erro de validação dos inputs
+    const [senhaError, setSenhaError] = useState(null); // Variavel responsavel por retornar o erro de validação dos inputs
+
     const addNovoFunc = async () => {
+                // Validando email e senha
+                const emailValidationError = validaEmail(email);
+                const senhaValidationError = validaSenha(senha);
+        
+                // Atualizando os estados com as mensagens de erro da validação
+                setEmailError(emailValidationError);
+                setSenhaError(senhaValidationError);
+        
+                if (emailValidationError || senhaValidationError) { // Caso ocorra erro de validação interompe o login
+                    return;
+                }
         try {
             const response = await api.post("/adm/usuarios", {
                 nome: nome,
@@ -89,7 +112,39 @@ export default function CadastroAdmMec() {
     }
 
     const nextStep = () => {
-        setStep(step + 1)
+        switch (step) {
+            case 1:
+                // Validando campos
+                const nomeValidationError = validaNome(nome);
+                const cpfValidationError = validaCPF(cpf);
+                const telefoneValidationError = validaTelefone(telefone);
+
+                // Atualização de mensagens de erro da validação
+                setNomeError(nomeValidationError)
+                setCpfError(cpfValidationError)
+                setTelefoneError(telefoneValidationError)
+                if (nomeValidationError || cpfValidationError || telefoneValidationError) { // Validando todos os campos
+                    return
+                }
+                setStep(step + 1)
+                break;
+            case 2:
+                // Validando campos
+                const cepValidationError = validaCEP(cep);
+                const numeroValidationError = validaNumeroResidencia(numero);
+                const complementoValidationError = validaComplemento(complemento);
+
+                // Atualização de mensagens de erro da validação
+                setCepError(cepValidationError);
+                setNumeroError(numeroValidationError);
+                setComplementoError(complementoValidationError);
+
+                if (cepValidationError || numeroValidationError || complementoValidationError) { // Validando todos os campos
+                    return
+                }
+                setStep(step + 1)
+                break;
+        }
     }
     const previousStep = () => setStep(step - 1);
 
@@ -97,7 +152,7 @@ export default function CadastroAdmMec() {
         <LinearGradient colors={['#000000', 'rgba(0, 0, 0, 0.5)']} style={styles.androidSafeArea}>
             <ScrollView contentContainerStyle={styles.scrollViewContent} showsVerticalScrollIndicator={false}>
                 <View style={styles.container}>
-                    <Text style={styles.textStart}>Preencha os campos abaixo para realizar o cadastro de um novo funcionario.</Text>
+                    <Text style={styles.textStart}>Preencha os campos abaixo para realizar o cadastro de um novo usuario.</Text>
                     <Text style={styles.stepText}>Passo {step} de 3</Text>
 
                     {step === 1 && (
@@ -118,26 +173,39 @@ export default function CadastroAdmMec() {
 
                             <TextInput
                                 value={nome}
-                                onChangeText={setNome}
-                                style={styles.inputs}
-                                placeholder="Nome do funcionario"
+                                onChangeText={(text) => {
+                                    setNome(text);
+                                    setNomeError(null); // Limpando o erro para proxima tentativa
+                                }}
+                                style={[styles.inputs, nomeError ? styles.inputError : null]}
+                                placeholder="Nome do usuario"
                             />
+                            {nomeError && <Text style={styles.errorText}>{nomeError}</Text>}
 
                             <TextInput
                                 value={cpf}
-                                onChangeText={setCpf}
-                                style={styles.inputs}
+                                onChangeText={(text) => {
+                                    setCpf(text);
+                                    setCpfError(null); // Limpando o erro para proxima tentativa
+                                }}
+                                style={[styles.inputs, cpfError ? styles.inputError : null]}
                                 keyboardType="numeric"
-                                placeholder="CPF do funcionario"
+                                placeholder="CPF do usuario"
                                 maxLength={11}
                             />
+                            {cpfError && <Text style={styles.errorText}>{cpfError}</Text>}
 
                             <TextInput
                                 value={telefone}
-                                onChangeText={setTelefone}
-                                style={styles.inputs}
-                                placeholder="Telefone do funcionario"
+                                onChangeText={(text) => {
+                                    setTelefone(text);
+                                    setTelefoneError(null); // Limpando o erro para proxima tentativa
+                                }}
+                                style={[styles.inputs, telefoneError ? styles.inputError : null]}
+                                placeholder="Telefone do usuario"
+                                maxLength={11}
                             />
+                            {telefoneError && <Text style={styles.errorText}>{telefoneError}</Text>}
 
                             <View style={styles.navigationButtons}>
                                 <TouchableOpacity style={styles.btnNext} onPress={nextStep}>
@@ -151,46 +219,59 @@ export default function CadastroAdmMec() {
                         <>
                             <TextInput
                                 value={cep}
-                                onChangeText={setCep}
-                                style={styles.inputs}
+                                onChangeText={(text) => {
+                                    setCep(text);
+                                    setCepError(null); // Limpando o erro para proxima tentativa
+                                }}
+                                style={[styles.inputs, cepError ? styles.inputError : null]}
                                 onBlur={buscarCep}
                                 maxLength={8}
-                                placeholder="Cep do funcionario"
+                                placeholder="CEP do usuario"
                             />
+                            {cepError && <Text style={styles.errorText}>{cepError}</Text>}
+
                             <TextInput
                                 value={bairro}
                                 onChangeText={setBairro}
                                 editable={false}
                                 style={styles.inputs}
-                                placeholder="Bairro do funcionario"
+                                placeholder="Bairro do usuario"
                             />
                             <TextInput
                                 value={numero}
-                                onChangeText={setNumero}
+                                onChangeText={(text) => {
+                                    setNumero(text);
+                                    setNumeroError(null); // Limpando o erro para proxima tentativa
+                                }}
                                 maxLength={6}
-                                style={styles.inputs}
-                                placeholder="Numero da sua residencia do funcionario"
+                                style={[styles.inputs, numeroError ? styles.inputError : null]}
+                                placeholder="Numero da residencia do usuario"
                             />
+                            {numeroError && <Text style={styles.errorText}>{numeroError}</Text>}
                             <TextInput
                                 value={estado}
                                 onChangeText={setEstado}
                                 style={styles.inputs}
                                 editable={false}
-                                placeholder="Estado do funcionario"
+                                placeholder="Estado do usuario"
                             />
                             <TextInput
                                 value={logradouro}
                                 onChangeText={setLogradouro}
                                 style={styles.inputs}
                                 editable={false}
-                                placeholder="Logradouro do funcionario"
+                                placeholder="Logradouro do usuario"
                             />
                             <TextInput
                                 value={complemento}
-                                onChangeText={setComplemento}
-                                style={styles.inputs}
-                                placeholder="Complemento do funcionario"
+                                onChangeText={(text) => {
+                                    setComplemento(text);
+                                    setComplementoError(null); // Limpando o erro para proxima tentativa
+                                }}
+                                style={[styles.inputs, complementoError ? styles.inputError : null]}
+                                placeholder="Complemento do usuario"
                             />
+                            {complementoError && <Text style={styles.errorText}>{complementoError}</Text>}
 
                             <View style={styles.navigationButtons}>
                                 <TouchableOpacity style={styles.btnBack} onPress={previousStep}>
@@ -207,19 +288,27 @@ export default function CadastroAdmMec() {
                         <>
                             <TextInput
                                 value={email}
-                                onChangeText={setEmail}
-                                style={styles.inputs}
-                                placeholder="Email do funcionario"
+                                onChangeText={(text) => {
+                                    setEmail(text);
+                                    setEmailError(null); // Limpando o erro para proxima tentativa
+                                }}
+                                style={[styles.inputs, emailError ? styles.inputError : null]}
+                                placeholder="Email do usuario"
                             />
+                            {emailError && <Text style={styles.errorText}>{emailError}</Text>}
 
                             <TextInput
                                 value={senha}
-                                onChangeText={setSenha}
-                                style={styles.inputs}
+                                onChangeText={(text) => {
+                                    setSenha(text);
+                                    setSenhaError(null); // // Limpando o erro para proxima tentativa
+                                }}
+                                style={[styles.inputs, senhaError ? styles.inputError : null]}
                                 maxLength={11}
                                 secureTextEntry
-                                placeholder="Senha do funcionario"
+                                placeholder="Senha do usuario"
                             />
+                            {senhaError && <Text style={styles.errorText}>{senhaError}</Text>}
 
                             <View style={styles.navigationButtons}>
                                 <TouchableOpacity style={styles.btnBack} onPress={previousStep}>
@@ -278,6 +367,16 @@ const styles = StyleSheet.create({
         fontSize: 16,
         borderRadius: 10,
         margin: 10
+    },
+    inputError: {
+        borderColor: "red",
+        borderWidth: 1,
+    },
+    errorText: {
+        color: "red",
+        fontSize: 14,
+        alignSelf: "flex-start",
+        marginLeft: 20,
     },
     btnCadastrar: {
         width: "70%",
