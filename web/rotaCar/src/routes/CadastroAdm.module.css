@@ -217,3 +217,17 @@ h3{
     font-size: 16px;
 }
 
+.select {
+    background-color: #333; /* Fundo escuro */
+    color: #ffffff; /* Texto em branco */
+    border: 1px solid #ffffff; /* Borda branca */
+    padding: 10px;
+    border-radius: 4px;
+    width: 100%;
+    font-size: 16px;
+}
+
+.select option {
+    background-color: #333;
+    color: #ffffff;
+}

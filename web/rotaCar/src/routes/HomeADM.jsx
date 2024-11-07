@@ -2,9 +2,13 @@ import React, { useEffect } from 'react';
 import Isotope from 'isotope-layout';
 import styleHomeAdm from './HomeADM.module.css';
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from '../Context/ContextUser';
 
 
 const HomeADM = () => {
+    const {id, type} = useAuth();
+
+    console.log(type)
 
     const navigate = useNavigate()
 
@@ -14,7 +18,7 @@ const HomeADM = () => {
 
                 <div className={styleHomeAdm.cbox} onClick={() => navigate('/cadastroOs')}>
                     <div className={styleHomeAdm.icon}>
-                        <i className="fa fa-code"></i>
+                        <i className="fa fa-car"></i>
                     </div>
 
                     <div className={styleHomeAdm.descr}>
@@ -28,13 +32,13 @@ const HomeADM = () => {
 
 
 
-                <div className={styleHomeAdm.cbox}>
+                <div className={styleHomeAdm.cbox}  onClick={() => navigate('/cadastroAdm')}>
                     <div className={styleHomeAdm.icon}>
-                        <i className="fa fa-desktop" styleHomeAdm={{ fontSize: '42px' }}></i>
+                        <i className="fa fa-user " styleHomeAdm={{ fontSize: '42px' }}></i>
                     </div>
                     <div className={styleHomeAdm.descr}>
                         <div className={styleHomeAdm.fTxt}>
-                            <h3>Cadastrar um veiculo</h3>
+                            <h3>Novo usuario</h3>
                             <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptates expedita corporis, culpa atque ducimus..</h4>
                         </div>
                     </div>
@@ -48,7 +52,7 @@ const HomeADM = () => {
                     </div>
                     <div className={styleHomeAdm.descr}>
                         <div className={styleHomeAdm.fTxt}>
-                            <h3>...</h3>
+                            <h3>Fazer agendamento</h3>
                             <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptates expedita corporis, culpa atque ducimus...</h4>
                         </div>
                     </div>
@@ -61,7 +65,7 @@ const HomeADM = () => {
                     </div>
                     <div className={styleHomeAdm.descr}>
                         <div className={styleHomeAdm.fTxt}>
-                            <h3>...</h3>
+                            <h3>Orçamntos</h3>
                             <h4>Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi voluptates expedita corporis, culpa atque ducimus...</h4>
                         </div>
                     </div>
