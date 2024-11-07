@@ -1,54 +1,68 @@
-import { Link, useNavigate } from 'react-router-dom';
-import styleLogin from './Login.module.css';
-import api from '../../service/api';
-import { useState } from 'react';
-import { useAuth } from '../Context/ContextUser';
+import React, { useState } from "react";
+import api from "../../service/api";
+import styleCadAdm from "./CadastroAdm.module.css";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../Context/ContextUser";
 
-const Login = () => {
-    const { login } = useAuth(); 
+const CadastroAdm = () => {
+    const { token } = useAuth();
 
-    const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
+    const navigate = useNavigate()
+    const [formData, setFormData] = useState({
+        nome: "",
+        cpf: "",
+        email: "",
+        telefone: "",
+        senha: "",
+        complemento: "",
+        cep: "",
+        numero: "",
+        logradouro: "",
+        tipo: "",
+        bairro: "",
+        estado: ""
+    });
 
-    const navigate = useNavigate();
 
-    const handleChangeEmail = (e) => {
-        setEmail(e.target.value);
+
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
     };
 
-    const handleChangeSenha = (e) => {
-        setSenha(e.target.value);
-    };
-
-    const hendleSubmit = async (e) => {
+    console.log(formData)
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
+
         try {
-            const response = await api.post('/login', { login: email, senha: senha });
-            const { id, nome, tipo, token } = response.data;
-            login(tipo, token, id, nome);
+            const response = await api.post('/adm/usuarios', formData, {
+                headers: { Authorization: `Token ${token}` }
+            });
+            console.log(response.data);
+            console.log(formData.nome);
 
-            if (tipo === 'CLI') {
-                navigate('/intranet');
-            }
-
-            if (tipo === 'ADM') {
-                navigate('/homeAdm');
-            }
-
-            if (tipo === 'MEC') {
-                navigate('/homeAdm');
-            }
+            navigate('/login')
         } catch (error) {
-            console.log(error);
+
+
+            console.error(error);
+
         }
     };
 
-    return (
-        <section className={styleLogin.PaiLogin}>
-            
 
-            <section className={styleLogin.conteinerLoginn}>
-            <span></span>
+    return (
+
+        <section className={styleCadAdm.pai}>
+
+
+
+            <section className={styleCadAdm.containerCad}>
+
                 <span></span>
                 <span></span>
                 <span></span>
@@ -308,26 +322,96 @@ const Login = () => {
                 <span></span>
                 <span></span>
                 <span></span>
-                
-                <div className={styleLogin.loginSection}>
-                    <div className={styleLogin.loginContent}>
-                        <h2>Bem-vindo de volta</h2>
-                        <div className={styleLogin.loginForm}>
-                            <div className={styleLogin.inputWrapper}>
-                                <input type="email" name='email' value={email} onChange={handleChangeEmail} required />
-                                <i>Email</i>
+                <span></span>
+
+                <div className={styleCadAdm.signin}>
+                    <div className={styleCadAdm.content}>
+
+                        <Link to="/">
+                            <h3>voltar</h3>
+                        </Link>
+
+                        <h2>Cadastro de usuarios</h2>
+                        <form className={styleCadAdm.form} onSubmit={handleSubmit}>
+                            <div className={styleCadAdm.inputLeft}>
+                                <div className={styleCadAdm.inputBox}>
+                                    <input type="text" name="nome" value={formData.nome} required onChange={handleChange} />
+                                    <i>Nome</i>
+                                </div>
+                                <div className={styleCadAdm.inputBox}>
+                                    <input type="number" name="cpf" value={formData.cpf} required onChange={handleChange} />
+                                    <i>CPF</i>
+                                </div>
+                                <div className={styleCadAdm.inputBox}>
+                                    <input type="email" name="email" value={formData.email} required onChange={handleChange} />
+                                    <i>Email</i>
+                                </div>
+                                <div className={styleCadAdm.inputBox}>
+                                    <input type="number" name="telefone" value={formData.telefone} required onChange={handleChange} />
+                                    <i>Telefone</i>
+                                </div>
+                                <div className={styleCadAdm.inputBox}>
+                                    <input type="password" name="senha" value={formData.senha} required onChange={handleChange} />
+                                    <i>Senha</i>
+                                </div>
                             </div>
-                            <div className={styleLogin.inputWrapper}>
-                                <input type="password" name='senha' value={senha} onChange={handleChangeSenha} required />
-                                <i>Senha</i>
+
+                            <div className={styleCadAdm.inputRight}>
+                                <div className={styleCadAdm.inputBox}>
+                                    <input type="text" name="complemento" value={formData.complemento} required onChange={handleChange} />
+                                    <i>Complemento</i>
+                                </div>
+                                <div className={styleCadAdm.Cepcontent}>
+                                    <div className={styleCadAdm.inputBox}>
+                                        <input type="number" name="cep" value={formData.cep} required onChange={handleChange} />
+                                        <i>CEP</i>
+                                    </div>
+                                    <div className={styleCadAdm.inputBox}>
+                                        <input type="text" name="numero" value={formData.numero} required onChange={handleChange} />
+                                        <i>Número</i>
+                                    </div>
+                                </div>
+                                <div className={styleCadAdm.inputBox}>
+                                    <input type="text" name="logradouro" value={formData.logradouro} required onChange={handleChange} />
+                                    <i>Logradouro</i>
+                                </div>
+                                <div className={styleCadAdm.Cepcontent}>
+                                    <div className={styleCadAdm.inputBox}>
+                                        <input type="text" name="bairro" value={formData.bairro} required onChange={handleChange} />
+                                        <i>Bairro</i>
+                                    </div>
+
+                                    <div className={styleCadAdm.inputBox}>
+                                        <input type="text" name="estado" value={formData.estado} required onChange={handleChange} />
+                                        <i>Estado</i>
+                                    </div>
+                                </div>
+
+                                <div className={styleCadAdm.inputBox}>
+                                   
+                                    <select
+                                        name="tipo"
+                                        value={formData.tipo}
+                                        required
+                                        onChange={handleChange}
+                                        className={styleCadAdm.select}
+                                    >
+                                        <option value="">Tipo de Usuário</option>
+                                        <option value="MEC">Mecânico</option>
+                                        <option value="ADM">Administrador</option>
+                                        <option value="CLI">Cliente</option>
+                                    </select>
+                                </div>
+
+
                             </div>
-                            <div className={styleLogin.loginLinks}>
-                                <Link to={"/cadastro"}>Cadastre-se</Link>
+                            <div className={styleCadAdm.buttonCad}>
+                                <input className={styleCadAdm.inputCad} type="submit" value="Cadastrar" />
                             </div>
-                            <div className={styleLogin.inputWrapper}>
-                                <input type="submit" value='Entrar' onClick={hendleSubmit} />
-                            </div>
-                        </div>
+
+
+                        </form>
+
                     </div>
                 </div>
             </section>
@@ -335,4 +419,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default CadastroAdm;
