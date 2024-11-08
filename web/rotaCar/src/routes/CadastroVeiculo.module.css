@@ -100,6 +100,7 @@ section .containerCad .signin .content .form {
 .inputRight {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 25px;
 }
 
@@ -200,10 +201,10 @@ input[type="submit"]:active {
 
 .inputCadVei {
 
-    width: 50%;
+    width: 100%;
     border-radius: 50px;
     border: none;
-    padding: 10px 10px;
+    padding: 10px 43px;
     cursor: pointer;
     background: red;
     color: white;
@@ -211,15 +212,15 @@ input[type="submit"]:active {
 
 }
 
-.colunasVei{
-    
+.colunasVei {
+
     display: flex;
     width: 100%;
     gap: 35px;
 }
 
 
-.veiculosCadastrados{
+.veiculosCadastrados {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -227,7 +228,7 @@ input[type="submit"]:active {
     align-items: center;
 }
 
-.buttonCadVei{
+.buttonCadVei {
     text-align: center;
 
 }
@@ -236,12 +237,153 @@ input[type="submit"]:active {
     color: #787878;
 }
 
-.TextsVei{
+.TextsVei {
     color: #787878;
+    margin-top: 8px;
 }
 
-.voltar{
+.voltar {
     color: #ffffff;
     display: flex;
     cursor: pointer;
+}
+
+/* Modal Estilizado */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; 
+}
+
+.modalContent {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    max-width: 80%;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease;
+}
+
+.modalContent .inputBox {
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.modalContent .inputBox input {
+    width: 100%;
+    padding: 10px 15px;
+    background: #333;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 1em;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.modalContent .inputBox label {
+    color: #787878;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.modalContent .inputBox input:focus {
+    background-color: #555;
+}
+
+.modalContent .btnEdit, .modalContent .btnClose {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.modalContent .btnEdit {
+    background: #ff0000;
+    color: #fff;
+}
+
+.modalContent .btnClose {
+    background: #333;
+    color: #fff;
+}
+
+.modalContent .btnEdit:hover, .modalContent .btnClose:hover {
+    opacity: 0.8;
+}
+
+
+
+.btnEdit,
+.btnDelete,
+.btnClose {
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+.tooltipWrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltipText {
+    visibility: hidden;
+    width: 50px; /* Ajuste o tamanho conforme necessário */
+    background-color: #ffffff;
+    color: #000000;
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px;
+    position: absolute;
+    bottom: 125%; /* Ajuste a posição conforme necessário */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.tooltipWrapper:hover .tooltipText {
+    visibility: visible;
+    opacity: 1;
 }
