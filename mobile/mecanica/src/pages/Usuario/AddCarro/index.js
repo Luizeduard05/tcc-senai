@@ -4,6 +4,7 @@ import { useAuth } from "../../../context/AuthContext";
 import { useEffect, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import api from "../../../services/api/api";
+import { validaAno, validaMarca, validaNome, validaPlaca } from "../../../utils/inputValidation";
 
 export default function AddCarro() {
     const { id, token } = useAuth();
@@ -26,6 +27,12 @@ export default function AddCarro() {
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
 
+    // Variaveis responsavel por retornar o erro de validação dos inputs
+    const [PlacaError, setPlacaError] = useState(null);
+    const [marcaError, setMarcaError] = useState(null);
+    const [modeloError, setModeloError] = useState(null);
+    const [anoError, setAnoError] = useState(null);
+
     const getVeiculos = async () => { // Requisicao para trazer os veiculos do usuario
         try {
             const response = await api.get(`/veiculos/${id}`, {
@@ -41,6 +48,22 @@ export default function AddCarro() {
     }
 
     const postVeiculo = async () => { // Requisicao para adicionar um novo veiculo ao usuario
+        // Validando campos antes de enviar para a API
+        const placaValidationError = validaPlaca(placa);
+        const marcaValidationError = validaMarca(marca);
+        const modeloValidationError = validaNome(modelo);
+        const anoValidationError = validaAno(ano);
+
+        // Atualizando os estados com as mensagens de erro da validação
+        setPlacaError(placaValidationError);
+        setMarcaError(marcaValidationError);
+        setModeloError(modeloValidationError);
+        setAnoError(anoValidationError);
+
+        if (placaValidationError || marcaValidationError || modeloValidationError || anoValidationError) { // Caso ocorra erro de validação interompe o cadastro
+            return;
+        }
+
         try {
             await api.post(
                 `/veiculos/${id}`,
@@ -116,7 +139,6 @@ export default function AddCarro() {
         setEditModalVisible(true); // Ativando modal de edicao
     };
 
-
     useEffect(() => {
         getVeiculos()
     }, [])
@@ -128,33 +150,58 @@ export default function AddCarro() {
 
                 <View style={styles.form}>
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, PlacaError ? styles.inputError : null]}
                         placeholder="Placa"
                         placeholderTextColor="#cccccc"
+                        onChangeText={(text) => {
+                            setPlaca(text);
+                            setPlacaError(null); // Limpando o erro para proxima tentativa
+                        }}
                         value={placa}
-                        onChangeText={setPlaca}
+                        maxLength={7}
                     />
+                    {PlacaError && <Text style={styles.errorText}>{PlacaError}</Text>}
+
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, marcaError ? styles.inputError : null]}
                         placeholder="Marca do veículo"
                         placeholderTextColor="#cccccc"
                         value={marca}
-                        onChangeText={setMarca}
+                        onChangeText={(text) => {
+                            setMarca(text);
+                            setMarcaError(null); // Limpando o erro para proxima tentativa
+                        }}
+                        maxLength={15}
                     />
+                    {marcaError && <Text style={styles.errorText}>{marcaError}</Text>}
+
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, modeloError ? styles.inputError : null]}
+
                         placeholder="Modelo"
                         placeholderTextColor="#cccccc"
                         value={modelo}
-                        onChangeText={setModelo}
+                        onChangeText={(text) => {
+                            setModelo(text);
+                            setModeloError(null); // Limpando o erro para proxima tentativa
+                        }}
+                        maxLength={25}
                     />
+                    {modeloError && <Text style={styles.errorText}>{modeloError}</Text>}
+
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, anoError ? styles.inputError : null]}
+
                         placeholder="Ano"
                         placeholderTextColor="#cccccc"
                         value={ano}
-                        onChangeText={setAno}
+                        onChangeText={(text) => {
+                            setAno(text);
+                            setAnoError(null); // Limpando o erro para proxima tentativa
+                        }}
+                        maxLength={4}
                     />
+                    {anoError && <Text style={styles.errorText}>{anoError}</Text>}
 
                     <TouchableOpacity style={styles.button} onPress={postVeiculo}>
                         <Text style={styles.buttonText}>Cadastrar Veículo</Text>
@@ -224,6 +271,7 @@ export default function AddCarro() {
                                 placeholderTextColor="#cccccc"
                                 value={placaEdit}
                                 onChangeText={setPlacaEdit}
+                                maxLength={7}
                             />
                             <Text style={styles.vehicleItem}>Marca</Text>
                             <TextInput
@@ -232,6 +280,7 @@ export default function AddCarro() {
                                 placeholderTextColor="#cccccc"
                                 value={marcaEdit}
                                 onChangeText={setMarcaEdit}
+                                maxLength={15}
                             />
                             <Text style={styles.vehicleItem}>Modelo</Text>
                             <TextInput
@@ -240,6 +289,7 @@ export default function AddCarro() {
                                 placeholderTextColor="#cccccc"
                                 value={modeloEdit}
                                 onChangeText={setModeloEdit}
+                                maxLength={25}
                             />
                             <Text style={styles.vehicleItem}>Ano</Text>
                             <TextInput
@@ -249,7 +299,9 @@ export default function AddCarro() {
                                 value={anoEdit}
                                 onChangeText={setAnoEdit}
                                 keyboardType="numeric"
+                                maxLength={4}
                             />
+
                             <TouchableOpacity style={styles.button} onPress={editVeiculo}>
                                 <Text style={styles.buttonText}>Salvar Alterações</Text>
                             </TouchableOpacity>
@@ -373,4 +425,15 @@ const styles = StyleSheet.create({
         color: "#ffffff",
         fontSize: 16,
     },
+    inputError: {
+        borderColor: "red",
+        borderWidth: 1,
+        marginTop: 5,
+    },
+    errorText: {
+        color: "red",     
+        fontSize: 14,   
+        alignSelf: "flex-start",
+        marginBottom: 7
+    }
 });
