@@ -7,7 +7,8 @@ import api from "../../../services/api/api";
 
 export default function AddCarro() {
     const { id, token } = useAuth();
-    const [veiculos, setVeiculos] = useState([]);
+    const [veiculos, setVeiculos] = useState([]);  // Variaveis para guardar os veiculos do usuario
+    const [veiculoSelecionado, setVeiculoSelecionado] = useState(null); // Variavel para capturar o veiculo clicado
 
     // Variaveis para cadastro de veiculo
     const [placa, setPlaca] = useState("")
@@ -15,18 +16,17 @@ export default function AddCarro() {
     const [modelo, setModelo] = useState("");
     const [ano, setAno] = useState("");
 
-    const [isEditing, setIsEditing] = useState(false); // estado para controlar o modo de edição
-
     // Variaveis para edicao de veiculo
     const [placaEdit, setPlacaEdit] = useState("")
     const [marcaEdit, setMarcaEdit] = useState("")
     const [modeloEdit, setModeloEdit] = useState("");
     const [anoEdit, setAnoEdit] = useState("");
 
-    const [modalVisible, setModalVisible] = useState(false); // Manipulando o Modal
-    const [veiculoSelecionado, setVeiculoSelecionado] = useState(null); // Variavel para capturar o veiculo selecionado
+    // Manipulando os Modals
+    const [editModalVisible, setEditModalVisible] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
 
-    const getVeiculos = async () => {
+    const getVeiculos = async () => { // Requisicao para trazer os veiculos do usuario
         try {
             const response = await api.get(`/veiculos/${id}`, {
                 headers: {
@@ -40,9 +40,9 @@ export default function AddCarro() {
         }
     }
 
-    const postVeiculo = async () => {
+    const postVeiculo = async () => { // Requisicao para adicionar um novo veiculo ao usuario
         try {
-            const response = await api.post(
+            await api.post(
                 `/veiculos/${id}`,
                 {
                     placa: placa,
@@ -56,14 +56,12 @@ export default function AddCarro() {
                     }
                 }
             );
-            //    console.log(response.data) 
+            // Limpando campos apos requisicao
             setPlaca("");
             setMarca("");
             setModelo("");
             setAno("");
-            alert(`Veiculo ${modelo} cadastrado com sucesso`)
-            getVeiculos()
-
+            getVeiculos() // Atualizando lista de veiculos apos insercao
         } catch (error) {
             console.log(error)
             alert("Ocorreu um erro")
@@ -72,7 +70,7 @@ export default function AddCarro() {
 
     const deleteVeiculo = async () => { // Requisicao para exlusao de veiculo
         try {
-            const response = await api.delete(`/veiculos/${veiculoSelecionado.id}`, {
+            await api.delete(`/veiculos/${veiculoSelecionado.id}`, {
                 headers: {
                     Authorization: `Token ${token}`
                 }
@@ -89,9 +87,9 @@ export default function AddCarro() {
         setModalVisible(true);
     };
 
-    const editVeiculo = async () => {  // Requisicao para edicao de veiculo
+    const editVeiculo = async () => { // Requisicao para editar veiculo
         try {
-            const response = await api.put(
+            await api.put(
                 `/veiculos/${veiculoSelecionado.id}`,
                 {
                     placa: placaEdit,
@@ -99,17 +97,25 @@ export default function AddCarro() {
                     modelo: modeloEdit,
                     ano: anoEdit
                 },
-                {
-                    headers: {
-                        Authorization: `Token ${token}`
-                    }
-                }
-            )
-
+                { headers: { Authorization: `Token ${token}` } }
+            );
+            setEditModalVisible(false);
+            getVeiculos(); // Atualizando a lista de veiculos apos edicao
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
+
+    const confirmEdit = (veiculo) => { // Botao de para ativar modal de edicao de dados do veiculo
+        // Atribuindo os valores do veiculo selecionado ao modal de edicao
+        setVeiculoSelecionado(veiculo);
+        setPlacaEdit(veiculo.placa);
+        setMarcaEdit(veiculo.marca);
+        setModeloEdit(veiculo.modelo);
+        setAnoEdit(veiculo.ano);
+        setEditModalVisible(true); // Ativando modal de edicao
+    };
+
 
     useEffect(() => {
         getVeiculos()
@@ -157,13 +163,19 @@ export default function AddCarro() {
 
                 <Text style={styles.subTitle}>Seus Veículos</Text>
 
+                {/* Lista de Veículos */}
                 {veiculos && veiculos.length > 0 ? (
                     veiculos.map((veiculo) => (
                         <View style={styles.vehicleList} key={veiculo.id}>
                             <Text style={styles.vehicleItem}>{veiculo.modelo} - {veiculo.placa}</Text>
-                            <TouchableOpacity onPress={() => confirmDelete(veiculo)}>
-                                <FontAwesome name="trash" size={24} color="red" />
-                            </TouchableOpacity>
+                            <View style={{ flexDirection: "row" }}>
+                                <TouchableOpacity onPress={() => confirmEdit(veiculo)}>
+                                    <FontAwesome name="pencil" size={24} color="blue" style={{ marginRight: 10 }} />
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => confirmDelete(veiculo)}>
+                                    <FontAwesome name="trash" size={24} color="red" />
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     ))
                 ) : (
@@ -188,6 +200,59 @@ export default function AddCarro() {
                                     <Text style={styles.modalButtonText}>Não</Text>
                                 </TouchableOpacity>
                             </View>
+                        </View>
+                    </View>
+                </Modal>
+
+                {/* Modal de Edição */}
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={editModalVisible}
+                    onRequestClose={() => setEditModalVisible(false)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <TouchableOpacity style={styles.closeButton} onPress={() => setEditModalVisible(false)}>
+                                <FontAwesome name="close" size={24} color="white" />
+                            </TouchableOpacity>
+                            <Text style={styles.modalText}>Editar Veículo</Text>
+                            <Text style={styles.vehicleItem}>Placa</Text>
+                            <TextInput
+                                style={styles.modalInput}
+                                placeholder="Placa"
+                                placeholderTextColor="#cccccc"
+                                value={placaEdit}
+                                onChangeText={setPlacaEdit}
+                            />
+                            <Text style={styles.vehicleItem}>Marca</Text>
+                            <TextInput
+                                style={styles.modalInput}
+                                placeholder="Marca"
+                                placeholderTextColor="#cccccc"
+                                value={marcaEdit}
+                                onChangeText={setMarcaEdit}
+                            />
+                            <Text style={styles.vehicleItem}>Modelo</Text>
+                            <TextInput
+                                style={styles.modalInput}
+                                placeholder="Modelo"
+                                placeholderTextColor="#cccccc"
+                                value={modeloEdit}
+                                onChangeText={setModeloEdit}
+                            />
+                            <Text style={styles.vehicleItem}>Ano</Text>
+                            <TextInput
+                                style={styles.modalInput}
+                                placeholder="Ano"
+                                placeholderTextColor="#cccccc"
+                                value={anoEdit}
+                                onChangeText={setAnoEdit}
+                                keyboardType="numeric"
+                            />
+                            <TouchableOpacity style={styles.button} onPress={editVeiculo}>
+                                <Text style={styles.buttonText}>Salvar Alterações</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </Modal>
@@ -231,12 +296,11 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         paddingVertical: 15,
         alignItems: "center",
-        marginTop: 10,
     },
     buttonText: {
         color: "#ffffff",
-        fontSize: 16,
         fontWeight: "bold",
+        fontSize: 16,
     },
     subTitle: {
         fontSize: 20,
@@ -245,14 +309,16 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     vehicleList: {
-        width: "100%",
-        backgroundColor: "rgba(255, 255, 255, 0.1)",
-        borderRadius: 8,
-        padding: 12,
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
+        backgroundColor: "rgba(255, 255, 255, 0.1)",
+        borderColor: "rgba(255, 255, 255, 0.3)",
+        borderWidth: 1,
+        borderRadius: 8,
+        padding: 15,
         marginBottom: 10,
+        width: "100%",
     },
     vehicleItem: {
         color: "#ffffff",
@@ -262,32 +328,48 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
     },
     modalContent: {
-        width: "80%",
-        backgroundColor: "#fff",
+        backgroundColor: "#333333",
+        borderRadius: 8,
         padding: 20,
-        borderRadius: 10,
-        alignItems: "center",
+        width: "80%",
+        position: "relative",
+    },
+    closeButton: {
+        position: "absolute",
+        top: 10,
+        right: 10,
+        zIndex: 1,
     },
     modalText: {
+        color: "#ffffff",
         fontSize: 18,
         marginBottom: 20,
+        textAlign: "center",
     },
     modalButtons: {
         flexDirection: "row",
         justifyContent: "space-around",
-        width: "100%",
     },
     modalButton: {
         backgroundColor: "#FF4500",
-        padding: 10,
         borderRadius: 8,
-        width: "40%",
-        alignItems: "center",
+        paddingVertical: 10,
+        paddingHorizontal: 20,
     },
     modalButtonText: {
+        color: "#ffffff",
+        fontSize: 16,
+    },
+    modalInput: {
+        backgroundColor: "rgba(255, 255, 255, 0.1)",
+        borderColor: "rgba(255, 255, 255, 0.3)",
+        borderWidth: 1,
+        borderRadius: 8,
+        padding: 12,
+        marginBottom: 12,
         color: "#ffffff",
         fontSize: 16,
     },
