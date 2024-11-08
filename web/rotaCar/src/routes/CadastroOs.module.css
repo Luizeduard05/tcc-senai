@@ -35,6 +35,8 @@ section .containerCad::before {
     animation: animate 5s linear infinite;
 }
 
+
+
 @keyframes animate {
     0% {
         transform: translateY(-100%);
@@ -127,6 +129,10 @@ section .containerCad .signin .content .form .inputBox input {
     color: #fff;
     font-weight: 500;
     font-size: 1em;
+}
+
+::marker {
+    color: white;
 }
 
 section .containerCad .signin .content .form .inputBox i {
