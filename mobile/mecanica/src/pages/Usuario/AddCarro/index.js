@@ -33,6 +33,12 @@ export default function AddCarro() {
     const [modeloError, setModeloError] = useState(null);
     const [anoError, setAnoError] = useState(null);
 
+    // Variáveis de erro para edição
+    const [PlacaErrorEdit, setPlacaErrorEdit] = useState(null);
+    const [MarcaErrorEdit, setMarcaErrorEdit] = useState(null);
+    const [ModeloErrorEdit, setModeloErrorEdit] = useState(null);
+    const [AnoErrorEdit, setAnoErrorEdit] = useState(null);
+
     const getVeiculos = async () => { // Requisicao para trazer os veiculos do usuario
         try {
             const response = await api.get(`/veiculos/${id}`, {
@@ -111,6 +117,21 @@ export default function AddCarro() {
     };
 
     const editVeiculo = async () => { // Requisicao para editar veiculo
+        // Validação para edição
+        const placaValidationErrorEdit = validaPlaca(placaEdit);
+        const marcaValidationErrorEdit = validaMarca(marcaEdit);
+        const modeloValidationErrorEdit = validaNome(modeloEdit);
+        const anoValidationErrorEdit = validaAno(anoEdit);
+
+        // Atualizando os estados com as mensagens de erro da validação
+        setPlacaErrorEdit(placaValidationErrorEdit);
+        setMarcaErrorEdit(marcaValidationErrorEdit);
+        setModeloErrorEdit(modeloValidationErrorEdit);
+        setAnoErrorEdit(anoValidationErrorEdit);
+
+        if (placaValidationErrorEdit || marcaValidationErrorEdit || modeloValidationErrorEdit || anoValidationErrorEdit) {
+            return;
+        }
         try {
             await api.put(
                 `/veiculos/${veiculoSelecionado.id}`,
@@ -137,6 +158,13 @@ export default function AddCarro() {
         setModeloEdit(veiculo.modelo);
         setAnoEdit(veiculo.ano);
         setEditModalVisible(true); // Ativando modal de edicao
+    };
+
+    const resetErrors = () => {  // Funcao para limpar os erros de validacao apos fechar modal de edicao
+        setPlacaErrorEdit("");
+        setMarcaErrorEdit("");
+        setModeloErrorEdit("");
+        setAnoErrorEdit("");
     };
 
     useEffect(() => {
@@ -229,7 +257,7 @@ export default function AddCarro() {
                     <Text>Nenhum veículo cadastrado</Text>
                 )}
 
-                {/* Modal de confirmação */}
+                {/* Modal de confirmação de exclusao */}
                 <Modal
                     animationType="slide"
                     transparent={true}
@@ -243,7 +271,7 @@ export default function AddCarro() {
                                 <TouchableOpacity style={styles.modalButton} onPress={deleteVeiculo}>
                                     <Text style={styles.modalButtonText}>Sim</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
+                                <TouchableOpacity style={styles.modalButtonCanc} onPress={() => setModalVisible(false)}>
                                     <Text style={styles.modalButtonText}>Não</Text>
                                 </TouchableOpacity>
                             </View>
@@ -256,58 +284,65 @@ export default function AddCarro() {
                     animationType="slide"
                     transparent={true}
                     visible={editModalVisible}
-                    onRequestClose={() => setEditModalVisible(false)}
+                    onRequestClose={() => {
+                        resetErrors();
+                        setEditModalVisible(false);
+                    }}
                 >
                     <View style={styles.modalContainer}>
                         <View style={styles.modalContent}>
-                            <TouchableOpacity style={styles.closeButton} onPress={() => setEditModalVisible(false)}>
+                            <TouchableOpacity style={styles.closeButton} onPress={() => {
+                                resetErrors();
+                                setEditModalVisible(false);
+                            }}>
                                 <FontAwesome name="close" size={24} color="white" />
                             </TouchableOpacity>
-                            <Text style={styles.modalText}>Editar Veículo</Text>
-                            <Text style={styles.vehicleItem}>Placa</Text>
+                            <Text style={styles.modalTitle}>Edicao de Veículo</Text>
                             <TextInput
-                                style={styles.modalInput}
+                                style={[styles.input, PlacaErrorEdit ? styles.inputError : null]}
                                 placeholder="Placa"
                                 placeholderTextColor="#cccccc"
                                 value={placaEdit}
-                                onChangeText={setPlacaEdit}
-                                maxLength={7}
+                                onChangeText={(text) => setPlacaEdit(text)}
                             />
-                            <Text style={styles.vehicleItem}>Marca</Text>
+                            {PlacaErrorEdit && <Text style={styles.errorText}>{PlacaErrorEdit}</Text>}
+
                             <TextInput
-                                style={styles.modalInput}
+                                style={[styles.input, MarcaErrorEdit ? styles.inputError : null]}
                                 placeholder="Marca"
                                 placeholderTextColor="#cccccc"
                                 value={marcaEdit}
-                                onChangeText={setMarcaEdit}
-                                maxLength={15}
+                                onChangeText={(text) => setMarcaEdit(text)}
                             />
-                            <Text style={styles.vehicleItem}>Modelo</Text>
+                            {MarcaErrorEdit && <Text style={styles.errorText}>{MarcaErrorEdit}</Text>}
+
                             <TextInput
-                                style={styles.modalInput}
+                                style={[styles.input, ModeloErrorEdit ? styles.inputError : null]}
                                 placeholder="Modelo"
                                 placeholderTextColor="#cccccc"
                                 value={modeloEdit}
-                                onChangeText={setModeloEdit}
-                                maxLength={25}
+                                onChangeText={(text) => setModeloEdit(text)}
                             />
-                            <Text style={styles.vehicleItem}>Ano</Text>
+                            {ModeloErrorEdit && <Text style={styles.errorText}>{ModeloErrorEdit}</Text>}
+
                             <TextInput
-                                style={styles.modalInput}
+                                style={[styles.input, AnoErrorEdit ? styles.inputError : null]}
                                 placeholder="Ano"
                                 placeholderTextColor="#cccccc"
                                 value={anoEdit}
-                                onChangeText={setAnoEdit}
-                                keyboardType="numeric"
-                                maxLength={4}
+                                onChangeText={(text) => setAnoEdit(text)}
                             />
+                            {AnoErrorEdit && <Text style={styles.errorText}>{AnoErrorEdit}</Text>}
 
                             <TouchableOpacity style={styles.button} onPress={editVeiculo}>
                                 <Text style={styles.buttonText}>Salvar Alterações</Text>
                             </TouchableOpacity>
+
+
                         </View>
                     </View>
                 </Modal>
+
             </ScrollView>
         </LinearGradient>
     );
@@ -411,6 +446,12 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
     },
+    modalButtonCanc: {
+        backgroundColor: "blue",
+        borderRadius: 8,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+    },
     modalButtonText: {
         color: "#ffffff",
         fontSize: 16,
@@ -431,9 +472,16 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     errorText: {
-        color: "red",     
-        fontSize: 14,   
+        color: "red",
+        fontSize: 14,
         alignSelf: "flex-start",
         marginBottom: 7
+    },
+    modalTitle: {
+        fontSize: 20,        
+        fontWeight: 'bold',   
+        color: '#fff',    
+        marginBottom: 15,   
+        textAlign: 'center',   
     }
 });
