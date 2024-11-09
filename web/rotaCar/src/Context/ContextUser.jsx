@@ -4,27 +4,27 @@ import React, { createContext, useContext, useState } from 'react';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [userType, setUserType] = useState(null);
+    const [tipo, setUserTipo] = useState(null);
     const [token, setToken] = useState(null);
     const [id, setId] = useState(null);
     const [nome, setNome] = useState(null);
 
-    const login = (type, token, id, nome) => {
-        setUserType(type);
+    const login = (tipo, token, id, nome) => {
+        setUserTipo(tipo);
         setToken(token);
         setId(id);
         setNome(nome);
     };
 
     const logout = () => {
-        setUserType(null);
+        setUserTipo(null);
         setToken(null);
         setId(null);
         setNome(null);
     };
 
     return (
-        <AuthContext.Provider value={{ userType, token, id, nome, login, logout }}>
+        <AuthContext.Provider value={{ tipo, token, id, nome, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

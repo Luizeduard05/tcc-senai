@@ -3,7 +3,8 @@ import api from "../../service/api";
 import styleCadVeiculo from "./CadastroVeiculo.module.css";
 import { useAuth } from "../Context/ContextUser";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCar, faClipboard, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faCar, faClipboard, faArrowLeft, faEdit, faTrashAlt, faTimes, faSave, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
+
 import { useNavigate } from 'react-router-dom';
 
 const CadastroVeiculo = () => {
@@ -134,19 +135,19 @@ const CadastroVeiculo = () => {
                                 <div className={styleCadVeiculo.inputLeft}>
                                     <div className={styleCadVeiculo.inputBox}>
                                         <input type="text" name="placa" value={formData.placa} required onChange={handleChange} />
-                                        <label>placa</label>
+                                        <i>placa</i>
                                     </div>
                                     <div className={styleCadVeiculo.inputBox}>
                                         <input type="text" name="marca" value={formData.marca} required onChange={handleChange} />
-                                        <label>marca</label>
+                                        <i>marca</i>
                                     </div>
                                     <div className={styleCadVeiculo.inputBox}>
                                         <input type="text" name="modelo" value={formData.modelo} required onChange={handleChange} />
-                                        <label>modelo</label>
+                                        <i>modelo</i>
                                     </div>
                                     <div className={styleCadVeiculo.inputBox}>
                                         <input type="text" name="ano" value={formData.ano} required onChange={handleChange} />
-                                        <label>ano</label>
+                                        <i>ano</i>
                                     </div>
                                     <div className={styleCadVeiculo.buttonCadVei}>
                                         <input className={styleCadVeiculo.inputCadVei} type="submit" value="Cadastrar" />
@@ -167,7 +168,7 @@ const CadastroVeiculo = () => {
                                                         icon={faClipboard}
                                                         onClick={() => handleOpenModal(veiculo)}
                                                         className={styleCadVeiculo.iconPrancheta}
-                                                        style={{ cursor: 'pointer', marginLeft: '10px', color: '#ff0000' }}
+                                                        style={{ cursor: 'pointer', marginLeft: '10px', color: 'rgb(184 184 184)' }}
                                                     />
                                                     <p className={styleCadVeiculo.tooltipText}>Editar</p>
                                                 </p>
@@ -182,48 +183,73 @@ const CadastroVeiculo = () => {
                         </div>
                     </div>
                 </div>
+
                 {showModal && (
                     <div className={styleCadVeiculo.modal}>
                         <div className={styleCadVeiculo.modalContent}>
-                            <p>{isEditing ? `Editando: ${selectedVehicle.modelo}` : "O que você gostaria de fazer?"}</p>
+                            <p className={styleCadVeiculo.modalContainer}>
+                                {isEditing ? (
+                                    <p className={styleCadVeiculo.editingText}>Editando: {selectedVehicle.modelo}</p>
+                                ) : (
+                                    <>
+                                        <p className={styleCadVeiculo.modalText}>O que você gostaria de fazer?</p>
+                                        <p className={styleCadVeiculo.vehicleText}>veículo: {selectedVehicle.modelo}</p>
+                                        <br />
+                                        <p className={styleCadVeiculo.plateText}>placa: {selectedVehicle.placa}</p>
+                                    </>
+                                )}
+                            </p>
 
                             {isEditing ? (
                                 <div>
+                                    {/* Campos de edição */}
                                     <div className={styleCadVeiculo.inputBox}>
-                                        <i>placa</i>
+                                        <label>placa</label>
                                         <input type="text" name="placa" value={editFormData.placa} onChange={handleEditChange} />
-
                                     </div>
-
                                     <div className={styleCadVeiculo.inputBox}>
-                                        <i>Marca:</i>
+                                        <label>Marca:</label>
                                         <input type="text" name="marca" value={editFormData.marca} onChange={handleEditChange} />
-
                                     </div>
-
                                     <div className={styleCadVeiculo.inputBox}>
-                                        <i>Modelo:</i>
+                                        <label>Modelo:</label>
                                         <input type="text" name="modelo" value={editFormData.modelo} onChange={handleEditChange} />
-
                                     </div>
                                     <div className={styleCadVeiculo.inputBox}>
-                                        <i>Ano:</i>
+                                        <label>Ano:</label>
                                         <input type="text" name="ano" value={editFormData.ano} onChange={handleEditChange} />
-
                                     </div>
-                                    <button onClick={handleEditSubmit} className={styleCadVeiculo.btnSave}>Salvar</button>
-                                    <button onClick={() => setIsEditing(false)} className={styleCadVeiculo.inputCadVei}>Cancelar</button>
+                                    <div className={styleCadVeiculo.iconContainer}>
+                                        <div className={styleCadVeiculo.iconItem} onClick={handleEditSubmit}>
+                                            <FontAwesomeIcon icon={faSave} size="2x" />
+                                            <p>Salvar</p>
+                                        </div>
+                                        <div className={styleCadVeiculo.iconItem} onClick={() => setIsEditing(false)}>
+                                            <FontAwesomeIcon icon={faTimesCircle} size="2x" />
+                                            <p>Cancelar</p>
+                                        </div>
+                                    </div>
                                 </div>
                             ) : (
-                                <div>
-                                    <button onClick={handleEdit} className={styleCadVeiculo.btnEdit}>Editar</button>
-                                    <button onClick={handleDelete} className={styleCadVeiculo.btnDelete}>Excluir</button>
-                                    <button onClick={handleCloseModal} className={styleCadVeiculo.btnClose}>Fechar</button>
+                                <div className={styleCadVeiculo.iconContainer}>
+                                    <div className={styleCadVeiculo.iconItem} onClick={handleEdit}>
+                                        <FontAwesomeIcon icon={faEdit} size="1x" />
+                                        <p>Editar</p>
+                                    </div>
+                                    <div className={styleCadVeiculo.iconItem} onClick={handleDelete}>
+                                        <FontAwesomeIcon icon={faTrashAlt} size="1x" />
+                                        <p>Excluir</p>
+                                    </div>
+                                    <div className={styleCadVeiculo.iconItem} onClick={handleCloseModal}>
+                                        <FontAwesomeIcon icon={faTimes} size="1x" />
+                                        <p>Fechar</p>
+                                    </div>
                                 </div>
                             )}
                         </div>
                     </div>
                 )}
+
 
             </section>
 
