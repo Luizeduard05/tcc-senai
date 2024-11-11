@@ -25,6 +25,7 @@ import NovaPeca from './src/pages/Adm/novaPeca';
 import VisualizaPeca from './src/pages/Adm/VisualizaPeca';
 import AddCarro from './src/pages/Usuario/AddCarro';
 import CadastroAdmMec from './src/pages/Adm/cadastroAdmMec';
+import GerenciaUser from './src/pages/Adm/GerenciaUser';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -340,6 +341,17 @@ function AdminDrawer() { // Drawer para administrador
           },
           headerTintColor: '#fff',
           title: 'Cadastro Funcionario',
+        }}
+      />
+      <Drawer.Screen
+        name="GerenciaUser"
+        component={GerenciaUser}
+        options={{
+          headerStyle: {
+            backgroundColor: '#000',
+          },
+          headerTintColor: '#fff',
+          title: 'Gerenciamento de usuarios',
         }}
       />
     </Drawer.Navigator>
