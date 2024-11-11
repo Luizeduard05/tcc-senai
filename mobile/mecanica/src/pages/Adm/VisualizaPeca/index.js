@@ -5,19 +5,24 @@ import api from "../../../services/api/api";
 import { useAuth } from "../../../context/AuthContext";
 import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
+import { validaMarca, validaNome, validaValor } from "../../../utils/inputValidation";
 
 export default function VisualizaPeca() {
     const { token } = useAuth();
     const [pecas, setPecas] = useState([]); // Variavel para manipular todas as pecas em estoque
     const [modalVisible, setModalVisible] = useState(false); // Manipulando o Modal
     const [pecaSelecionada, setPecaSelecionada] = useState(null); // Variavel para capturar a peça selecionada
+    const [isEditing, setIsEditing] = useState(false); // estado para controlar o modo de edição
 
+    // Campos de edição
     const [nome, setNome] = useState("");
     const [marca, setMarca] = useState("");
     const [valor, setValor] = useState("");
 
-    const [isEditing, setIsEditing] = useState(false); // estado para controlar o modo de edição
-
+    // Variavel responsavel por retornar o erro de validação dos inputs
+    const [nomeError, setNomeError] = useState(null);
+    const [marcaError, setMarcaError] = useState(null);
+    const [valorError, setValorError] = useState(null);
 
     const getPecas = async () => {  // Requisição para trazer as peças
         try {
@@ -47,7 +52,21 @@ export default function VisualizaPeca() {
         }
     };
 
-    const editPeca = async () => {
+    const editPeca = async () => { // Requisição para edição de peça
+        // Validando campos 
+        const nomeValidationError = validaNome(nome);
+        const marcaValidationError = validaMarca(marca);
+        const valorValidationError = validaValor(valor);
+
+        // Atualizando os estados com as mensagens de erro da validação
+        setNomeError(nomeValidationError);
+        setMarcaError(marcaValidationError);
+        setValorError(valorValidationError);
+
+        if (nomeValidationError || marcaValidationError || valorValidationError) { // Caso ocorra erro de validação interompe o login
+            return;
+        }
+
         try {
             const response = await api.put(
                 `/pecas/${pecaSelecionada.id}`,
@@ -118,24 +137,39 @@ export default function VisualizaPeca() {
                                     {isEditing ? (
                                         <>
                                             <TextInput
-                                                style={styles.modalInput}
+                                                style={[styles.modalInput, nomeError ? styles.inputError : null]}
                                                 value={nome}
-                                                onChangeText={setNome}
+                                                onChangeText={(text) => {
+                                                    setNome(text);
+                                                    setNomeError(null); // Limpando o erro para proxima tentativa
+                                                }}
                                                 placeholder="Nome do produto"
                                             />
+                                            {nomeError && <Text style={styles.errorText}>{nomeError}</Text>}
+
                                             <TextInput
-                                                style={styles.modalInput}
+                                                style={[styles.modalInput, marcaError ? styles.inputError : null]}
                                                 value={marca}
-                                                onChangeText={setMarca}
+                                                onChangeText={(text) => {
+                                                    setMarca(text);
+                                                    setMarcaError(null); // Limpando o erro para proxima tentativa
+                                                }}
                                                 placeholder="Marca do produto"
                                             />
+                                            {marcaError && <Text style={styles.errorText}>{marcaError}</Text>}
+
                                             <TextInput
-                                                style={styles.modalInput}
+                                                style={[styles.modalInput, valorError ? styles.inputError : null]}
                                                 value={valor}
-                                                onChangeText={setValor}
+                                                onChangeText={(text) => {
+                                                    setValor(text);
+                                                    setValorError(null); // Limpando o erro para proxima tentativa
+                                                }}
                                                 placeholder="Valor do produto"
                                                 keyboardType="numeric"
                                             />
+                                            {valorError && <Text style={styles.errorText}>{valorError}</Text>}
+
                                             <TouchableOpacity onPress={editPeca} style={styles.modalSaveButton}>
                                                 <Text style={styles.modalSaveText}>Salvar</Text>
                                             </TouchableOpacity>
@@ -287,5 +321,15 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
+    },
+    inputError: {
+        borderColor: "red",
+        borderWidth: 1,
+    },
+    errorText: {
+        color: "red",
+        fontSize: 14,
+        alignSelf: "flex-start",
+        marginLeft: 20,
     }
 });
