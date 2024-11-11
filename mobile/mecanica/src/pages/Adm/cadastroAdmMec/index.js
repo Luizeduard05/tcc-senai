@@ -39,17 +39,17 @@ export default function CadastroAdmMec() {
     const [senhaError, setSenhaError] = useState(null); // Variavel responsavel por retornar o erro de validação dos inputs
 
     const addNovoFunc = async () => {
-                // Validando email e senha
-                const emailValidationError = validaEmail(email);
-                const senhaValidationError = validaSenha(senha);
-        
-                // Atualizando os estados com as mensagens de erro da validação
-                setEmailError(emailValidationError);
-                setSenhaError(senhaValidationError);
-        
-                if (emailValidationError || senhaValidationError) { // Caso ocorra erro de validação interompe o login
-                    return;
-                }
+        // Validando email e senha
+        const emailValidationError = validaEmail(email);
+        const senhaValidationError = validaSenha(senha);
+
+        // Atualizando os estados com as mensagens de erro da validação
+        setEmailError(emailValidationError);
+        setSenhaError(senhaValidationError);
+
+        if (emailValidationError || senhaValidationError) { // Caso ocorra erro de validação interompe o login
+            return;
+        }
         try {
             const response = await api.post("/adm/usuarios", {
                 nome: nome,
@@ -335,7 +335,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     container: {
-        flex: 1,
+        flex: 0,
+        width: "80%",
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#383838",
@@ -385,7 +386,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         borderRadius: 10,
-        marginTop: 20,
     },
     textBtn: {
         fontSize: 20,

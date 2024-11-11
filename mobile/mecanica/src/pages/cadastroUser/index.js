@@ -394,8 +394,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#28A745",
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 10,
-        marginTop: 20,
+        borderRadius: 10
     },
     textBtn: {
         fontSize: 18,
