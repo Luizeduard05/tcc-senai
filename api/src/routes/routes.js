@@ -43,6 +43,8 @@ router.put('/usuarios/:id', autenticarToken, pessoaControllers.editarUsuario);
 router.delete('/usuarios/:id', autenticarToken, pessoaControllers.deletarUsuario);
 // rota para efetuar o login de uma pessoa
 router.post('/login', pessoaControllers.loginUsuario);
+// rota para trazer todos os cadastros
+router.get('/todosUser',autenticarToken, pessoaControllers.selecionarTodosUsuario);
 
 
 

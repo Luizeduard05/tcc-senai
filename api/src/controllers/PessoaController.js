@@ -114,7 +114,28 @@ const pessoaControllers = {
     }
 },
 
+
+
+
+
   
+selecionarTodosUsuario: async (req, res) => {
+  try {
+    const result = await Pessoa.selecionarTodosRegistros(); 
+
+    if (result.length > 0) {
+      return res.json({
+        selectMessage: `Usuários localizados`,
+        result
+      });
+    } else {
+      return res.json({ selectMessage: `Usuários não foram encontrados` });
+    }
+  } catch (e) {
+    console.error(e);
+    return res.json({ selectMessage: `Usuários não foram localizados, motivo: ${e.message}` });
+  }
+},
 
 
 

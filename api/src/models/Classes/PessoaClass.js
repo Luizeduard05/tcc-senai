@@ -103,6 +103,40 @@ class Pessoa {
 
 
 
+    static selecionarTodosRegistros = async () => {
+        const con = await conectarBancoDeDados();
+        try {
+          const query = `SELECT       
+          p.id AS pessoa_id, 
+          p.nome, 
+          p.cpf, 
+          p.email, 
+          p.tipo,
+          e.logradouro, 
+          e.bairro,  
+          e.numero,
+          t.telefone,
+          l.perfil,
+          v.placa,
+          v.modelo
+        FROM tbl_pessoa p
+        INNER JOIN tbl_endereco AS e ON p.id = e.id_pessoa
+        INNER JOIN tbl_telefone AS t ON p.id = t.id_pessoa
+        INNER JOIN tbl_login AS l ON p.id = l.id_pessoa
+        LEFT JOIN tbl_veiculo AS v ON p.id = v.id_pessoa;
+          `;
+          const [rows] = await con.query(query);
+          return rows;
+        } catch (error) {
+          throw new Error(`Erro ao selecionar: ${error.message}`);
+        } finally {
+          await con.release();
+        }
+      };
+
+
+
+
 
 
 
@@ -141,6 +175,10 @@ class Pessoa {
           await con.release();
         }
       };
+
+
+
+      
       
 
     atualizarRegistroPessoa = async () => {

@@ -113,39 +113,6 @@ class classOs {
 
 
 
-
-    atualizarRegistroOs = async (idOS) => {
-        const con = await conectarBancoDeDados();
-        try {
-            this.validarCampos();
-            await con.query(
-                `UPDATE tbl_ordem_de_serviço SET data = ?, status = ?, mo = ?, total = ? WHERE id = ?`,
-                [this.data, this.status, this.mo, this.total, idOS]
-            );
-        } catch (error) {
-            throw new Error(`Erro ao atualizar OS: ${error.message}`);
-        }
-    };
-
-
-
-
-
-    static deleteRegistroOs = async (idOS) => {
-        const con = await conectarBancoDeDados();
-        try {
-            const result = await con.query(`DELETE FROM tbl_ordem_de_serviço WHERE id = ?`, [idOS]);
-            return result;
-        } catch (error) {
-            throw new Error(`Erro ao excluir OS: ${error.message}`);
-        }
-    };
-
-
-
-
-
-
     static selecionarOrcamentos = async (req, res) => {
         const con = await conectarBancoDeDados();
         try {
@@ -194,7 +161,40 @@ class classOs {
             console.error('Erro ao buscar peças dessa Os:', error);
             throw new Error(`Erro ao buscar peças dessa Os: ${error.message}`);
         }
-    }
+    };
+
+
+
+
+
+
+    atualizarRegistroOs = async (idOS) => {
+        const con = await conectarBancoDeDados();
+        try {
+            this.validarCampos();
+            await con.query(
+                `UPDATE tbl_ordem_de_serviço SET data = ?, status = ?, mo = ?, total = ? WHERE id = ?`,
+                [this.data, this.status, this.mo, this.total, idOS]
+            );
+        } catch (error) {
+            throw new Error(`Erro ao atualizar OS: ${error.message}`);
+        }
+    };
+
+
+
+
+
+    static deleteRegistroOs = async (idOS) => {
+        const con = await conectarBancoDeDados();
+        try {
+            const result = await con.query(`DELETE FROM tbl_ordem_de_serviço WHERE id = ?`, [idOS]);
+            return result;
+        } catch (error) {
+            throw new Error(`Erro ao excluir OS: ${error.message}`);
+        }
+    };
+
 }
 
 export default classOs;
