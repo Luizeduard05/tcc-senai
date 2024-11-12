@@ -26,6 +26,7 @@ import VisualizaPeca from './src/pages/Adm/VisualizaPeca';
 import AddCarro from './src/pages/Usuario/AddCarro';
 import CadastroAdmMec from './src/pages/Adm/cadastroAdmMec';
 import GerenciaUser from './src/pages/Adm/GerenciaUser';
+import Sobre from './src/pages/Usuario/sobre';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -94,6 +95,18 @@ function UserDrawer() { // Drawer para o usuário
         component={AddCarro}
         options={{
           title: 'Meus veiculos',
+          headerTintColor: "#fff",
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#000'
+          },
+        }}
+      />
+      <Drawer.Screen
+        name="Sobre"
+        component={Sobre}
+        options={{
+          title: 'Sobre nós',
           headerTintColor: "#fff",
           headerShown: true,
           headerStyle: {
