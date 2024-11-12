@@ -4,6 +4,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { AuthProvider, useAuth } from './src/context/AuthContext';
+import { TouchableOpacity } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 
 import Intranet from './src/pages/intranet';
 import Login from './src/pages/login';
@@ -23,12 +25,14 @@ import NovaPeca from './src/pages/Adm/novaPeca';
 import VisualizaPeca from './src/pages/Adm/VisualizaPeca';
 import AddCarro from './src/pages/Usuario/AddCarro';
 import CadastroAdmMec from './src/pages/Adm/cadastroAdmMec';
+import GerenciaUser from './src/pages/Adm/GerenciaUser';
+import Sobre from './src/pages/Usuario/sobre';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 // INICIO NAVEGAÇÃO USUARIO
-function UserDrawer({ navigation }) { // Drawer para o usuário
+function UserDrawer() { // Drawer para o usuário
   const { logout } = useAuth()
   return (
     <Drawer.Navigator
@@ -51,6 +55,15 @@ function UserDrawer({ navigation }) { // Drawer para o usuário
           },
           headerTintColor: '#fff',
           title: 'Início',
+          headerRight: () => (  // Adiciona o botão de logout com ícone no canto superior direito
+            <TouchableOpacity
+              onPress={() => {
+                logout();
+              }}
+            >
+              <FontAwesome name="sign-out" size={25} color="#FFF" style={{ marginRight: 6, padding: 13 }} />
+            </TouchableOpacity>
+          ),
         }}
       />
       <Drawer.Screen
@@ -90,17 +103,14 @@ function UserDrawer({ navigation }) { // Drawer para o usuário
         }}
       />
       <Drawer.Screen
-        name="Sair"
-        component={Login}
+        name="Sobre"
+        component={Sobre}
         options={{
-          headerShown: false,
-          title: 'Sair',
-        }}
-        listeners={{
-          tabPress: e => {
-            e.preventDefault(); // Evitar o comportamento padrão
-            logout(); // Executa o logout
-            navigation.navigate('Login'); // Navega para a tela Intranet
+          title: 'Sobre nós',
+          headerTintColor: "#fff",
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#000'
           },
         }}
       />
@@ -163,6 +173,15 @@ function MechanicDrawer() { // Drawer para mecânico
           },
           headerTintColor: '#fff',
           title: 'Início',
+          headerRight: () => (  // Adiciona o botão de logout com ícone no canto superior direito
+            <TouchableOpacity
+              onPress={() => {
+                logout();
+              }}
+            >
+              <FontAwesome name="sign-out" size={25} color="#FFF" style={{ marginRight: 6, padding: 13 }} />
+            </TouchableOpacity>
+          ),
         }}
       />
       <Drawer.Screen
@@ -198,21 +217,6 @@ function MechanicDrawer() { // Drawer para mecânico
           headerShown: true,
           headerStyle: {
             backgroundColor: '#000'
-          },
-        }}
-      />
-      <Drawer.Screen
-        name="Sair"
-        component={Login}
-        options={{
-          headerShown: false,
-          title: 'Sair',
-        }}
-        listeners={{
-          tabPress: e => {
-            e.preventDefault(); // Evitar o comportamento padrão
-            logout(); // Executa o logout
-            navigation.navigate('Login'); // Navega para a tela Intranet
           },
         }}
       />
@@ -275,6 +279,15 @@ function AdminDrawer() { // Drawer para administrador
           },
           headerTintColor: '#fff',
           title: 'Início',
+          headerRight: () => (  // Adiciona o botão de logout com ícone no canto superior direito
+            <TouchableOpacity
+              onPress={() => {
+                logout();
+              }}
+            >
+              <FontAwesome name="sign-out" size={25} color="#FFF" style={{ marginRight: 6, padding: 13 }} />
+            </TouchableOpacity>
+          ),
         }}
       />
       <Drawer.Screen
@@ -344,18 +357,14 @@ function AdminDrawer() { // Drawer para administrador
         }}
       />
       <Drawer.Screen
-        name="Sair"
-        component={Login}
+        name="GerenciaUser"
+        component={GerenciaUser}
         options={{
-          headerShown: false,
-          title: 'Sair',
-        }}
-        listeners={{
-          tabPress: e => {
-            e.preventDefault(); // Evitar o comportamento padrão
-            logout(); // Executa o logout
-            navigation.navigate('Login'); // Navega para a tela Intranet
+          headerStyle: {
+            backgroundColor: '#000',
           },
+          headerTintColor: '#fff',
+          title: 'Gerenciamento de usuarios',
         }}
       />
     </Drawer.Navigator>
@@ -391,6 +400,29 @@ function AdminStack() { // Stack de administrador
     </Stack.Navigator>
   );
 }
+
+function LogoutStack() { // Stack quando o usuario estiver deslogado
+  return (
+    <Stack.Navigator initialRouteName='Intranet'>
+      <Stack.Screen
+        name="Intranet"
+        component={Intranet}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="CadastroUser"
+        component={CadastroUser}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  )
+}
+
 // FIM NAVEGAÇÃO ADM
 
 // Navegador principal que escolhe a stack com base no tipo de usuário
@@ -399,24 +431,23 @@ function AppNavigator() {
 
   return (
     <Stack.Navigator>
-      {userType ? (
-        userType === 'MEC' ? (
-          <Stack.Screen name="MechanicStack" component={MechanicStack} options={{ headerShown: false }} />
-        ) : userType === 'CLI' ? (
-          <Stack.Screen name="UserStack" component={UserStack} options={{ headerShown: false }} />
-        ) : userType === 'ADM' ? (
-          <Stack.Screen name="AdminStack" component={AdminStack} options={{ headerShown: false }} />
-        ) : null
-      ) : (
-        <>
-          <Stack.Screen name="Intranet" component={Intranet} options={{ headerShown: false }} />
-          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-          <Stack.Screen name="CadastroUser" component={CadastroUser} options={{ headerShown: false }} />
-        </>
-      )}
+      {(() => {
+        switch (userType) {
+          case 'MEC':
+            return <Stack.Screen name="MechanicStack" component={MechanicStack} options={{ headerShown: false }} />;
+          case 'CLI':
+            return <Stack.Screen name="UserStack" component={UserStack} options={{ headerShown: false }} />;
+          case 'ADM':
+            return <Stack.Screen name="AdminStack" component={AdminStack} options={{ headerShown: false }} />;
+          default:
+            // Caso userType seja null ou não corresponda a nenhum dos casos acima
+            return <Stack.Screen name="LogoutStack" component={LogoutStack} options={{ headerShown: false }} />;;
+        }
+      })()}
     </Stack.Navigator>
   );
 }
+
 
 export default function App() {
   return (

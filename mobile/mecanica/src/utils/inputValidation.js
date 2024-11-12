@@ -1,10 +1,10 @@
 const validaNome = (nome) => {
-    if (!nome) return 'O campo nome não pode ser nulo';
+    if (!nome) return 'Esse é um campo obrigatorio';
     return null;
 };
 
 const validaCPF = (cpf) => {
-    if (!cpf) return 'O campo CPF não pode ser nulo';
+    if (!cpf) return 'Esse é um campo obrigatorio';
     cpf = cpf.replace(/\D/g, ''); // Remove caracteres não numéricos
 
     if (cpf.length !== 11) return 'O CPF deve ter 11 dígitos';
@@ -32,46 +32,55 @@ const validaCPF = (cpf) => {
 
 
 const validaTelefone = (telefone) => {
-    if (!telefone) return 'O campo telefone não pode ser nulo';
+    if (!telefone) return 'Esse é um campo obrigatorio';
     if (!/^\d+$/.test(telefone)) return 'Digite apenas numeros e sem espaço'
     if (telefone.length !== 11) return 'Quantidade incorreta de digitos'
     return null;
 };
 
 const validaCEP = (cep) => {
-    if(!cep) return 'O campo CEP não pode ser nulo';
+    if(!cep) return 'Esse é um campo obrigatorio';
     if (!/^\d+$/.test(cep)) return 'Digite apenas numeros e sem espaço'
     if (cep.length !== 8) return 'Quantidade incorreta de digitos'
 }
 
 const validaNumeroResidencia = (numero) => {
-    if(!numero) return 'O campo numero não pode ser nulo';
+    if(!numero) return 'Esse é um campo obrigatorio';
 }
 
 const validaComplemento = (complemento) => {
-    if(!complemento) return 'O campo complemento não pode ser nulo';
+    if(!complemento) return 'Esse é um campo obrigatorio';
 }
 
 const validaEmail = (email) => {
-    if (!email) return 'O campo email não pode ser nulo';
+    if (!email) return 'Esse é um campo obrigatorio';
     if (!/\S+@\S+\.\S+/.test(email)) return "E-mail invalido" // verificando se possui caracteres antes de depois do @ e ponto apos o @
     return null;
 }
 
 const validaSenha = (senha) => {
-    if (!senha) return 'O campo senha não pode ser nulo';
+    if (!senha) return 'Esse é um campo obrigatorio';
     if (senha.length < 8) return 'A senha deve ter pelo menos 8 caracteres';
     return null;
 };
 
 const validaMarca = (marca) => {
-    if(!marca) return 'O campo marca não pode ser nulo'
+    if(!marca) return 'Esse é um campo obrigatorio'
     if(marca.length < 2) return "nome curto para marca"
 }
 
 const validaValor = (valor) => {
-    if(!valor) return 'O campo valor não pode ser nulo'
+    if(!valor) return 'Esse é um campo obrigatorio'
 }
+
+const validaPlaca = (placa) => {
+    if(!placa) return 'Esse é um campo obrigatorio'
+    if(placa.length < 7) return 'Placa invalida'
+} 
+
+const validaAno = (ano) =>  {
+    if(!ano) return 'Esse é um campo obrigatorio'
+} 
 
 export {
     validaSenha,
@@ -83,5 +92,7 @@ export {
     validaNumeroResidencia,
     validaComplemento,
     validaMarca, 
-    validaValor
+    validaValor,
+    validaPlaca,
+    validaAno
 }
