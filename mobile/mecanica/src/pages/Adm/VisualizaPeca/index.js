@@ -24,6 +24,8 @@ export default function VisualizaPeca() {
     const [marcaError, setMarcaError] = useState(null);
     const [valorError, setValorError] = useState(null);
 
+    const [search, setSearch] = useState("")
+
     const getPecas = async () => {  // Requisição para trazer as peças
         try {
             const response = await api.get("/todasPecas", {
@@ -105,11 +107,25 @@ export default function VisualizaPeca() {
         setModalVisible(true);
     };
 
+    const filterPecas = () => { // Função para filtrar peças com base no texto da busca
+        return pecas.filter((peca) =>
+            peca.nome_produto.toLowerCase().includes(search.toLowerCase())
+        );
+    };
+
     return (
         <LinearGradient colors={['#000000', 'rgba(0, 0, 0, 0.5)']} style={styles.androidSafeArea}>
+            <View style={styles.inputBusca}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Buscar por nome da peça"
+                    value={search}
+                    onChangeText={setSearch}
+                />
+            </View>
             <View style={styles.container}>
-                {pecas !== undefined ? (
-                    pecas.map((peca) => (
+            {pecas && filterPecas().length > 0 ? (
+                    filterPecas().map((peca) => (
                         <View style={styles.historicoItem} key={Number(peca.id)}>
                             <Text style={styles.textVeiculo}>{peca.nome_produto}</Text>
                             <View style={styles.alinha}>
@@ -125,7 +141,9 @@ export default function VisualizaPeca() {
                         </View>
                     ))
                 ) : (
-                    <Text style={{ backgroundColor: "#fff" }}>Nenhuma peça em estoque</Text>
+                    <Text style={{ backgroundColor: "#fff", textAlign: "center" }}>
+                        Nenhuma peça encontrada
+                    </Text>
                 )}
 
 
@@ -331,5 +349,21 @@ const styles = StyleSheet.create({
         fontSize: 14,
         alignSelf: "flex-start",
         marginLeft: 20,
-    }
+    },
+    inputBusca: {
+        backgroundColor: "#fff",
+        width: "90%",
+        height: 40,
+        borderRadius: 25,
+        flexDirection: "row",
+        alignItems: "center",
+        paddingHorizontal: 20,
+        alignSelf: "center",
+        shadowColor: "#000",
+    },
+    input: {
+        flex: 1,
+        fontSize: 16,
+        paddingVertical: 10,
+    },
 });
