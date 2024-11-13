@@ -259,11 +259,11 @@ input[type="submit"]:active {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; 
+    z-index: 1000;
 }
 
 .modalContent {
-    background-color: #ffffff;
+    background-color: #525252;
     padding: 20px;
     border-radius: 8px;
     width: 300px;
@@ -271,6 +271,15 @@ input[type="submit"]:active {
     text-align: center;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     animation: fadeIn 0.3s ease;
+}
+
+.modalContent p {
+    padding: 10px;
+}
+
+
+.modalp {
+    color: #ffffff;
 }
 
 .modalContent .inputBox {
@@ -289,7 +298,7 @@ input[type="submit"]:active {
     color: #fff;
     font-size: 1em;
     font-weight: 500;
-    transition: background-color 0.3s;
+    transition: background-color 1s;
 }
 
 .modalContent .inputBox label {
@@ -301,9 +310,11 @@ input[type="submit"]:active {
 
 .modalContent .inputBox input:focus {
     background-color: #555;
+    border: 2px solid white;
 }
 
-.modalContent .btnEdit, .modalContent .btnClose {
+.modalContent .btnEdit,
+.modalContent .btnClose {
     margin-top: 15px;
     padding: 10px;
     border-radius: 5px;
@@ -321,7 +332,8 @@ input[type="submit"]:active {
     color: #fff;
 }
 
-.modalContent .btnEdit:hover, .modalContent .btnClose:hover {
+.modalContent .btnEdit:hover,
+.modalContent .btnClose:hover {
     opacity: 0.8;
 }
 
@@ -343,6 +355,7 @@ input[type="submit"]:active {
         opacity: 0;
         transform: scale(0.9);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -366,14 +379,16 @@ input[type="submit"]:active {
 
 .tooltipText {
     visibility: hidden;
-    width: 50px; /* Ajuste o tamanho conforme necessário */
+    width: 50px;
+    /* Ajuste o tamanho conforme necessário */
     background-color: #ffffff;
     color: #000000;
     text-align: center;
     border-radius: 4px;
     padding: 5px;
     position: absolute;
-    bottom: 125%; /* Ajuste a posição conforme necessário */
+    bottom: 125%;
+    /* Ajuste a posição conforme necessário */
     left: 50%;
     transform: translateX(-50%);
     z-index: 1;
@@ -386,4 +401,50 @@ input[type="submit"]:active {
 .tooltipWrapper:hover .tooltipText {
     visibility: visible;
     opacity: 1;
+}
+
+
+
+
+.modalContainer {
+    color: #ffffff;
+    /* Cor padrão branca */
+    background-color: #202020;
+    /* Fundo #202020 */
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.modalText {
+    color: #ffffff;
+    /* Texto principal branco */
+    font-weight: bold;
+}
+
+.vehicleText,
+.plateText {
+    color: #ffffff;
+    /* Cor dos textos de veículo e placa */
+}
+
+.editingText {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.iconContainer {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.iconItem {
+    text-align: center;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.iconItem p {
+    margin-top: 5px;
+    font-size: 14px;
 }

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import Swiper from "swiper/bundle";
 import "./Home.css";
 import logoCarro from "../assets/logoCarro.png";
@@ -9,6 +9,9 @@ import Header from "../component/Header";
 
 
 const Home = () => {
+
+    const {nome, tipo} = useContext
+
     useEffect(() => {
         var swiper = new Swiper(".swiper", {
             grabCursor: true,
