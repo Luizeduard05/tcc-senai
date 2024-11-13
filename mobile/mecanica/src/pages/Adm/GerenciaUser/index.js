@@ -126,7 +126,7 @@ export default function GerenciaUser() {
                 <Text style={styles.userName}>{item.nome}</Text>
                 <Text style={styles.userEmail}>{item.email}</Text>
             </View>
-            <View style={styles.actions}>
+            {/* <View style={styles.actions}>
                 <TouchableOpacity
                     style={styles.actionButton}
                     onPress={() => confirmEdit(item)}
@@ -139,7 +139,7 @@ export default function GerenciaUser() {
                 >
                     <FontAwesome name="trash" size={18} color="#fff" />
                 </TouchableOpacity>
-            </View>
+            </View> */}
         </View>
     );
 
@@ -157,7 +157,7 @@ export default function GerenciaUser() {
             />
 
             {/* Modal de Edicao */}
-            <Modal
+            {/* <Modal
                 animationType="slide"
                 transparent={true}
                 visible={editModalVisible}
@@ -253,7 +253,7 @@ export default function GerenciaUser() {
                         </ScrollView>
                     </View>
                 </View>
-            </Modal>
+            </Modal> */}
         </LinearGradient>
     )
 }

@@ -17,22 +17,35 @@ export default function Historico() {
                     Authorization: `Token ${token}`
                 }
             });
-            
-            // Transformando dados do array "veiculos" em um objeto para fácil acesso pelo id
-            const veiculosMap = response.data.veiculos.reduce((acc, veiculo) => {
-                acc[veiculo.id] = veiculo;
-                return acc;
-            }, {});
-
-            setVeiculos(veiculosMap);
+            // console.log(response.data.ordensServico)
             setOrcamentos(response.data.ordensServico);
         } catch (error) {
             console.log(error);
         }
     };
 
+    const getVeiculos = async () => {
+        try {
+            const response = await api.get(`/veiculos/${id}`, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            })
+            // console.log(response.data.person)
+            setVeiculos(
+                response.data.person.reduce((acc, veiculo) => {
+                    acc[veiculo.id] = veiculo;
+                    return acc;
+                }, {})
+            );
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         getOrcamentos();
+        getVeiculos();
     }, []);
 
     return (

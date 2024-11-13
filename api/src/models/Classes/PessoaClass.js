@@ -109,6 +109,7 @@ class Pessoa {
           const query = `SELECT       
           p.id AS pessoa_id, 
           p.nome, 
+          p.tipo,
           p.cpf, 
           p.email,
           e.logradouro, 
