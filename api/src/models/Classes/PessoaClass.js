@@ -137,7 +137,7 @@ class Pessoa {
 
 
 
-      static selectRegistroPessoaPorEmail = async (email) => {
+      static selectRegistroIdPessoa = async (id) => {
         const con = await conectarBancoDeDados();
         try {
           const query = `
@@ -145,25 +145,20 @@ class Pessoa {
               p.id AS pessoa_id, 
               p.nome, 
               p.cpf, 
-              p.email, 
-              p.tipo,
+              p.email,
               e.logradouro, 
               e.bairro, 
               e.estado, 
               e.numero, 
               e.complemento, 
               e.cep,
-              t.telefone,
-              l.perfil,
-              l.login,
-              l.senha
+              t.telefone
             FROM tbl_pessoa p
             INNER JOIN tbl_endereco e ON p.id = e.id_pessoa
             INNER JOIN tbl_telefone t ON p.id = t.id_pessoa
-            INNER JOIN tbl_login l ON p.id = l.id_pessoa
-            WHERE p.email = ?;
+            WHERE p.id = ?;
           `;
-          const [rows] = await con.query(query, [email]);
+          const [rows] = await con.query(query, [id]);
           return rows;
         } catch (error) {
           throw new Error(`Erro ao selecionar: ${error.message}`);

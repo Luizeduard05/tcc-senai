@@ -141,7 +141,7 @@ selecionarTodosUsuario: async (req, res) => {
 
 
 
-
+//Ver se realmente precisa dessa função
   selecionarUsuarioPorEmail: async (req, res) => {
     try {
       const email = req.params.email; 
@@ -153,6 +153,29 @@ selecionarTodosUsuario: async (req, res) => {
         return res.json({
           selectMessage: `Usuário localizado`,
           person: result[0]
+        });
+      } else {
+        return res.json({ selectMessage: `Usuário não encontrado` });
+      }
+    } catch (e) {
+      console.error(e);
+      return res.json({ selectMessage: `Usuário não foi localizado, motivo: ${e.message}` });
+    }
+  },
+
+
+
+  selecionarUsuarioId: async (req, res) => {
+    try {
+      const id = req.params.id; 
+      console.log(`Buscando usuário com ID: ${id}`);
+  
+      const result = await Pessoa.selectRegistroIdPessoa(id); 
+  
+      if (result.length > 0) {
+        return res.json({
+          selectMessage: `Usuário localizado`,
+          result
         });
       } else {
         return res.json({ selectMessage: `Usuário não encontrado` });

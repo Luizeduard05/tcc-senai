@@ -35,6 +35,8 @@ router.post('/usuarios', pessoaControllers.registroDeAdm);
 router.post('/adm/usuarios', authMiddleware, pessoaControllers.registroDeAdm);
 // rota para buscar uma pessoa cadastrada
 router.get('/usuario/email/:email', authMiddleware, pessoaControllers.selecionarUsuarioPorEmail);
+// rota para buscar uma pessoa cadastrada
+router.get('/usuario/:id', authMiddleware, pessoaControllers.selecionarUsuarioId);
 // rota para buscar todos os mecanicos cadastrados 
 router.get('/mecanicos', authMiddleware, pessoaControllers.selecionarMecanicos);
 // rota para editar uma pessoa cadastrada
