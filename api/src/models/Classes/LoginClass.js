@@ -77,16 +77,16 @@ class Login{
 
 
 
-    static deleteRegistroLog = async (idLogin) => {
-        const con = await conectarBancoDeDados();
-        try {
-            const person = await con.query(`delete from tbl_login where id_pessoa = ?`,
-                [idLogin]);
-            return person;
-        } catch (error) {
-            throw new Error(`Erro ao registrar: ${error.message}`);
-        }
-    };
+    // static deleteRegistroLog = async (idLogin) => {
+    //     const con = await conectarBancoDeDados();
+    //     try {
+    //         const person = await con.query(`delete from tbl_login where id_pessoa = ?`,
+    //             [idLogin]);
+    //         return person;
+    //     } catch (error) {
+    //         throw new Error(`Erro ao registrar: ${error.message}`);
+    //     }
+    // };
 
 
 

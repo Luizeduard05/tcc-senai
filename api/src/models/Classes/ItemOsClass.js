@@ -61,7 +61,6 @@ class ItemOs{
 
 
 
-
     static deletePecaOs = async (idItem) => {
         const con = await conectarBancoDeDados();
         try {
@@ -71,6 +70,7 @@ class ItemOs{
             throw new Error(`Erro ao excluir peça: ${error.message}`);
         }
     };
+    
 }
 
 export default  ItemOs;

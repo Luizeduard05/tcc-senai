@@ -44,6 +44,7 @@ class classAgendamento {
         const [data, hora] = value.split(' ');
         let [dia, mes, ano] = data.split('/');
         let dataFormatada = `${ano}-${mes}-${dia}T${hora}`;
+        console.log(dataFormatada);
         this.Data_e_hora = new Date(dataFormatada);
         return this.Data_e_hora
     }
@@ -57,16 +58,27 @@ class classAgendamento {
     novoRegistroAgendamento = async (idOS, idVeiOs, idPessoaVeiOs) => {
         const con = await conectarBancoDeDados();
         try {
-            this.validarCampos();
+            this.validarCampos(); // Valida os campos obrigatórios
+
+            // Se idOS foi fornecido, usamos ele; caso contrário, passamos null para o banco
             const result = await con.query(
-                `INSERT INTO tbl_agendamento (Data_e_hora, Observação, id_os, id_veiculo_os, id_pessoa_veiculo_os) VALUES (?, ?, ?, ?, ?)`,
-                [this.data_e_hora, this.Observação, idOS, idVeiOs, idPessoaVeiOs]
+                `INSERT INTO tbl_agendamento (Data_e_hora, Observação, id_os, id_veiculo_os, id_pessoa_veiculo_os) 
+                VALUES (?, ?, ?, ?, ?)`,
+                [
+                    this.data_e_hora,
+                    this.observacao,
+                    idOS || null, // Se idOS não for fornecido, passamos null
+                    idVeiOs,
+                    idPessoaVeiOs
+                ]
             );
+
             return result[0].insertId;
         } catch (error) {
             throw new Error(`Erro ao realizar agendamento: ${error.message}`);
         }
     };
+
 
 
 
@@ -133,9 +145,9 @@ class classAgendamento {
     atualizarRegistroAgendamento = async () => {
         const con = await conectarBancoDeDados();
         try {
-            this.validarCampos();
+            console.log(this.data_e_hora, this.observacao, this.id);
             await con.query(
-                `UPDATE tbl_agendamento SET data_e_hora = ?, observacao = ? WHERE id = ?`,
+                `UPDATE tbl_agendamento SET data_e_hora = ?, Observação = ? WHERE id = ?`,
                 [this.data_e_hora, this.observacao, this.id]
             );
         } catch (error) {
@@ -147,15 +159,15 @@ class classAgendamento {
 
 
 
-    static deleteRegistroAgendamento = async (idAge) => {
-        const con = await conectarBancoDeDados();
-        try {
-            const result = await con.query(`DELETE FROM tbl_Agendamento WHERE id = ?`, [idAge]);
-            return result;
-        } catch (error) {
-            throw new Error(`Erro ao excluir agendamento: ${error.message}`);
-        }
-    };
+    // static deleteRegistroAgendamento = async (idAge) => {
+    //     const con = await conectarBancoDeDados();
+    //     try {
+    //         const result = await con.query(`DELETE FROM tbl_Agendamento WHERE id = ?`, [idAge]);
+    //         return result;
+    //     } catch (error) {
+    //         throw new Error(`Erro ao excluir agendamento: ${error.message}`);
+    //     }
+    // };
 
 
 }

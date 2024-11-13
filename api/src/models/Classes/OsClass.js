@@ -185,15 +185,15 @@ class classOs {
 
 
 
-    static deleteRegistroOs = async (idOS) => {
-        const con = await conectarBancoDeDados();
-        try {
-            const result = await con.query(`DELETE FROM tbl_ordem_de_serviço WHERE id = ?`, [idOS]);
-            return result;
-        } catch (error) {
-            throw new Error(`Erro ao excluir OS: ${error.message}`);
-        }
-    };
+    // static deleteRegistroOs = async (idOS) => {
+    //     const con = await conectarBancoDeDados();
+    //     try {
+    //         const result = await con.query(`DELETE FROM tbl_ordem_de_serviço WHERE id = ?`, [idOS]);
+    //         return result;
+    //     } catch (error) {
+    //         throw new Error(`Erro ao excluir OS: ${error.message}`);
+    //     }
+    // };
 
 }
 

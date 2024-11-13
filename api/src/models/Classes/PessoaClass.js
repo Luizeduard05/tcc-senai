@@ -110,22 +110,60 @@ class Pessoa {
           p.id AS pessoa_id, 
           p.nome, 
           p.cpf, 
-          p.email, 
-          p.tipo,
+          p.email,
           e.logradouro, 
-          e.bairro,  
-          e.numero,
-          t.telefone,
-          l.perfil,
-          v.placa,
-          v.modelo
+          e.bairro, 
+          e.estado, 
+          e.numero, 
+          e.complemento, 
+          e.cep,
+          t.telefone
         FROM tbl_pessoa p
         INNER JOIN tbl_endereco AS e ON p.id = e.id_pessoa
         INNER JOIN tbl_telefone AS t ON p.id = t.id_pessoa
-        INNER JOIN tbl_login AS l ON p.id = l.id_pessoa
-        LEFT JOIN tbl_veiculo AS v ON p.id = v.id_pessoa;
           `;
           const [rows] = await con.query(query);
+          return rows;
+        } catch (error) {
+          throw new Error(`Erro ao selecionar: ${error.message}`);
+        } finally {
+          await con.release();
+        }
+      };
+
+
+
+
+
+
+
+      static selectRegistroPessoaPorEmail = async (email) => {
+        const con = await conectarBancoDeDados();
+        try {
+          const query = `
+            SELECT 
+              p.id AS pessoa_id, 
+              p.nome, 
+              p.cpf, 
+              p.email, 
+              p.tipo,
+              e.logradouro, 
+              e.bairro, 
+              e.estado, 
+              e.numero, 
+              e.complemento, 
+              e.cep,
+              t.telefone,
+              l.perfil,
+              l.login,
+              l.senha
+            FROM tbl_pessoa p
+            INNER JOIN tbl_endereco e ON p.id = e.id_pessoa
+            INNER JOIN tbl_telefone t ON p.id = t.id_pessoa
+            INNER JOIN tbl_login l ON p.id = l.id_pessoa
+            WHERE p.email = ?;
+          `;
+          const [rows] = await con.query(query, [email]);
           return rows;
         } catch (error) {
           throw new Error(`Erro ao selecionar: ${error.message}`);
@@ -202,16 +240,16 @@ class Pessoa {
 
 
 
-    deleteRegistroPessoa = async (idPessoa) => {
-        const con = await conectarBancoDeDados();
-        try {
-            const person = await con.query(`delete from tbl_pessoa where id=?`,
-                [idPessoa]);
-            return person;
-        } catch (error) {
-            throw new Error(`Erro ao registrar: ${error.message}`);
-        }
-    };
+    // deleteRegistroPessoa = async (idPessoa) => {
+    //     const con = await conectarBancoDeDados();
+    //     try {
+    //         const person = await con.query(`delete from tbl_pessoa where id=?`,
+    //             [idPessoa]);
+    //         return person;
+    //     } catch (error) {
+    //         throw new Error(`Erro ao registrar: ${error.message}`);
+    //     }
+    // };
 }
 
 export default Pessoa;
