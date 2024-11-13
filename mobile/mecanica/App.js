@@ -27,6 +27,7 @@ import AddCarro from './src/pages/Usuario/AddCarro';
 import CadastroAdmMec from './src/pages/Adm/cadastroAdmMec';
 import GerenciaUser from './src/pages/Adm/GerenciaUser';
 import Sobre from './src/pages/Usuario/sobre';
+import NovoAgendamento from './src/pages/Adm/novoAgendamento';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -299,6 +300,17 @@ function AdminDrawer() { // Drawer para administrador
           },
           headerTintColor: '#fff',
           title: 'Historico',
+        }}
+      />
+      <Drawer.Screen
+        name="NovoAgendamentoADM"
+        component={NovoAgendamento}
+        options={{
+          headerStyle: {
+            backgroundColor: '#000',
+          },
+          headerTintColor: '#fff',
+          title: 'Criar agendamento',
         }}
       />
       <Drawer.Screen
