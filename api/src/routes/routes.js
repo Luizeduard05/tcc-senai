@@ -39,8 +39,10 @@ router.get('/usuario/email/:email', authMiddleware, pessoaControllers.selecionar
 router.get('/mecanicos', authMiddleware, pessoaControllers.selecionarMecanicos);
 // rota para editar uma pessoa cadastrada
 router.put('/usuarios/:id', autenticarToken, pessoaControllers.editarUsuario);
+
 // rora para deletar uma pessoa cadastrada
-router.delete('/usuarios/:id', autenticarToken, pessoaControllers.deletarUsuario);
+//router.delete('/usuarios/:id', autenticarToken, pessoaControllers.deletarUsuario);
+
 // rota para efetuar o login de uma pessoa
 router.post('/login', pessoaControllers.loginUsuario);
 // rota para trazer todos os cadastros
@@ -58,8 +60,10 @@ router.post('/veiculos/:idPessoa', autenticarToken, veiculoControllers.registroD
 router.get('/veiculos/:idPessoa', autenticarToken, veiculoControllers.buscarVeiculosPorPessoa);
 // Rota para editar veículo
 router.put('/veiculos/:id', autenticarToken, veiculoControllers.editarVeiculo);
+
 // Rota para deletar veículo 
-router.delete('/veiculos/:id', autenticarToken, veiculoControllers.deletarVeiculo);
+//router.delete('/veiculos/:id', autenticarToken, veiculoControllers.deletarVeiculo);
+
 //Rota para Buscar veículo por placa
 router.post('/veiculo/placa', autenticarToken, veiculoControllers.buscarVeiculoPorPlaca);
 
@@ -77,8 +81,10 @@ router.get('/os/:idPessoa', autenticarToken, osController.buscarOrcamentoPorPess
 router.get('/orcamentos', autenticarToken, osController.buscarTodosOrcamentos);
 // Rota para editar OS
 router.put('/os/:id', autenticarToken, osController.editarOS);
+
 // Rota para deletar OS 
-router.delete('/os/:id', autenticarToken, osController.deletarOS);
+//router.delete('/os/:id', autenticarToken, osController.deletarOS);
+
 // Rota para buscar peças da os
 router.get('/osPecas/:idOS', autenticarToken, osController.buscarItensOs);
 
@@ -96,8 +102,9 @@ router.get('/agendar/pessoa/:idPessoa', autenticarToken, agendamentoController.b
 router.get('/agendamentos', autenticarToken, agendamentoController.listarAgendamentos);
 // Rota para editar AGENDAMENTO
 router.put('/agendar/:id', autenticarToken, agendamentoController.editarAgendamento);
+
 // Rota para deletar AGENDAMENTO 
-router.delete('/agendar/:id', autenticarToken, agendamentoController.deletarAgendamento);
+//router.delete('/agendar/:id', autenticarToken, agendamentoController.deletarAgendamento);
 
 
 
@@ -113,8 +120,9 @@ router.get('/pecas/:idPro', autenticarToken, PecasController.listarPecasPorId);
 router.get('/todasPecas', autenticarToken, PecasController.listarPecas);
 // Rota para editar PEÇAS
 router.put('/pecas/:id', autenticarToken, PecasController.editarPecas);
+
 // Rota para deletar PEÇAS 
-router.delete('/pecas/:id', autenticarToken, PecasController.deletarPecas);
+//router.delete('/pecas/:id', autenticarToken, PecasController.deletarPecas);
 
 
 export default router;

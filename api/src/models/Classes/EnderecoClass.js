@@ -82,17 +82,17 @@ class Endereco {
 
 
 
-    static deleteRegistroEnd = async (idEndereco) => {
+    // static deleteRegistroEnd = async (idEndereco) => {
 
-        const con = await conectarBancoDeDados();
-        try {
-            const person = await con.query(`delete from tbl_endereco where id_pessoa = ?`,
-                [idEndereco]);
-            return person;
-        } catch (error) {
-            throw new Error(`Erro ao registrar: ${error.message}`);
-        }
-    };
+    //     const con = await conectarBancoDeDados();
+    //     try {
+    //         const person = await con.query(`delete from tbl_endereco where id_pessoa = ?`,
+    //             [idEndereco]);
+    //         return person;
+    //     } catch (error) {
+    //         throw new Error(`Erro ao registrar: ${error.message}`);
+    //     }
+    // };
 
 
 

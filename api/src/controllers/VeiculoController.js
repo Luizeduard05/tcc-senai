@@ -106,20 +106,20 @@ const VeiculoController = {
 
     
 
-    async deletarVeiculo(req, res) {
-        const idVei = req.params.id;
+    // async deletarVeiculo(req, res) {
+    //     const idVei = req.params.id;
 
-        try {
-            const resultado = await Veiculo.deleteRegistroVei(idVei);
-            if (resultado.affectedRows === 0) {
-                return res.status(404).json({ message: 'Veículo não encontrado.' });
-            }
-            return res.json({ message: 'Veículo deletado com sucesso!' });
-        } catch (error) {
-            console.error(error);
-            return res.status(400).json({ message: `Erro ao deletar veículo: ${error.message}` });
-        }
-    }
+    //     try {
+    //         const resultado = await Veiculo.deleteRegistroVei(idVei);
+    //         if (resultado.affectedRows === 0) {
+    //             return res.status(404).json({ message: 'Veículo não encontrado.' });
+    //         }
+    //         return res.json({ message: 'Veículo deletado com sucesso!' });
+    //     } catch (error) {
+    //         console.error(error);
+    //         return res.status(400).json({ message: `Erro ao deletar veículo: ${error.message}` });
+    //     }
+    // }
 }
 
 
