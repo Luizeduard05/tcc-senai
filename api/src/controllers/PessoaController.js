@@ -96,7 +96,52 @@ const pessoaControllers = {
     }
   },
 
+  selecionarMecanicos: async (req, res) => {
+    try {
+        const mecanicos = await Pessoa.selecionarMecanicos();
 
+        if (mecanicos.length > 0) {
+            return res.json({
+                message: 'Mecânicos encontrados',
+                mecanicos
+            });
+        } else {
+            return res.json({ message: 'Nenhum mecânico encontrado' });
+        }
+    } catch (e) {
+        console.error(e);
+        return res.status(500).json({ message: `Erro ao buscar mecânicos, motivo: ${e.message}` });
+    }
+},
+
+
+
+
+
+  
+selecionarTodosUsuario: async (req, res) => {
+  try {
+    const result = await Pessoa.selecionarTodosRegistros(); 
+
+    if (result.length > 0) {
+      return res.json({
+        selectMessage: `Usuários localizados`,
+        result
+      });
+    } else {
+      return res.json({ selectMessage: `Usuários não foram encontrados` });
+    }
+  } catch (e) {
+    console.error(e);
+    return res.json({ selectMessage: `Usuários não foram localizados, motivo: ${e.message}` });
+  }
+},
+
+
+
+
+
+//Ver se realmente precisa dessa função
   selecionarUsuarioPorEmail: async (req, res) => {
     try {
       const email = req.params.email; 
@@ -117,13 +162,42 @@ const pessoaControllers = {
       return res.json({ selectMessage: `Usuário não foi localizado, motivo: ${e.message}` });
     }
   },
+
+
+
+  selecionarUsuarioId: async (req, res) => {
+    try {
+      const id = req.params.id; 
+      console.log(`Buscando usuário com ID: ${id}`);
+  
+      const result = await Pessoa.selectRegistroIdPessoa(id); 
+  
+      if (result.length > 0) {
+        return res.json({
+          selectMessage: `Usuário localizado`,
+          result
+        });
+      } else {
+        return res.json({ selectMessage: `Usuário não encontrado` });
+      }
+    } catch (e) {
+      console.error(e);
+      return res.json({ selectMessage: `Usuário não foi localizado, motivo: ${e.message}` });
+    }
+  },
+
+
+
+
+
+
   
 
 
   editarUsuario: async (req, res) => {
     try {
       const id = req.params.id;
-      const { nome, cpf, email, tipo, logradouro, bairro, estado, numero, complemento, cep, telefone } = req.body;
+      const { nome, cpf, email, logradouro, bairro, estado, numero, complemento, cep, telefone } = req.body;
 
       if (!Pessoa.validarCPF(cpf)) {
         return res.status(400).json({ message: 'CPF inválido. Deve conter 11 dígitos e ser um CPF existente.' });
@@ -137,17 +211,17 @@ const pessoaControllers = {
         return res.status(400).json({ message: 'CEP inválido. Deve conter exatamente 8 dígitos.' });
       }
   
-      const tipoUsuario = tipo ? tipo : 'CLI';
-      if (!['ADM', 'MEC', 'CLI'].includes(tipoUsuario)) {
-        return res.status(400).json({ message: 'Tipo de usuário inválido. Permitido apenas ADM, MEC ou CLI.' });
-      }
+      // const tipoUsuario = tipo ? tipo : 'CLI';
+      // if (!['ADM', 'MEC', 'CLI'].includes(tipoUsuario)) {
+      //   return res.status(400).json({ message: 'Tipo de usuário inválido. Permitido apenas ADM, MEC ou CLI.' });
+      // }
   
       const cpfExistente = await Pessoa.verificarCPFExistente(cpf, id);
       if (cpfExistente) {
         return res.status(400).json({ message: 'CPF já cadastrado.' });
       }
   
-      const pessoa = new Pessoa({ id, nome, cpf, email, tipo });
+      const pessoa = new Pessoa({ id, nome, cpf, email });
       await pessoa.atualizarRegistroPessoa();
   
       const endereco = new Endereco({ id, logradouro, bairro, estado, numero, complemento, cep });
@@ -165,26 +239,16 @@ const pessoaControllers = {
       return res.status(400).json({ message: `Erro ao atualizar usuário, motivo: ${e.message}` });
     }
   },
-  
-  
-  
 
 
-  deletarUsuario: async (req, res) => {
-    try {
-      const id = req.params.id;
-      const deletar = new Pessoa(id);
-      const usuarioExistente = await Pessoa.selectRegistroPessoa(id);
-      if (!usuarioExistente || usuarioExistente.length === 0) {
-        return res.json({ deletMessage: `Usuário não encontrado` });
-      }
-      await deletar.deleteRegistroPessoa(id);
 
-      return res.json({ deletMessage: `Usuário deletado com sucesso` });
-    } catch (e) {
-      res.status(500).json({ deletMessage: `Não foi possível excluir o usuário, motivo: ${e.message}` });
-    }
-  },
+
+
+
+
+
+
+  
 
 
 

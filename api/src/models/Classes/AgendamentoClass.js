@@ -1,6 +1,6 @@
 import conectarBancoDeDados from '../../config/db.js';
 
-class novoAgendamento {
+class classAgendamento {
     constructor(pAge) {
         this.id = (pAge.id !== null || pAge.id > 0) ? pAge.id : null;
         this.DataConvert(pAge.data_e_hora);
@@ -33,58 +33,180 @@ class novoAgendamento {
             Observação: this.observacao
         };
         for (const [key, value] of Object.entries(campos)) {
-            if (!value || (key === 'data_e_hora' && isNaN(value))) {
+            if (!value || (key === 'Data_e_hora' && isNaN(new Date(value)))) {
                 throw new Error(`O campo ${key} é obrigatório e deve ser válido.`);
             }
         }
         return true;
     }
+    
 
     DataConvert(value) {
+        // Verifica se o valor recebido está no formato correto
         const [data, hora] = value.split(' ');
-        let [dia, mes, ano] = data.split('/');
+        if (!data || !hora) {
+            throw new Error('Formato de data e hora inválido');
+        }
+    
+        // Separa a data em dia, mês e ano
+        const [dia, mes, ano] = data.split('/');
+        if (!dia || !mes || !ano) {
+            throw new Error('Data inválida');
+        }
+    
+        // Formata a data no padrão ISO (yyyy-mm-ddTHH:mm)
         let dataFormatada = `${ano}-${mes}-${dia}T${hora}`;
-        this.Data_e_hora = new Date(dataFormatada);
-        return this.Data_e_hora
+    
+        // Verifica se a data gerada é válida
+        const dataObjeto = new Date(dataFormatada);
+        if (isNaN(dataObjeto)) {
+            throw new Error('Data inválida');
+        }
+    
+        console.log("Data formatada:", dataFormatada);
+        this.Data_e_hora = dataObjeto;
+        return this.Data_e_hora;
     }
+    
+
+
+
+
+
+
 
     novoRegistroAgendamento = async (idOS, idVeiOs, idPessoaVeiOs) => {
         const con = await conectarBancoDeDados();
         try {
-            this.validarCampos();
+            this.validarCampos(); // Valida os campos obrigatórios
+
+            // Se idOS foi fornecido, usamos ele; caso contrário, passamos null para o banco
             const result = await con.query(
-                `INSERT INTO tbl_agendamento (Data_e_hora, Observação, id_os, id_veiculo_os, id_pessoa_veiculo_os) VALUES (?, ?, ?, ?, ?)`,
-                [this.data_e_hora, this.Observação, idOS, idVeiOs, idPessoaVeiOs]
+                `INSERT INTO tbl_agendamento (Data_e_hora, Observação, id_os, id_veiculo_os, id_pessoa_veiculo_os) 
+                VALUES (?, ?, ?, ?, ?)`,
+                [
+                    this.data_e_hora,
+                    this.observacao,
+                    idOS || null, // Se idOS não for fornecido, passamos null
+                    idVeiOs,
+                    idPessoaVeiOs
+                ]
             );
+
             return result[0].insertId;
         } catch (error) {
             throw new Error(`Erro ao realizar agendamento: ${error.message}`);
         }
     };
 
-    atualizarRegistroAgendamento = async () => {
-        const con = await conectarBancoDeDados();
+
+
+
+
+
+
+    static selectAgendamentos = async () => {
+        const con = await conectarBancoDeDados()
         try {
-            this.validarCampos();
-            await con.query(
-                `UPDATE tbl_agendamento SET data_e_hora = ?, observacao = ? WHERE id = ?`,
-                [this.data_e_hora, this.observacao, this.id]
-            );
+            const [rows] = await con.query(`SELECT * FROM tbl_agendamento`);
+            return rows;
         } catch (error) {
-            throw new Error(`Erro ao atualizar agendamento: ${error.message}`);
+            throw new Error(`Erro ao selecionar: ${error.message}`);
         }
     };
 
 
-    static deleteRegistroAgendamento = async (idAge) => {
+
+
+
+
+    static selectAgendamentosPorPessoa = async (idPessoa) => {
+        const con = await conectarBancoDeDados()
+        try {
+            const result = await con.query(`SELECT a.*, o.*, v.*, p.*
+                FROM tbl_agendamento a
+                LEFT JOIN tbl_ordem_de_serviço o ON a.id_os = o.id
+                JOIN tbl_veiculo v ON a.id_veiculo_os = v.id
+                JOIN tbl_pessoa p ON a.id_pessoa_veiculo_os = p.id
+                WHERE a.id_pessoa_veiculo_os = ?`, [idPessoa]);
+            return result;
+        } catch (error) {
+            throw new Error(`Erro ao selecionar: ${error.message}`);
+        }
+    };
+
+
+
+
+
+
+    static verificaSeClienteOsVeiculoExiste = async (idOs) => {
         const con = await conectarBancoDeDados();
         try {
-            const result = await con.query(`DELETE FROM tbl_Agendamento WHERE id = ?`, [idAge]);
+            const result = await con.query(`select COUNT(*)
+            from tbl_ordem_de_serviço as OS 
+            inner join tbl_veiculo as V 
+            on OS.id_veiculo = V.id 
+            inner join tbl_pessoa as P 
+            on OS.id_pessoa_veiculo = P.id 
+            where OS.id = ? ;`, [idOs]);
             return result;
         } catch (error) {
             throw new Error(`Erro ao excluir agendamento: ${error.message}`);
         }
     };
+
+
+
+
+
+
+    atualizarRegistroAgendamento = async () => {
+        const con = await conectarBancoDeDados();
+        try {
+            console.log('Atualizando agendamento:', this.data_e_hora, this.observacao, this.id, this.id_os);
+            
+            // Verifica se todos os dados obrigatórios estão presentes
+            if (!this.data_e_hora || !this.observacao || !this.id) {
+                throw new Error('Dados obrigatórios estão faltando.');
+            }
+    
+            // Caso o id_os tenha sido passado, inclui ele na consulta de atualização
+            const query = `UPDATE tbl_agendamento SET 
+                data_e_hora = ?, 
+                Observação = ?, 
+                id_os = ? 
+                WHERE id = ?`;
+    
+            const params = [
+                this.data_e_hora,
+                this.observacao,
+                this.id_os || null, // Se id_os for nulo, passa null
+                this.id
+            ];
+    
+            await con.query(query, params);
+        } catch (error) {
+            throw new Error(`Erro ao atualizar agendamento: ${error.message}`);
+        }
+    };
+    
+
+
+
+
+
+    // static deleteRegistroAgendamento = async (idAge) => {
+    //     const con = await conectarBancoDeDados();
+    //     try {
+    //         const result = await con.query(`DELETE FROM tbl_Agendamento WHERE id = ?`, [idAge]);
+    //         return result;
+    //     } catch (error) {
+    //         throw new Error(`Erro ao excluir agendamento: ${error.message}`);
+    //     }
+    // };
+
+
 }
 
-export default novoAgendamento;
+export default classAgendamento;

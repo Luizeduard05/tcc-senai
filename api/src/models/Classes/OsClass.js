@@ -1,7 +1,7 @@
 import conectarBancoDeDados from '../../config/db.js';
 import ItemOs from './ItemOsClass.js';
 
-class Os {
+class classOs {
     constructor(pOs) {
         this.id = (pOs.id !== null || pOs.id > 0) ? pOs.id : null;
         this.data = pOs.data;
@@ -44,6 +44,11 @@ class Os {
         return true;
     }
 
+
+
+
+
+
     async novoRegistroOs(idVei, idPessoaVei) {
         const con = await conectarBancoDeDados();
         try {
@@ -70,6 +75,11 @@ class Os {
         }
     };
 
+
+
+
+
+
     static selecionarRegistroOs = async (idPessoa) => {
         const con = await conectarBancoDeDados();
         try {
@@ -81,54 +91,30 @@ class Os {
             console.error('Erro ao buscar orçamento:', error);
             return res.status(500).json({ message: `Erro ao buscar orçamento: ${error.message}` });
         }
-    }
-
-    atualizarRegistroOs = async (idOS) => {
-        const con = await conectarBancoDeDados();
-        try {
-            this.validarCampos();
-            await con.query(
-                `UPDATE tbl_ordem_de_serviço SET data = ?, status = ?, mo = ?, total = ? WHERE id = ?`,
-                [this.data, this.status, this.mo, this.total, idOS]
-            );
-        } catch (error) {
-            throw new Error(`Erro ao atualizar OS: ${error.message}`);
-        }
     };
 
 
-    static deleteRegistroOs = async (idOS) => {
+
+
+
+
+
+    static selecionarRegistroOsMecanico = async (mecanico) => {
         const con = await conectarBancoDeDados();
         try {
-            const result = await con.query(`DELETE FROM tbl_ordem_de_serviço WHERE id = ?`, [idOS]);
+            const result = await con.query( `SELECT tipo FROM tbl_pessoa WHERE id = ?`, [mecanico]);
             return result;
         } catch (error) {
-            throw new Error(`Erro ao excluir OS: ${error.message}`);
+            throw new Error(`Erro ao buscar mecânico: ${error.message}`);
         }
     };
 
-    async buscarOrcamentoPorPessoa(req, res) {
-        const idPessoa = req.params.idPessoa;
 
-        if (!idPessoa) {
-            return res.status(400).json({ message: 'ID da pessoa é obrigatório.' });
-        }
 
+
+
+    static selecionarOrcamentos = async (req, res) => {
         const con = await conectarBancoDeDados();
-        try {
-            const [veiculos] = await con.query(`SELECT * FROM tbl_veiculo WHERE id_pessoa = ?`, [idPessoa]);
-            const [ordensServico] = await con.query(`SELECT * FROM tbl_ordem_de_serviço WHERE id_pessoa_veiculo = ?`, [idPessoa]);
-
-            return res.json({ veiculos, ordensServico });
-        } catch (error) {
-            console.error('Erro ao buscar orçamento:', error);
-            return res.status(500).json({ message: `Erro ao buscar orçamento: ${error.message}` });
-        }
-    };
-
-    async buscarTodosOrcamentos(req, res) {
-        const con = await conectarBancoDeDados();
-
         try {
             const [ordensServico] = await con.query(`
             SELECT 
@@ -145,25 +131,21 @@ class Os {
             INNER JOIN tbl_veiculo v ON o.id_veiculo = v.id
             INNER JOIN tbl_pessoa p ON o.id_pessoa_veiculo = p.id;
           `);
-
-            for (let i = 0; i < ordensServico.length; i++) {
-                const newDate = new Date(ordensServico[i].data);
-                const dataBr = newDate.toLocaleString("pt-BR")
-                ordensServico[i].data = dataBr;
-            }
-
-            return res.json({ ordensServico });
+            return ordensServico;
         } catch (error) {
             console.error('Erro ao buscar orçamentos:', error);
-            return res.status(500).json({ message: `Erro ao buscar orçamentos: ${error.message}` });
+            throw new Error(`Erro ao buscar orçamentos: ${error.message}`);
         }
     };
 
-    async buscarItensOs(req, res) {
+
+
+
+
+     static selecionarItensOs = async(idOS) => {
         const con = await conectarBancoDeDados();
-        const idOS = req.params.id;
         try {
-            const [pecasOs] = await con.query(`
+            const result = await con.query(`
             SELECT 
               o.id AS id_os, 
               i.id AS id_itens_os,
@@ -171,15 +153,48 @@ class Os {
               p.marca_produto, 
               p.valor_produto
             FROM tbl_ordem_de_serviço o
-            INNER JOIN tbl_itens_os i ON o.id = i.id_os
-            INNER JOIN tbl_produtos p ON i.id_produto = p.id          
+            LEFT JOIN tbl_itens_os i ON o.id = i.id_os
+            LEFT JOIN tbl_produtos p ON i.id_produto = p.id          
             WHERE o.id = ?;`,[idOS]);
-            return res.json({ pecasOs });
+            return result;
         } catch (error) {
             console.error('Erro ao buscar peças dessa Os:', error);
-            return res.status(500).json({ message: `Erro ao buscar peças dessa Os: ${error.message}`});
+            throw new Error(`Erro ao buscar peças dessa Os: ${error.message}`);
         }
-    }
+    };
+
+
+
+
+
+
+    atualizarRegistroOs = async (idOS) => {
+        const con = await conectarBancoDeDados();
+        try {
+            this.validarCampos();
+            await con.query(
+                `UPDATE tbl_ordem_de_serviço SET data = ?, status = ?, mo = ?, total = ? WHERE id = ?`,
+                [this.data, this.status, this.mo, this.total, idOS]
+            );
+        } catch (error) {
+            throw new Error(`Erro ao atualizar OS: ${error.message}`);
+        }
+    };
+
+
+
+
+
+    // static deleteRegistroOs = async (idOS) => {
+    //     const con = await conectarBancoDeDados();
+    //     try {
+    //         const result = await con.query(`DELETE FROM tbl_ordem_de_serviço WHERE id = ?`, [idOS]);
+    //         return result;
+    //     } catch (error) {
+    //         throw new Error(`Erro ao excluir OS: ${error.message}`);
+    //     }
+    // };
+
 }
 
-export default Os;
+export default classOs;

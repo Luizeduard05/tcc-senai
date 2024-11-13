@@ -34,7 +34,12 @@ class ItemOs{
             }
         }
         return true;
-    }
+    };
+
+
+
+
+    
 
     adicionarPecaOs = async (idOS, idVeiOs, idPessoaVeiOs, idPro) => {
         const con = await conectarBancoDeDados();
@@ -51,6 +56,11 @@ class ItemOs{
     };
 
 
+
+
+
+
+
     static deletePecaOs = async (idItem) => {
         const con = await conectarBancoDeDados();
         try {
@@ -60,6 +70,7 @@ class ItemOs{
             throw new Error(`Erro ao excluir peça: ${error.message}`);
         }
     };
+    
 }
 
 export default  ItemOs;

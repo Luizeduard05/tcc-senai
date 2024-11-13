@@ -49,7 +49,10 @@ class Veiculo {
             throw new Error('O ano deve conter exatamente 4 dígitos.');
         }
         return true;
-    }
+    };
+
+
+
     
 
     novoRegistroVeiculo = async (idPessoa) => {
@@ -66,6 +69,11 @@ class Veiculo {
         }
     };
 
+
+
+
+
+
     static selecionarRegistroVeiculo = async (idPessoa) => {
         const con = await conectarBancoDeDados();
         try {
@@ -76,7 +84,12 @@ class Veiculo {
         } finally {
           await con.release();
         }
-    }
+    };
+
+
+
+
+
 
     static selecionarRegistroVeiculoPorPlaca = async (placa) => {
         const con = await conectarBancoDeDados();
@@ -88,7 +101,11 @@ class Veiculo {
         } finally {
           await con.release();
         }
-    }
+    };
+
+
+
+
 
     atualizarRegistroVeiculo = async () => {
         const con = await conectarBancoDeDados();
@@ -102,17 +119,23 @@ class Veiculo {
             throw new Error(`Erro ao atualizar veículo: ${error.message}`);
         }
     };
+
+
+
+
+
     
     
-    static deleteRegistroVei = async (idVei) => {
-        const con = await conectarBancoDeDados();
-        try {
-            const result = await con.query(`DELETE FROM tbl_veiculo WHERE id = ?`, [idVei]);
-            return result; 
-        } catch (error) {
-            throw new Error(`Erro ao excluir veículo: ${error.message}`);
-        }
-    };
+    
+    // static deleteRegistroVei = async (idVei) => {
+    //     const con = await conectarBancoDeDados();
+    //     try {
+    //         const result = await con.query(`DELETE FROM tbl_veiculo WHERE id = ?`, [idVei]);
+    //         return result; 
+    //     } catch (error) {
+    //         throw new Error(`Erro ao excluir veículo: ${error.message}`);
+    //     }
+    // };
 
 
 }

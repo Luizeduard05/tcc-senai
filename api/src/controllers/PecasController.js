@@ -14,7 +14,6 @@ const PecasController = {
             return res.status(400).json({ message: 'O campo mo deve ser um valor decimal válido.' });
         }
 
-
         const pecas = new Produtos({ nome_produto, marca_produto, valor_produto: valorFormatado });
 
         try {
@@ -25,6 +24,11 @@ const PecasController = {
             return res.status(500).json({ message: `Erro ao registrar peça: ${error.message}` });
         }
     },
+
+
+
+
+
 
     async listarPecas(req, res) {
         try {
@@ -42,6 +46,12 @@ const PecasController = {
             return res.json({ selectMessage: `Peça não foi localizada, motivo: ${e.message}` });
         }
     },
+
+
+
+
+
+
 
     async listarPecasPorId(req, res) {
         const idPro = req.params.idPro;
@@ -62,6 +72,12 @@ const PecasController = {
             return res.json({ selectMessage: `Peça não foi localizado, motivo: ${e.message}` });
         }
     },
+
+
+
+
+
+
 
     async editarPecas(req, res) {
         const idPro = req.params.id;
@@ -86,6 +102,11 @@ const PecasController = {
             return res.status(500).json({ message: `Erro ao atualizar peça: ${error.message}` });
         }
     },
+
+
+
+
+    
 
     async deletarPecas(req, res) {
         const idPro = req.params.id;

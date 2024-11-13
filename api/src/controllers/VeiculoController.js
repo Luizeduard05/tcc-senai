@@ -11,9 +11,7 @@ const VeiculoController = {
         if (!placa || !marca || !ano || !modelo || !idPessoa) {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
         }
-
         const veiculo = new Veiculo({ placa, marca, ano, modelo });
-
         try {
             await veiculo.novoRegistroVeiculo(idPessoa);
             return res.status(201).json({ message: 'Veículo registrado com sucesso!' });
@@ -26,6 +24,11 @@ const VeiculoController = {
         }
     },
 
+
+
+
+
+
     async buscarVeiculosPorPessoa(req, res) {
         const idPessoa = req.params.idPessoa;
         const result = await Veiculo.selecionarRegistroVeiculo(idPessoa);
@@ -35,7 +38,7 @@ const VeiculoController = {
         try {
             if (result.length > 0) {
                 return res.json({
-                    person: result[0]
+                    person: result
                 });
             } else {
                 return res.json({ selectMessage: `Usuário não encontrado` });
@@ -45,6 +48,11 @@ const VeiculoController = {
             return res.json({ selectMessage: `Usuário não foi localizado, motivo: ${e.message}` });
         }
     },
+
+
+
+
+
     
     async buscarVeiculoPorPlaca(req, res) {
         const placa = req.body.placa;
@@ -65,6 +73,12 @@ const VeiculoController = {
             return res.json({ selectMessage: `Veiculo não foi localizado, motivo: ${e.message}` });
         }
     },
+
+
+
+
+
+
 
     async editarVeiculo(req, res) {
         const idVei = req.params.id;
@@ -87,20 +101,25 @@ const VeiculoController = {
         }
     },
 
-    async deletarVeiculo(req, res) {
-        const idVei = req.params.id;
 
-        try {
-            const resultado = await Veiculo.deleteRegistroVei(idVei);
-            if (resultado.affectedRows === 0) {
-                return res.status(404).json({ message: 'Veículo não encontrado.' });
-            }
-            return res.json({ message: 'Veículo deletado com sucesso!' });
-        } catch (error) {
-            console.error(error);
-            return res.status(400).json({ message: `Erro ao deletar veículo: ${error.message}` });
-        }
-    }
+
+
+    
+
+    // async deletarVeiculo(req, res) {
+    //     const idVei = req.params.id;
+
+    //     try {
+    //         const resultado = await Veiculo.deleteRegistroVei(idVei);
+    //         if (resultado.affectedRows === 0) {
+    //             return res.status(404).json({ message: 'Veículo não encontrado.' });
+    //         }
+    //         return res.json({ message: 'Veículo deletado com sucesso!' });
+    //     } catch (error) {
+    //         console.error(error);
+    //         return res.status(400).json({ message: `Erro ao deletar veículo: ${error.message}` });
+    //     }
+    // }
 }
 
 

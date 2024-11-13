@@ -24,6 +24,23 @@ class Login{
     get Id_pessoa(){return this.id_pessoa;}
     set Id_pessoa(value){this.id_pessoa = value;}
 
+
+    validarCampos() {
+        return (
+            this.perfil &&
+            this.login &&
+            this.senha
+        );
+    };
+
+
+
+
+
+    
+
+
+
     novoRegistroLogin = async (idPessoa) => {
         const con = await conectarBancoDeDados();
         try {
@@ -38,6 +55,11 @@ class Login{
         }
     };
 
+
+
+
+
+
     static selectRegistroLogin = async (idPessoa) => {
         const con = await conectarBancoDeDados()
         try{
@@ -49,16 +71,27 @@ class Login{
         }
     };
 
-    static deleteRegistroLog = async (idLogin) => {
-        const con = await conectarBancoDeDados();
-        try {
-            const person = await con.query(`delete from tbl_login where id_pessoa = ?`,
-                [idLogin]);
-            return person;
-        } catch (error) {
-            throw new Error(`Erro ao registrar: ${error.message}`);
-        }
-    };
+
+
+
+
+
+
+    // static deleteRegistroLog = async (idLogin) => {
+    //     const con = await conectarBancoDeDados();
+    //     try {
+    //         const person = await con.query(`delete from tbl_login where id_pessoa = ?`,
+    //             [idLogin]);
+    //         return person;
+    //     } catch (error) {
+    //         throw new Error(`Erro ao registrar: ${error.message}`);
+    //     }
+    // };
+
+
+
+
+
 
     static selecionarUsuarioPorLogin = async (login) => {
         const con = await conectarBancoDeDados();
@@ -67,16 +100,8 @@ class Login{
             return rows;
         } catch (error) {
             throw new Error(`Erro ao selecionar: ${error.message}`);
-        }
     }
-
-    validarCampos() {
-        return (
-            this.perfil &&
-            this.login &&
-            this.senha
-        );
-    }
+    };
 }
 
 export default  Login;
