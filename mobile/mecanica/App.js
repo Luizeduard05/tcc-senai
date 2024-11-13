@@ -376,13 +376,12 @@ function AdminDrawer() { // Drawer para administrador
             backgroundColor: '#000',
           },
           headerTintColor: '#fff',
-          title: 'Gerenciamento de usuarios',
+          title: 'Usuarios existentes',
         }}
       />
     </Drawer.Navigator>
   );
 }
-
 
 function AdminStack() { // Stack de administrador
   return (
