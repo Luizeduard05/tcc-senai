@@ -122,7 +122,7 @@ const HomeADM = () => {
                 {/* Card Orçamentos */}
                 <motion.div
                     className={styleHomeAdm.cbox}
-                    onClick={() => navigate('/orcamentos')}
+                    onClick={() => navigate('/historico')}
                     variants={cardVariants}
                     whileHover="hover"
                     whileTap="tap"

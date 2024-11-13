@@ -121,7 +121,7 @@ const CadastroVeiculo = () => {
                     <div className={styleCadVeiculo.voltar}>
                         <FontAwesomeIcon
                             icon={faArrowLeft}
-                            onClick={() => navigate('/intranet')}
+                            onClick={() => navigate('/')}
                             style={{ cursor: 'pointer', marginBottom: '18px' }}
                         />
                         <p style={{ marginLeft: '8px' }}>Voltar</p>
