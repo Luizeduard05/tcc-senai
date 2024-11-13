@@ -54,16 +54,16 @@ class Telefone {
 
 
 
-    static deleteRegistroTel = async (idTel) => {
-        const con = await conectarBancoDeDados();
-        try {
-            const person = await con.query(`delete from tbl_telefone where id_pessoa = ?`,
-                [idTel]);
-            return person;
-        } catch (error) {
-            throw new Error(`Erro ao registrar: ${error.message}`);
-        }
-    };
+    // static deleteRegistroTel = async (idTel) => {
+    //     const con = await conectarBancoDeDados();
+    //     try {
+    //         const person = await con.query(`delete from tbl_telefone where id_pessoa = ?`,
+    //             [idTel]);
+    //         return person;
+    //     } catch (error) {
+    //         throw new Error(`Erro ao registrar: ${error.message}`);
+    //     }
+    // };
 
 
 

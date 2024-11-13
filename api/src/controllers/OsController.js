@@ -226,19 +226,19 @@ const osController = {
 
 
 
-    async deletarOS(req, res) {
-        const idOS = req.params.id;
-        try {
-            const resultado = await classOs.deleteRegistroOs(idOS);
-            if (resultado.affectedRows === 0) {
-                return res.status(404).json({ message: 'OS não encontrada.' });
-            }
-            return res.json({ message: 'OS deletada com sucesso!' });
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: `Erro ao deletar OS: ${error.message}` });
-        }
-    }
+    // async deletarOS(req, res) {
+    //     const idOS = req.params.id;
+    //     try {
+    //         const resultado = await classOs.deleteRegistroOs(idOS);
+    //         if (resultado.affectedRows === 0) {
+    //             return res.status(404).json({ message: 'OS não encontrada.' });
+    //         }
+    //         return res.json({ message: 'OS deletada com sucesso!' });
+    //     } catch (error) {
+    //         console.error(error);
+    //         return res.status(500).json({ message: `Erro ao deletar OS: ${error.message}` });
+    //     }
+    // }
 }
 
 
