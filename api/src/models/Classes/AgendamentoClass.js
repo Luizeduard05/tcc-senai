@@ -33,21 +33,41 @@ class classAgendamento {
             Observação: this.observacao
         };
         for (const [key, value] of Object.entries(campos)) {
-            if (!value || (key === 'data_e_hora' && isNaN(value))) {
+            if (!value || (key === 'Data_e_hora' && isNaN(new Date(value)))) {
                 throw new Error(`O campo ${key} é obrigatório e deve ser válido.`);
             }
         }
         return true;
     }
+    
 
     DataConvert(value) {
+        // Verifica se o valor recebido está no formato correto
         const [data, hora] = value.split(' ');
-        let [dia, mes, ano] = data.split('/');
+        if (!data || !hora) {
+            throw new Error('Formato de data e hora inválido');
+        }
+    
+        // Separa a data em dia, mês e ano
+        const [dia, mes, ano] = data.split('/');
+        if (!dia || !mes || !ano) {
+            throw new Error('Data inválida');
+        }
+    
+        // Formata a data no padrão ISO (yyyy-mm-ddTHH:mm)
         let dataFormatada = `${ano}-${mes}-${dia}T${hora}`;
-        console.log(dataFormatada);
-        this.Data_e_hora = new Date(dataFormatada);
-        return this.Data_e_hora
+    
+        // Verifica se a data gerada é válida
+        const dataObjeto = new Date(dataFormatada);
+        if (isNaN(dataObjeto)) {
+            throw new Error('Data inválida');
+        }
+    
+        console.log("Data formatada:", dataFormatada);
+        this.Data_e_hora = dataObjeto;
+        return this.Data_e_hora;
     }
+    
 
 
 
@@ -141,19 +161,36 @@ class classAgendamento {
 
 
 
-
     atualizarRegistroAgendamento = async () => {
         const con = await conectarBancoDeDados();
         try {
-            console.log(this.data_e_hora, this.observacao, this.id);
-            await con.query(
-                `UPDATE tbl_agendamento SET data_e_hora = ?, Observação = ? WHERE id = ?`,
-                [this.data_e_hora, this.observacao, this.id]
-            );
+            console.log('Atualizando agendamento:', this.data_e_hora, this.observacao, this.id, this.id_os);
+            
+            // Verifica se todos os dados obrigatórios estão presentes
+            if (!this.data_e_hora || !this.observacao || !this.id) {
+                throw new Error('Dados obrigatórios estão faltando.');
+            }
+    
+            // Caso o id_os tenha sido passado, inclui ele na consulta de atualização
+            const query = `UPDATE tbl_agendamento SET 
+                data_e_hora = ?, 
+                Observação = ?, 
+                id_os = ? 
+                WHERE id = ?`;
+    
+            const params = [
+                this.data_e_hora,
+                this.observacao,
+                this.id_os || null, // Se id_os for nulo, passa null
+                this.id
+            ];
+    
+            await con.query(query, params);
         } catch (error) {
             throw new Error(`Erro ao atualizar agendamento: ${error.message}`);
         }
     };
+    
 
 
 
