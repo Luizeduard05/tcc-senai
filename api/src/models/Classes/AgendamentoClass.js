@@ -125,7 +125,7 @@ class classAgendamento {
         try {
             const result = await con.query(`SELECT a.*, o.*, v.*, p.*
                 FROM tbl_agendamento a
-                JOIN tbl_ordem_de_serviço o ON a.id_os = o.id
+                LEFT JOIN tbl_ordem_de_serviço o ON a.id_os = o.id
                 JOIN tbl_veiculo v ON a.id_veiculo_os = v.id
                 JOIN tbl_pessoa p ON a.id_pessoa_veiculo_os = p.id
                 WHERE a.id_pessoa_veiculo_os = ?`, [idPessoa]);
