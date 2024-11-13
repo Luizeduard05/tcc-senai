@@ -11,7 +11,7 @@ class classOs {
         this.id_veiculo = (pOs.id_veiculo !== null && pOs.id_veiculo > 0) ? pOs.id_veiculo : null;
         this.id_pessoa_veiculo = (pOs.id_pessoa_veiculo !== null && pOs.id_pessoa_veiculo > 0) ? pOs.id_pessoa_veiculo : null;
         this.itens = pOs.itens || [];
-        this.id_mecanico = (pOs.id_mecanico !== null && pOs.id_mecanico > 0) ? pOs.id_mecanico : null; 
+        this.id_mecanico = (pOs.id_mecanico !== null && pOs.id_mecanico > 0) ? pOs.id_mecanico : null;
     }
     get Id() { return this.id; }
     set Id(value) { this.id = value; }
@@ -34,6 +34,7 @@ class classOs {
     get Id_pessoa_veiculo() { return this.id_pessoa_veiculo; }
     set Id_pessoa_veiculo(value) { this.id_pessoa_veiculo = value; }
 
+    // Verifica se os campos obrigatórios estão definidos e não são nulos ou vazios
     validarCampos() {
         const campos = {
             Data: this.data,
@@ -48,7 +49,7 @@ class classOs {
 
 
 
-
+    //Cria uma nova ordem de serviço no banco de dados.
     async novoRegistroOs(idVei, idPessoaVei) {
         const con = await conectarBancoDeDados();
         try {
@@ -79,7 +80,7 @@ class classOs {
 
 
 
-
+    //Recupera veículos e ordens de serviço associados a uma pessoa.
     static selecionarRegistroOs = async (idPessoa) => {
         const con = await conectarBancoDeDados();
         try {
@@ -98,11 +99,11 @@ class classOs {
 
 
 
-
+    //Recupera o tipo de uma pessoa, identificando se ela é um mecânico.
     static selecionarRegistroOsMecanico = async (mecanico) => {
         const con = await conectarBancoDeDados();
         try {
-            const result = await con.query( `SELECT tipo FROM tbl_pessoa WHERE id = ?`, [mecanico]);
+            const result = await con.query(`SELECT tipo FROM tbl_pessoa WHERE id = ?`, [mecanico]);
             return result;
         } catch (error) {
             throw new Error(`Erro ao buscar mecânico: ${error.message}`);
@@ -112,7 +113,7 @@ class classOs {
 
 
 
-
+    // Recupera uma lista de ordens de serviço junto com os dados dos veículos e das pessoas.
     static selecionarOrcamentos = async (req, res) => {
         const con = await conectarBancoDeDados();
         try {
@@ -141,8 +142,8 @@ class classOs {
 
 
 
-
-     static selecionarItensOs = async(idOS) => {
+    //Recupera os itens (produtos) de uma ordem de serviço específica.
+    static selecionarItensOs = async (idOS) => {
         const con = await conectarBancoDeDados();
         try {
             const result = await con.query(`
@@ -155,7 +156,7 @@ class classOs {
             FROM tbl_ordem_de_serviço o
             LEFT JOIN tbl_itens_os i ON o.id = i.id_os
             LEFT JOIN tbl_produtos p ON i.id_produto = p.id          
-            WHERE o.id = ?;`,[idOS]);
+            WHERE o.id = ?;`, [idOS]);
             return result;
         } catch (error) {
             console.error('Erro ao buscar peças dessa Os:', error);
@@ -167,7 +168,7 @@ class classOs {
 
 
 
-
+    // Atualiza os dados de uma ordem de serviço existente.
     atualizarRegistroOs = async (idOS) => {
         const con = await conectarBancoDeDados();
         try {
@@ -184,7 +185,7 @@ class classOs {
 
 
 
-
+    //(comentado): Exclui uma ordem de serviço do banco de dados.
     // static deleteRegistroOs = async (idOS) => {
     //     const con = await conectarBancoDeDados();
     //     try {

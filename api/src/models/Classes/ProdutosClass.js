@@ -19,6 +19,7 @@ class Produtos {
     get Valor_produto() { return this.valor_produto; }
     set Valor_produto(value) { this.valor_produto = value; }
 
+    // Método para validar os campos do produto
     validarCampos() {
         const campos = {
             Nome_produto: this.nome_produto,
@@ -37,7 +38,7 @@ class Produtos {
 
 
 
-
+    // Método para registrar um novo produto no banco de dados
     novoRegistroPecas = async () => {
         const con = await conectarBancoDeDados();
         try {
@@ -57,7 +58,7 @@ class Produtos {
 
 
 
-
+    // Método para selecionar todos os produtos do banco de dados
     static selecionarRegistroPecas = async () => {
         const con = await conectarBancoDeDados();
         try {
@@ -75,7 +76,7 @@ class Produtos {
 
 
 
-
+    // Método para selecionar um produto específico pelo ID
     static selecionarRegistroPecasPorId = async (idPro) => {
         const con = await conectarBancoDeDados();
         try {
@@ -93,7 +94,7 @@ class Produtos {
 
 
 
-
+    // Método para atualizar as informações de um produto no banco de dados
     atualizarRegistroPecas = async (idPro) => {
         const con = await conectarBancoDeDados();
         try {
@@ -111,9 +112,9 @@ class Produtos {
 
 
 
-    
 
 
+    // Método para excluir um produto do banco de dados pelo ID
     static deleteRegistroPecas = async (idPro) => {
         const con = await conectarBancoDeDados();
         try {
