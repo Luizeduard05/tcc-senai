@@ -1,6 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, Platform, StatusBar, View, Text, TextInput, TouchableOpacity, FlatList, Modal } from "react-native";
-import CheckBox from "expo-checkbox";
 import { Picker } from '@react-native-picker/picker';
 import { useAuth } from "../../../context/AuthContext";
 import api from "../../../services/api/api";
@@ -10,46 +9,57 @@ export default function NovoOrcamentoADM() {
     const { token } = useAuth();
     const [modalVisible, setModalVisible] = useState(false);
 
-    const [email, setEmail] = useState(""); // Variavel para buscar usuario
-    const [carros, setCarros] = useState([]); // Variavel para buscar os carros do cliente
+    const [clientes, setClientes] = useState([]) // Variavel para guardar todos clientes
+    const [clienteSelecionado, setClienteSelecionado] = useState(null); // Variavel para armazenar cliente selecionado
+    const [veiculosCliente, setVeiculosCliente] = useState([]); // Variavel para armazenar todos veiculos que um cliente possui
+    const [veiculoSelecionado, setVeiculoSelecionado] = useState(null); // Variavel para armazenar o carro selecionado para agendamento
     const [pecas, setPecas] = useState([]); // Variavel para armazenar pecas do estoque
 
-    const [idCliente, setIdCliente] = useState(); // Capturando id do cliente para usar na requisição    
-    const [idCarroSelecionado, setIdCarroSelecionado] = useState(null); // Carro selecionado para orçamento na requisição
     const [data, setData] = useState("") // Variavel para guardar a data que sera usada na requisição
     const status = "Aguardando Retorno"  // Variavel para guardar o status que sera usado na requisição
     const [mo, setMo] = useState("") // Variavel para guardar a mo inicial
     const [pecasSelecionadas, setPecasSelecionadas] = useState([]); // Variavel para guardar as pecas que serao enviadas a requisicao
 
-    const getCliente = async () => { // Requisição para buscar o cliente
+    const getUsuarios = async () => { // Requisição para trazer todos usuarios que possui no sistema
         try {
-            const response = await api.get(`/usuario/email/${email}`, {
+            const response = await api.get(`/todosUser`, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            const clientesFiltrados = response.data.result.filter(usuario => usuario.tipo === 'CLI'); // Filtrando apenas os que sao clientes
+            setClientes(clientesFiltrados);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const getCarros = async (pessoaId) => { // Requisição para trazer os carros do cliente
+        try {
+            const response = await api.get(`/veiculos/${pessoaId}`, {
                 headers: {
                     Authorization: `Token ${token}`
                 }
             })
-            console.log(response.data.person.pessoa_id)
-            setIdCliente(response.data.person.pessoa_id)
-            alert(`usuario ${response.data.person.nome} localizado`)
+            // console.log(response.data.person)
+            setVeiculosCliente(response.data.person)
         } catch (error) {
             console.log(error)
-            alert(`usuario nao localizado`)
         }
     }
 
-    const getCarros = async () => { // Requisição para trazer os carros do cliente
-        try {
-            const response = await api.get(`/veiculos/${idCliente}`, {
-                headers: {
-                    Authorization: `Token ${token}`
-                }
-            })
-            console.log(response.data.person)
-            setCarros(response.data.person)
-        } catch (error) {
-            console.log(error)
+    useEffect(() => {
+        getUsuarios()
+        getPecas();
+    }, [])
+
+
+    useEffect(() => {
+        if (clienteSelecionado) {
+            getCarros(clienteSelecionado.pessoa_id)
+
         }
-    }
+    }, [clienteSelecionado])
 
     const getPecas = async () => { // Requisição para busca de peças no orcamento
         try {
@@ -58,7 +68,7 @@ export default function NovoOrcamentoADM() {
                     Authorization: `Token ${token}`
                 }
             })
-            console.log(response.data.pecas)
+            console.log(`PECAS ${response.data.pecas}`)
             setPecas(response.data.pecas)
         } catch (error) {
             console.log(error)
@@ -83,18 +93,18 @@ export default function NovoOrcamentoADM() {
             const response = await api.post("/os", body,
                 {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        Authorization: `Token ${token}`
                     },
                     params: {
-                        idVei: idCarroSelecionado,
-                        idPessoaVei: idCliente
+                        idVei: veiculoSelecionado.id,
+                        idPessoaVei: clienteSelecionado.id
                     }
                 },
             )
             alert("Orçamento criado com sucesso:", response.data)
             // Limpando os campos
             setEmail("")
-            setIdCarroSelecionado(null)
+            setVeiculoSelecionado(null)
             setPecasSelecionadas([])
             setData("")
             setMo("")
@@ -104,12 +114,7 @@ export default function NovoOrcamentoADM() {
         }
     }
 
-    useEffect(() => { // Toda vez que o id do cliente é setado a bsuca por carros é chamada
-        if (idCliente != undefined) {
-            getCarros()
-            getPecas()
-        }
-    }, [idCliente])
+
 
     const handleSelectPeca = (peca) => { // Função para adicao de peca na lista de orcamento
         const existingPeca = pecasSelecionadas.find(item => item.id === peca.id);
@@ -148,7 +153,9 @@ export default function NovoOrcamentoADM() {
         }, 0);
         const maoDeObra = Number(mo);
         const valorFinal = totalPecas + maoDeObra;
-        return valorFinal.toFixed(2);
+        const valorEditado = valorFinal.toFixed(2);
+        const valorFinalString = valorEditado.toString()
+         return valorFinalString
     }
 
     return (
@@ -159,56 +166,65 @@ export default function NovoOrcamentoADM() {
             <View style={styles.container}>
 
                 <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Buscar cliente:</Text>
-                    <TextInput style={styles.input} placeholder="Digite o email do cliente" value={email} onChangeText={setEmail} />
-
-                    <TouchableOpacity onPress={getCliente}>
-                        <Text style={styles.label}>Buscar usuario</Text>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Selecionar Veículo:</Text>
                     <Picker
-                        selectedValue={idCarroSelecionado}
-                        onValueChange={(itemValue) => setIdCarroSelecionado(itemValue)}
-                        style={styles.input}
+                        selectedValue={clienteSelecionado}
+                        onValueChange={(itemValue) => setClienteSelecionado(itemValue)}
                     >
-                        <Picker.Item label="Selecione um veículo" value={null} />
-                        {carros.map((carro) => (
-                            <Picker.Item
-                                key={carro.id}
-                                label={`${carro.modelo} - ${carro.placa}`}
-                                value={carro.id}
-                            />
+                        <Picker.Item label="Selecione um cliente" value={null} />
+                        {clientes.map(cliente => (
+                            <Picker.Item key={cliente.pessoa_id} label={`${cliente.nome} - ${cliente.cpf}`} value={cliente} />
                         ))}
                     </Picker>
                 </View>
 
                 <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Peças Selecionadas:</Text>
-                    <FlatList
-                        data={pecasSelecionadas}
-                        keyExtractor={(item, index) => index.toString()}
-                        renderItem={({ item, index }) => (
-                            <View style={styles.pecaItem}>
-                                <Text style={styles.pecaLabel}>{item.nome_produto} - {item.valor_produto}</Text>
-                                <Text style={styles.pecaQuantity}>Quantidade: {item.quantidade}</Text>
-                                <TouchableOpacity onPress={() => handleIncreaseQuantity(index)}>
-                                    <Text style={styles.quantityControl}>+</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => handleDecreaseQuantity(index)}>
-                                    <Text style={styles.quantityControl}>-</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={() => handleRemovePeca(index)}>
-                                    <Text style={styles.removeText}>Remover</Text>
-                                </TouchableOpacity>
-                            </View>
-                        )}
-                    />
-                    <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.btnAdicionarPeca}>
-                        <Text style={styles.textBtn}>Adicionar Peça</Text>
-                    </TouchableOpacity>
+                    {clienteSelecionado && (
+                        <>
+                            <Text style={styles.label}>Selecionar Veículo:</Text>
+                            <Picker
+                                selectedValue={veiculoSelecionado}
+                                style={styles.picker}
+                                onValueChange={(itemValue) => setVeiculoSelecionado(itemValue)}
+                            >
+                                <Picker.Item label="Selecione um veículo" value={null} />
+                                {veiculosCliente.map(veiculo => (
+                                    <Picker.Item key={veiculo.id} label={`${veiculo.modelo} - ${veiculo.placa}`} value={veiculo.id} />
+                                ))}
+                            </Picker>
+                        </>
+                    )}
+
+                </View>
+
+                <View style={styles.inputGroup}>
+                    {veiculoSelecionado && (
+                        <>
+                            <Text style={styles.label}>Peças Selecionadas:</Text>
+                            <FlatList
+                                data={pecasSelecionadas}
+                                keyExtractor={(item, index) => index.toString()}
+                                renderItem={({ item, index }) => (
+                                    <View style={styles.pecaItem}>
+                                        <Text style={styles.pecaLabel}>{item.nome_produto} - {item.valor_produto}</Text>
+                                        <Text style={styles.pecaQuantity}>Quantidade: {item.quantidade}</Text>
+                                        <TouchableOpacity onPress={() => handleIncreaseQuantity(index)}>
+                                            <Text style={styles.quantityControl}>+</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => handleDecreaseQuantity(index)}>
+                                            <Text style={styles.quantityControl}>-</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => handleRemovePeca(index)}>
+                                            <Text style={styles.removeText}>Remover</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                )}
+                            />
+                            <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.btnAdicionarPeca}>
+                                <Text style={styles.textBtn}>Adicionar Peça</Text>
+                            </TouchableOpacity>
+                        </>
+                    )}
+
                 </View>
 
                 <Modal visible={modalVisible} transparent={true} animationType="slide">
