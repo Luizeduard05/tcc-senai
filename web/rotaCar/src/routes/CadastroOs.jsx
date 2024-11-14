@@ -58,6 +58,7 @@ const CadastroOs = () => {
         });
     };
     
+    
 
     const handleItemChange = (index, e) => {
         const { name, value } = e.target;
@@ -89,25 +90,26 @@ const CadastroOs = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-        console.log("Data selecionada:", formData.data); 
+        console.log("Data selecionada:", formData.data);
+        console.log("ID do Veículo selecionado:", formData.idVei); 
     
-       
-        if (!formData.data) {
-            console.error("Data não foi fornecida.");
+        if (!formData.data || !formData.idVei) { // Verifica se data e idVei estão presentes
+            console.error("Data ou ID do veículo não foram fornecidos.");
             return;
         }
     
-        const formattedDate = new Date(formData.data).toISOString().split('T')[0]; 
-        console.log("Data formatada:", formattedDate); 
+        const formattedDate = new Date(formData.data).toISOString().split('T')[0];
+        console.log("Data formatada:", formattedDate);
     
         const dataToSend = {
             ...formData,
-            data: formattedDate, 
+            data: formattedDate,
         };
     
         try {
             const response = await api.post("/os", dataToSend, {
-                headers: { Authorization: `Token ${token}` }
+                headers: { Authorization: `Token ${token}` },
+                params: {idVei: formData.idVei, idPessoaVei: formData.idPessoaVei}
             });
             console.log("Resposta da API:", response.data);
         } catch (error) {
@@ -115,39 +117,38 @@ const CadastroOs = () => {
         }
     };
     
+    
 
 
 
 
     const handleUserChange = async (e) => {
         const userId = e.target.value;
-        setFormData({ ...formData, idPessoaVei: userId, idVei: "" });
-
+        setFormData({ ...formData, idPessoaVei: userId, idVei: "" }); 
+    
         if (userId) {
             try {
                 const response = await api.get(`/veiculos/${userId}`, {
                     headers: { Authorization: `Token ${token}` }
                 });
-
-                // Logar a resposta para verificar a estrutura dos dados
+    
                 console.log("Resposta completa da API para veículos:", response);
-
-                // Verifique o conteúdo de response.data.person
+    
                 if (response && response.data && response.data.person && response.data.person.length > 0) {
-                    setVeiculos(response.data.person); 
+                    setVeiculos(response.data.person);
                 } else {
                     console.log("Nenhum veículo encontrado para este usuário.");
-                    setVeiculos([]); 
+                    setVeiculos([]);
                 }
             } catch (error) {
                 console.error("Erro ao buscar veículos:", error);
-                setVeiculos([]); 
+                setVeiculos([]);
             }
         } else {
-            setVeiculos([]); 
+            setVeiculos([]);
         }
     };
-
+    
 
 
     return (
