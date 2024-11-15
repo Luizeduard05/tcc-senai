@@ -3,6 +3,7 @@ import conectarBancoDeDados from '../config/db.js'
 
 const PecasController = {
     async registroDePecas(req, res) {
+        // Função para registrar uma nova peça
         const { nome_produto, marca_produto, valor_produto } = req.body;
 
         if (!nome_produto || !marca_produto || !valor_produto) {
@@ -29,7 +30,7 @@ const PecasController = {
 
 
 
-
+    // Função para listar todas as peças registradas
     async listarPecas(req, res) {
         try {
             const result = await Produtos.selecionarRegistroPecas();
@@ -52,7 +53,7 @@ const PecasController = {
 
 
 
-
+    // Função para listar uma peça específica pelo seu ID
     async listarPecasPorId(req, res) {
         const idPro = req.params.idPro;
         const result = await Produtos.selecionarRegistroPecasPorId(idPro);
@@ -78,7 +79,7 @@ const PecasController = {
 
 
 
-
+    // Função para editar uma peça existente
     async editarPecas(req, res) {
         const idPro = req.params.id;
         const { nome_produto, marca_produto, valor_produto } = req.body;
@@ -106,8 +107,8 @@ const PecasController = {
 
 
 
-    
 
+    // Função para deletar uma peça pelo ID
     async deletarPecas(req, res) {
         const idPro = req.params.id;
 
