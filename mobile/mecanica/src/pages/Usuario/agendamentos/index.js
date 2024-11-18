@@ -28,15 +28,15 @@ export default function Agendamentos() {
     return (
         <LinearGradient colors={['#000000', 'rgba(0, 0, 0, 0.5)']} style={styles.androidSafeArea}>
             <View style={styles.container}>
-                {agendamentos.length > 0 ? (
+                {Array.isArray(agendamentos) && agendamentos.length > 0 ? (
                     agendamentos.map((agendamento) => (
                         <View key={agendamento.id} style={styles.agendamentoItem}>
                             <View style={styles.alinha}>
-                                <Text style={styles.textHora}>{agendamento.Data_e_hora.slice(12,17)}</Text>
-                                <Text style={styles.textData}>{agendamento.Data_e_hora.slice(0,10)}</Text>
+                                <Text style={styles.textHora}>{agendamento.Data_e_hora.slice(12, 17)}</Text>
+                                <Text style={styles.textData}>{agendamento.Data_e_hora.slice(0, 10)}</Text>
                             </View>
                             <Text style={styles.textObs}>
-                                <Text style={{ fontWeight: "bold" }}>Observação:</Text>{agendamento.Observação}
+                                <Text style={{ fontWeight: "bold" }}>Observação:</Text> {agendamento.Observação}
                             </Text>
                             <View style={styles.linhaVermelha} />
                         </View>
