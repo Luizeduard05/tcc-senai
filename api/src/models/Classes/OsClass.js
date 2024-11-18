@@ -4,7 +4,7 @@ import ItemOs from './ItemOsClass.js';
 class classOs {
     constructor(pOs) {
         this.id = (pOs.id !== null || pOs.id > 0) ? pOs.id : null;
-        this.data = pOs.data;
+        this.DataConvert(pOs.data);
         this.status = (pOs.status !== null || pOs.status !== '') ? pOs.status : null;
         this.mo = pOs.mo;
         this.total = pOs.total;
@@ -45,6 +45,29 @@ class classOs {
     }
 
 
+    DataConvert(data) {
+        // Cria um objeto Date a partir da data recebida
+        const dataObjeto = new Date(data);
+    
+        // Verifica se a data é válida
+        if (isNaN(dataObjeto)) {
+            throw new Error('Data inválida');
+        }
+    
+        // Extrai o ano, mês e dia da data
+        const ano = dataObjeto.getFullYear();
+        const mes = String(dataObjeto.getMonth() + 1).padStart(2, '0'); // Meses começam do 0, então adiciona 1
+        const dia = String(dataObjeto.getDate()).padStart(2, '0'); // Adiciona 0 à esquerda, se necessário
+    
+        // Formata a data no padrão ISO (yyyy-mm-ddTHH:mm)
+        let dataFormatada = `${ano}-${mes}-${dia}`;
+    
+        console.log("Data formatada:", dataFormatada);
+        this.data = dataObjeto;
+        return this.data;
+    }
+    
+
 
 
 
@@ -52,7 +75,6 @@ class classOs {
     async novoRegistroOs(idVei, idPessoaVei) {
         const con = await conectarBancoDeDados();
         try {
-            this.validarCampos();
             const result = await con.query(
                 `INSERT INTO tbl_ordem_de_serviço (data, status, total, mo, id_veiculo, id_pessoa_veiculo, id_mecanico) VALUES (?, ?, ?, ?, ?, ?, ?)`,
                 [this.data, this.status, this.total, this.mo, idVei, idPessoaVei, this.id_mecanico] // Adiciona o ID do mecânico na inserção
