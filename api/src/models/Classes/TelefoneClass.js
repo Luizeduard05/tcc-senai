@@ -15,7 +15,7 @@ class Telefone {
     get Id_pessoa() { return this.id_pessoa; }
     set Id_pessoa(value) { this.id_pessoa = value; }
 
-
+    // Método para limpar a máscara do telefone, removendo caracteres como () -
     cleanMaskTel(value) {
         if (value != null) {
             let newValue = value.replace(/[() -]/g, '');
@@ -23,10 +23,12 @@ class Telefone {
         }
     };
 
+    // Método para validar os campos do telefone (verifica se o telefone é válido)
     validarCampos() {
         return this.telefone && Telefone.validarTelefone(this.telefone);
     }
 
+    // Método para validar o formato do telefone (deve ter exatamente 11 dígitos)
     static validarTelefone(telefone) {
         const regex = /^\d{11}$/;
         return regex.test(telefone);
@@ -35,7 +37,7 @@ class Telefone {
 
 
 
-
+    // Método para registrar um novo telefone no banco de dados
     novoRegistroTel = async (idPessoa) => {
         const con = await conectarBancoDeDados();
         try {
@@ -44,7 +46,7 @@ class Telefone {
             return telefone[0].insertId;
         } catch (error) {
             throw new Error(`Erro ao registrar: ${error.message}`);
-        }finally{
+        } finally {
             con.release();
         }
     };
@@ -53,7 +55,7 @@ class Telefone {
 
 
 
-
+    // Método comentado: seria responsável por excluir um telefone do banco
     // static deleteRegistroTel = async (idTel) => {
     //     const con = await conectarBancoDeDados();
     //     try {
@@ -69,16 +71,16 @@ class Telefone {
 
 
 
-
+    // Método para atualizar o número de telefone de uma pessoa no banco de dados
     atualizarRegistroTel = async () => {
         const con = await conectarBancoDeDados();
         try {
-          await con.query(`UPDATE tbl_telefone SET telefone = ? WHERE id_pessoa = ?`,
-            [this.telefone, this.id]);
+            await con.query(`UPDATE tbl_telefone SET telefone = ? WHERE id_pessoa = ?`,
+                [this.telefone, this.id]);
         } catch (error) {
-          throw new Error(`Erro ao atualizar: ${error.message}`);
+            throw new Error(`Erro ao atualizar: ${error.message}`);
         }
-      };
+    };
 }
 
 export default Telefone;

@@ -10,6 +10,7 @@ import authMiddleware from "../../Middlewares/authMiddlewares.js";
 
 const router = Router();
 
+// Função de autenticação de token: valida o JWT enviado na requisição
 const autenticarToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -48,7 +49,7 @@ router.put('/usuarios/:id', autenticarToken, pessoaControllers.editarUsuario);
 // rota para efetuar o login de uma pessoa
 router.post('/login', pessoaControllers.loginUsuario);
 // rota para trazer todos os cadastros
-router.get('/todosUser',autenticarToken, pessoaControllers.selecionarTodosUsuario);
+router.get('/todosUser', autenticarToken, pessoaControllers.selecionarTodosUsuario);
 
 
 

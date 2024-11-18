@@ -38,7 +38,7 @@ class Endereco {
     set Id_pessoa(value) { this.id_pessoa = value; }
 
 
-
+    // Método para validar se todos os campos obrigatórios estão preenchidos
     validarCampos() {
         return (
             this.logradouro &&
@@ -50,26 +50,27 @@ class Endereco {
         );
     };
 
+
+    // Métodopara validar o formato do CEP
     static validarCEP(cep) {
-        return /^\d{8}$/.test(cep); 
+        return /^\d{8}$/.test(cep);
     };
 
 
 
 
-    
-
+    // Método para registrar um novo endereço no banco de dados
     novoRegistroEnd = async (idPessoa) => {
 
         const con = await conectarBancoDeDados();
-        try {  
+        try {
             const endereco = await con.query(`insert into tbl_endereco (logradouro, bairro, estado, numero, complemento, cep, id_pessoa) VALUES (?,?,?,?,?,?,?)`,
                 [this.logradouro, this.bairro, this.estado, this.numero, this.complemento, this.cep, idPessoa]);
 
             return endereco[0].insertId;
         } catch (error) {
             throw new Error(`Erro ao registrar: ${error.message}`);
-        }finally{
+        } finally {
             con.release();
         }
     };
@@ -99,16 +100,16 @@ class Endereco {
 
 
 
-
+    // Método para atualizar os dados de um endereço existente
     atualizarRegistroEnd = async () => {
         const con = await conectarBancoDeDados();
         try {
-          await con.query(`UPDATE tbl_endereco SET logradouro = ?, bairro = ?, estado = ?, numero = ?, complemento = ?, cep = ? WHERE id_pessoa = ?`,
-            [this.logradouro, this.bairro, this.estado, this.numero, this.complemento, this.cep, this.id]);
+            await con.query(`UPDATE tbl_endereco SET logradouro = ?, bairro = ?, estado = ?, numero = ?, complemento = ?, cep = ? WHERE id_pessoa = ?`,
+                [this.logradouro, this.bairro, this.estado, this.numero, this.complemento, this.cep, this.id]);
         } catch (error) {
-          throw new Error(`Erro ao atualizar: ${error.message}`);
+            throw new Error(`Erro ao atualizar: ${error.message}`);
         }
-      };  
+    };
 
 }
 

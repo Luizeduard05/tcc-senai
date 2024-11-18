@@ -205,3 +205,135 @@ input[type="submit"]:active {
     display: flex;
     gap: 21px;
 }
+
+
+/* Estilo para Campos de Formulário */
+.inputBox {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.inputBox input {
+    width: 100%;
+    background: #333;
+    border: 2px solid #333;
+    outline: none;
+    padding: 15px 10px;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1em;
+    transition: all 0.3s ease-in-out;
+}
+
+.inputBox input:focus {
+    background: #444;
+    border-color: #ff0000;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    transform: scale(1.02);
+}
+
+.inputBox .inputIcon {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    font-style: normal;
+    color: #aaa;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Estilo para Botões */
+.buttonCad {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.buttonCad input[type="submit"] {
+    padding: 15px 20px;
+    background: linear-gradient(45deg, #ff0000, #222);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.buttonCad input[type="submit"]:hover {
+    background: linear-gradient(45deg, #222, #ff0000);
+    transform: translateY(-3px);
+}
+
+/* Estilo para Modal */
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modalContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    animation: modalSlideIn 0.5s ease forwards;
+}
+
+.modalContent {
+    background: #222;
+    border-radius: 10px;
+    padding: 20px;
+    width: 60%;
+    max-width: 700px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
+    transform: scale(1.05);
+}
+
+/* Estilo para Select */
+.selectField {
+    width: 100%;
+    padding: 10px;
+    background: #333;
+    color: white;
+    border: 2px solid #444;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.selectField:focus {
+    border-color: #ff0000;
+    box-shadow: 0 0 8px rgba(255, 0, 0, 0.5);
+}
+
+/* Estilo para Botões de Itens */
+.itemContainer button {
+    background: #ff0000;
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin: 5px;
+}
+
+.itemContainer button:hover {
+    background: #cc0000;
+}
+
+.itemContainer button:active {
+    transform: scale(0.95);
+}

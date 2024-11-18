@@ -9,6 +9,7 @@ const Login = () => {
 
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    
 
     const navigate = useNavigate();
 
@@ -28,11 +29,13 @@ const Login = () => {
             login(tipo, token, id, nome);
 
             if (tipo === 'CLI') {
-                navigate('/intranet');
+                navigate('/');
             }
 
             if (tipo === 'ADM') {
                 navigate('/homeAdm');
+                console.log(nome)
+                console.log(tipo)
             }
 
             if (tipo === 'MEC') {
@@ -42,7 +45,7 @@ const Login = () => {
             console.log(error);
         }
     };
-
+    
     return (
         <section className={styleLogin.PaiLogin}>
             

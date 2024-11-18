@@ -4,6 +4,7 @@ import conectarBancoDeDados from '../config/db.js'
 
 
 const VeiculoController = {
+    // Função para registrar um novo veículo
     async registroDeVeiculo(req, res) {
         const { placa, marca, ano, modelo } = req.body;
         const idPessoa = req.params.idPessoa;
@@ -28,7 +29,7 @@ const VeiculoController = {
 
 
 
-
+    // Função para buscar os veículos de uma pessoa, utilizando o ID da pessoa da URL
     async buscarVeiculosPorPessoa(req, res) {
         const idPessoa = req.params.idPessoa;
         const result = await Veiculo.selecionarRegistroVeiculo(idPessoa);
@@ -53,7 +54,7 @@ const VeiculoController = {
 
 
 
-    
+    // Função para buscar um veículo pelo número da placa
     async buscarVeiculoPorPlaca(req, res) {
         const placa = req.body.placa;
         const result = await Veiculo.selecionarRegistroVeiculoPorPlaca(placa);
@@ -79,7 +80,7 @@ const VeiculoController = {
 
 
 
-
+    // Função para editar as informações de um veículo
     async editarVeiculo(req, res) {
         const idVei = req.params.id;
         const { placa, marca, ano, modelo } = req.body;
@@ -104,8 +105,8 @@ const VeiculoController = {
 
 
 
-    
 
+    // Função comentada para deletar um veículo 
     // async deletarVeiculo(req, res) {
     //     const idVei = req.params.id;
 

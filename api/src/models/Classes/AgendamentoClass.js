@@ -27,6 +27,7 @@ class classAgendamento {
     get Id_pessoa_veiculo_os() { return this.id_pessoa_veiculo_os; }
     set Id_pessoa_veiculo_os(value) { this.id_pessoa_veiculo_os = value; }
 
+    // Método para validar os campos obrigatórios
     validarCampos() {
         const campos = {
             Data_e_hora: this.data_e_hora,
@@ -39,35 +40,35 @@ class classAgendamento {
         }
         return true;
     }
-    
 
+
+    // Método para converter a data e hora recebida para o formato ISO
     DataConvert(value) {
         // Verifica se o valor recebido está no formato correto
         const [data, hora] = value.split(' ');
         if (!data || !hora) {
             throw new Error('Formato de data e hora inválido');
         }
-    
+
         // Separa a data em dia, mês e ano
         const [dia, mes, ano] = data.split('/');
         if (!dia || !mes || !ano) {
             throw new Error('Data inválida');
         }
-    
+
         // Formata a data no padrão ISO (yyyy-mm-ddTHH:mm)
         let dataFormatada = `${ano}-${mes}-${dia}T${hora}`;
-    
+
         // Verifica se a data gerada é válida
         const dataObjeto = new Date(dataFormatada);
         if (isNaN(dataObjeto)) {
             throw new Error('Data inválida');
         }
-    
+
         console.log("Data formatada:", dataFormatada);
         this.Data_e_hora = dataObjeto;
         return this.Data_e_hora;
     }
-    
 
 
 
@@ -75,6 +76,7 @@ class classAgendamento {
 
 
 
+    // Método para registrar um novo agendamento no banco de dados
     novoRegistroAgendamento = async (idOS, idVeiOs, idPessoaVeiOs) => {
         const con = await conectarBancoDeDados();
         try {
@@ -104,7 +106,7 @@ class classAgendamento {
 
 
 
-
+    // Método para selecionar todos os agendamentos
     static selectAgendamentos = async () => {
         const con = await conectarBancoDeDados()
         try {
@@ -119,7 +121,7 @@ class classAgendamento {
 
 
 
-
+    // Método para selecionar agendamentos de uma pessoa específica
     static selectAgendamentosPorPessoa = async (idPessoa) => {
         const con = await conectarBancoDeDados()
         try {
@@ -139,7 +141,7 @@ class classAgendamento {
 
 
 
-
+    // Método para atualizar um agendamento existente no banco de dados
     static verificaSeClienteOsVeiculoExiste = async (idOs) => {
         const con = await conectarBancoDeDados();
         try {
@@ -165,37 +167,37 @@ class classAgendamento {
         const con = await conectarBancoDeDados();
         try {
             console.log('Atualizando agendamento:', this.data_e_hora, this.observacao, this.id, this.id_os);
-            
+
             // Verifica se todos os dados obrigatórios estão presentes
             if (!this.data_e_hora || !this.observacao || !this.id) {
                 throw new Error('Dados obrigatórios estão faltando.');
             }
-    
+
             // Caso o id_os tenha sido passado, inclui ele na consulta de atualização
             const query = `UPDATE tbl_agendamento SET 
                 data_e_hora = ?, 
                 Observação = ?, 
                 id_os = ? 
                 WHERE id = ?`;
-    
+
             const params = [
                 this.data_e_hora,
                 this.observacao,
                 this.id_os || null, // Se id_os for nulo, passa null
                 this.id
             ];
-    
+
             await con.query(query, params);
         } catch (error) {
             throw new Error(`Erro ao atualizar agendamento: ${error.message}`);
         }
     };
-    
 
 
 
 
 
+    // Método para excluir um agendamento, que foi comentado
     // static deleteRegistroAgendamento = async (idAge) => {
     //     const con = await conectarBancoDeDados();
     //     try {
