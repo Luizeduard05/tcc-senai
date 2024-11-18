@@ -29,8 +29,8 @@ export default function Agendamentos() {
         <LinearGradient colors={['#000000', 'rgba(0, 0, 0, 0.5)']} style={styles.androidSafeArea}>
             <View style={styles.container}>
                 {Array.isArray(agendamentos) && agendamentos.length > 0 ? (
-                    agendamentos.map((agendamento) => (
-                        <View key={agendamento.id} style={styles.agendamentoItem}>
+                    agendamentos.map((agendamento, index) => (
+                        <View key={index} style={styles.agendamentoItem}>
                             <View style={styles.alinha}>
                                 <Text style={styles.textHora}>{agendamento.Data_e_hora.slice(12, 17)}</Text>
                                 <Text style={styles.textData}>{agendamento.Data_e_hora.slice(0, 10)}</Text>

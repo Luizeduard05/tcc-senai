@@ -28,6 +28,9 @@ import CadastroAdmMec from './src/pages/Adm/cadastroAdmMec';
 import GerenciaUser from './src/pages/Adm/GerenciaUser';
 import Sobre from './src/pages/Usuario/sobre';
 import NovoAgendamento from './src/pages/Adm/novoAgendamento';
+import PerfilCLI from './src/pages/Usuario/perfil';
+import PerfilADM from './src/pages/Adm/perfil';
+import PerfilMEC from './src/pages/Mecanico/perfil';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -108,6 +111,18 @@ function UserDrawer() { // Drawer para o usuário
         component={Sobre}
         options={{
           title: 'Sobre nós',
+          headerTintColor: "#fff",
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#000'
+          },
+        }}
+      />
+      <Drawer.Screen
+        name="PerfilCLI"
+        component={PerfilCLI}
+        options={{
+          title: 'Perfil',
           headerTintColor: "#fff",
           headerShown: true,
           headerStyle: {
@@ -214,6 +229,18 @@ function MechanicDrawer() { // Drawer para mecânico
         component={NovoOrcamentoMecanico}
         options={{
           title: 'Novo Orçamento',
+          headerTintColor: "#fff",
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#000'
+          },
+        }}
+      />
+            <Drawer.Screen
+        name="PerfilMEC"
+        component={PerfilMEC}
+        options={{
+          title: 'Perfil',
           headerTintColor: "#fff",
           headerShown: true,
           headerStyle: {
@@ -377,6 +404,17 @@ function AdminDrawer() { // Drawer para administrador
           },
           headerTintColor: '#fff',
           title: 'Usuarios existentes',
+        }}
+      />
+      <Drawer.Screen
+        name="PerfilADM"
+        component={PerfilADM}
+        options={{
+          headerStyle: {
+            backgroundColor: '#000',
+          },
+          headerTintColor: '#fff',
+          title: 'Perfil',
         }}
       />
     </Drawer.Navigator>

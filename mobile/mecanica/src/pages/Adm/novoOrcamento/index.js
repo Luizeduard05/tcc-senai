@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, Platform, StatusBar, View, Text, TextInput, TouchableOpacity, FlatList, Modal } from "react-native";
+import { StyleSheet, Platform, StatusBar, View, Text, TextInput, TouchableOpacity, FlatList, Modal, ScrollView } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import { useAuth } from "../../../context/AuthContext";
 import api from "../../../services/api/api";
@@ -74,7 +74,7 @@ export default function NovoOrcamentoADM() {
                     Authorization: `Token ${token}`
                 }
             })
-            console.log(`PECAS ${response.data.pecas}`)
+            // console.log(`PECAS ${response.data.pecas}`)
             setPecas(response.data.pecas)
 
             const pecasTransformadas = response.data.pecas.map((peca) => ({
@@ -83,7 +83,7 @@ export default function NovoOrcamentoADM() {
                 valor_produto: Number(peca.valor_produto).toFixed(2), // Convertendo o valor para string com 2 casas decimais
             }));
 
-            console.log(pecasTransformadas)
+            // console.log(pecasTransformadas)
         } catch (error) {
             console.log(error)
         }
@@ -100,19 +100,14 @@ export default function NovoOrcamentoADM() {
                 valor: item.quantidade * valorNumber // Multiplicando a quantidade pelo valor
             };
         });
-
-        // console.log(itensOrçamento)
-        console.log(mecanicoSelecionado)
         const body = {
             data: data,
             status: status,
-            mo: formatMo(mo) , // Pegando o total mais a mao de obra
+            mo: formatMo(mo), // Pegando o total mais a mao de obra
             itens: itensOrçamento,
             mecanico: mecanicoSelecionado.pessoa_id,
-            total: Number(total()) 
+            total: Number(total())
         }
-        console.log(body.total)
-
         try {
             const response = await api.post("/os", body,
                 {
@@ -125,7 +120,6 @@ export default function NovoOrcamentoADM() {
                     }
                 },
             )
-
             alert("Orçamento criado com sucesso:", response.data)
             // Limpando os campos
             setEmail("")
@@ -139,10 +133,6 @@ export default function NovoOrcamentoADM() {
             console.log(clienteSelecionado)
         }
     }
-
-    
-
-
 
     const handleSelectPeca = (peca) => { // Função para adicao de peca na lista de orcamento
         const existingPeca = pecasSelecionadas.find(item => item.id === peca.id);
@@ -175,18 +165,7 @@ export default function NovoOrcamentoADM() {
         }
     };
 
-    // const total = () => { // Função para somar a mão de obra e as pecas
-    //     const totalPecas = pecasSelecionadas.reduce((acc, peca) => {
-    //         return acc + (peca.valor_produto * peca.quantidade);
-    //     }, 0);
-    //     const maoDeObra = Number(mo);
-    //     const valorFinal = totalPecas + maoDeObra;
-    //     const valorEditado = valorFinal.toFixed(2);
-    //     const valorFinalString = valorEditado.toString()
-    //      return valorFinalString
-    // }
-
-    const total = () => { 
+    const total = () => {
         const totalPecas = pecasSelecionadas.reduce((acc, peca) => {
             return acc + (peca.valor_produto * peca.quantidade);
         }, 0);
@@ -200,135 +179,138 @@ export default function NovoOrcamentoADM() {
             colors={['#000000', 'rgba(0, 0, 0, 0.5)']}
             style={styles.androidSafeArea}
         >
-            <View style={styles.container}>
+            <ScrollView contentContainerStyle={styles.scrollView}>
+                <View style={styles.container}>
 
-                <View style={styles.inputGroup}>
-                    <Picker
-                        selectedValue={clienteSelecionado}
-                        onValueChange={(itemValue) => setClienteSelecionado(itemValue)}
-                    >
-                        <Picker.Item label="Selecione um cliente" value={null} />
-                        {clientes.map(cliente => (
-                            <Picker.Item key={cliente.pessoa_id} label={`${cliente.nome} - ${cliente.cpf}`} value={cliente} />
-                        ))}
-                    </Picker>
-                </View>
-
-                <View style={styles.inputGroup}>
-                    {clienteSelecionado && (
-                        <>
-                            <Text style={styles.label}>Selecionar Veículo:</Text>
-                            <Picker
-                                selectedValue={veiculoSelecionado}
-                                style={styles.picker}
-                                onValueChange={(itemValue) => setVeiculoSelecionado(itemValue)}
-                            >
-                                <Picker.Item label="Selecione um veículo" value={null} />
-                                {veiculosCliente.map(veiculo => (
-                                    <Picker.Item key={veiculo.id} label={`${veiculo.modelo} - ${veiculo.placa}`} value={veiculo.id} />
-                                ))}
-                            </Picker>
-                        </>
-                    )}
-
-                </View>
-
-                <View style={styles.inputGroup}>
-                    {veiculoSelecionado && (
-                        <>
-                            <Text style={styles.label}>Peças Selecionadas:</Text>
-                            <FlatList
-                                data={pecasSelecionadas}
-                                keyExtractor={(item, index) => index.toString()}
-                                renderItem={({ item, index }) => (
-                                    <View style={styles.pecaItem}>
-                                        <Text style={styles.pecaLabel}>{item.nome_produto} - {item.valor_produto}</Text>
-                                        <Text style={styles.pecaQuantity}>Quantidade: {item.quantidade}</Text>
-                                        <TouchableOpacity onPress={() => handleIncreaseQuantity(index)}>
-                                            <Text style={styles.quantityControl}>+</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => handleDecreaseQuantity(index)}>
-                                            <Text style={styles.quantityControl}>-</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity onPress={() => handleRemovePeca(index)}>
-                                            <Text style={styles.removeText}>Remover</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                )}
-                            />
-                            <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.btnAdicionarPeca}>
-                                <Text style={styles.textBtn}>Adicionar Peça</Text>
-                            </TouchableOpacity>
-                        </>
-                    )}
-
-                </View>
-
-                <Modal visible={modalVisible} transparent={true} animationType="slide">
-                    <View style={styles.modalContainer}>
-                        <View style={styles.modalContent}>
-                            <FlatList
-                                data={pecas}
-                                keyExtractor={(item) => item.id.toString()}
-                                renderItem={({ item }) => (
-                                    <TouchableOpacity onPress={() => handleSelectPeca(item)}>
-                                        <Text style={styles.pecaModalItem}>{item.nome_produto} - {item.valor_produto}</Text>
-                                    </TouchableOpacity>
-                                )}
-                            />
-                            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalCloseButton}>
-                                <Text style={styles.textBtnCancelar}>Fechar</Text>
-                            </TouchableOpacity>
-                        </View>
+                    <View style={styles.inputGroup}>
+                        <Picker
+                            selectedValue={clienteSelecionado}
+                            onValueChange={(itemValue) => setClienteSelecionado(itemValue)}
+                            style={styles.picker}
+                        >
+                            <Picker.Item label="Selecione um cliente" value={null} style={styles.label} />
+                            {clientes.map(cliente => (
+                                <Picker.Item key={cliente.pessoa_id} label={`${cliente.nome} - ${cliente.cpf}`} value={cliente} />
+                            ))}
+                        </Picker>
                     </View>
-                </Modal>
 
-                <View style={styles.inputGroup}>
-                    {pecasSelecionadas.length > 0 && (
-                        <>
-                            <Text style={styles.label}>Selecionar o mecanico:</Text>
-                            <Picker
-                                selectedValue={mecanicoSelecionado}
-                                style={styles.picker}
-                                onValueChange={(itemValue) => setMecanicoSelecionado(itemValue)}
-                            >
-                                <Picker.Item label="Selecione o mecanico" value={null} />
-                                {mecanicos.map(mecanico => (
-                                    <Picker.Item key={mecanico.pessoa_id} label={`${mecanico.nome} - ${mecanico.cpf}`} value={mecanico} />
-                                ))}
-                            </Picker>
-                        </>
-                    )}
+                    <View style={styles.inputGroup}>
+                        {clienteSelecionado && (
+                            <>
+                                <Text style={styles.label}>Selecionar Veículo:</Text>
+                                <Picker
+                                    selectedValue={veiculoSelecionado}
+                                    style={styles.picker}
+                                    onValueChange={(itemValue) => setVeiculoSelecionado(itemValue)}
+                                >
+                                    <Picker.Item label="Selecione um veículo" value={null} />
+                                    {veiculosCliente.map(veiculo => (
+                                        <Picker.Item key={veiculo.id} label={`${veiculo.modelo} - ${veiculo.placa}`} value={veiculo.id} />
+                                    ))}
+                                </Picker>
+                            </>
+                        )}
 
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        {veiculoSelecionado && (
+                            <>
+                                <Text style={styles.label}>Peças Selecionadas:</Text>
+                                <FlatList
+                                    data={pecasSelecionadas}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    renderItem={({ item, index }) => (
+                                        <View style={styles.pecaItem}>
+                                            <Text style={styles.pecaLabel}>{item.nome_produto} - {item.valor_produto}</Text>
+                                            <Text style={styles.pecaQuantity}>Quantidade: {item.quantidade}</Text>
+                                            <TouchableOpacity onPress={() => handleIncreaseQuantity(index)}>
+                                                <Text style={styles.quantityControl}>+</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity onPress={() => handleDecreaseQuantity(index)}>
+                                                <Text style={styles.quantityControl}>-</Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity onPress={() => handleRemovePeca(index)}>
+                                                <Text style={styles.removeText}>Remover</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    )}
+                                />
+                                <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.btnAdicionarPeca}>
+                                    <Text style={styles.textBtn}>Adicionar Peça</Text>
+                                </TouchableOpacity>
+                            </>
+                        )}
+
+                    </View>
+
+                    <Modal visible={modalVisible} transparent={true} animationType="slide">
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                <FlatList
+                                    data={pecas}
+                                    keyExtractor={(item) => item.id.toString()}
+                                    renderItem={({ item }) => (
+                                        <TouchableOpacity onPress={() => handleSelectPeca(item)}>
+                                            <Text style={styles.pecaModalItem}>{item.nome_produto} - {item.valor_produto}</Text>
+                                        </TouchableOpacity>
+                                    )}
+                                />
+                                <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalCloseButton}>
+                                    <Text style={styles.textBtnCancelar}>Fechar</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
+
+                    <View style={styles.inputGroup}>
+                        {pecasSelecionadas.length > 0 && (
+                            <>
+                                <Text style={styles.label}>Selecionar o mecanico:</Text>
+                                <Picker
+                                    selectedValue={mecanicoSelecionado}
+                                    style={styles.picker}
+                                    onValueChange={(itemValue) => setMecanicoSelecionado(itemValue)}
+                                >
+                                    <Picker.Item label="Selecione o mecanico" value={null} />
+                                    {mecanicos.map(mecanico => (
+                                        <Picker.Item key={mecanico.pessoa_id} label={`${mecanico.nome} - ${mecanico.cpf}`} value={mecanico} />
+                                    ))}
+                                </Picker>
+                            </>
+                        )}
+
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Data:</Text>
+                        <TextInput style={styles.input} value={data} onChangeText={setData} />
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Mão de Obra:</Text>
+                        <TextInput style={styles.input} value={mo} onChangeText={setMo} />
+                    </View>
+
+                    <View style={styles.inputGroup}>
+                        <Text style={styles.label}>Total:</Text>
+                        <TextInput
+                            style={styles.input}
+                            value={total().toString()}
+                            editable={false}
+                        />
+                    </View>
+
+                    <TouchableOpacity style={styles.btnConfirmar} onPress={postOS} >
+                        <Text style={styles.textBtn}>Confirmar</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.btnCancelar}>
+                        <Text style={styles.textBtnCancelar}>Cancelar</Text>
+                    </TouchableOpacity>
                 </View>
-
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Data:</Text>
-                    <TextInput style={styles.input} value={data} onChangeText={setData} />
-                </View>
-
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Mão de Obra:</Text>
-                    <TextInput style={styles.input} value={mo} onChangeText={setMo} />
-                </View>
-
-                <View style={styles.inputGroup}>
-                    <Text style={styles.label}>Total:</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={total().toString()}
-                        editable={false}
-                    />
-                </View>
-
-                <TouchableOpacity style={styles.btnConfirmar} onPress={postOS} >
-                    <Text style={styles.textBtn}>Confirmar</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.btnCancelar}>
-                    <Text style={styles.textBtnCancelar}>Cancelar</Text>
-                </TouchableOpacity>
-            </View>
+            </ScrollView>
         </LinearGradient>
     )
 }
@@ -341,63 +323,82 @@ const styles = StyleSheet.create({
     container: {
         justifyContent: "center",
         margin: 20,
-        paddingVertical: 20,
-        paddingHorizontal: 15,
+        height: '100%',
+        backgroundColor: "#383838",
+        borderRadius: 10,
         alignItems: "center",
+        elevation: 7,
+        shadowColor: '#ffffff',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.8,
+        shadowRadius: 6,
+    },
+    scrollView: {
+        paddingBottom: 20,
     },
     inputGroup: {
         width: '100%',
-        marginBottom: 15,
+        marginBottom: 20,
+        paddingHorizontal: 10,
     },
     label: {
-        color: "#fff",
+        color: "#e0e0e0",
         fontSize: 18,
-        fontWeight: "500",
-        marginBottom: 8,
+        fontWeight: "600",
+        marginBottom: 10,
     },
     input: {
-        height: 40,
-        backgroundColor: '#fff',
-        color: '#000',
+        height: 45,
+        backgroundColor: '#2c2c2e',
+        color: '#fff',
         borderRadius: 8,
-        padding: 10,
+        paddingHorizontal: 15,
         borderWidth: 1,
-        borderColor: '#aaa',
+        borderColor: '#444',
+        fontSize: 16,
         marginBottom: 10,
+    },
+    picker: {
+        backgroundColor: '#2c2c2e',
+        color: '#fff',
+        borderRadius: 8,
+        paddingHorizontal: 10,
+        height: 45,
+        fontSize: 16,
     },
     pecaItem: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#2C2C2C',
+        backgroundColor: '#3a3a3c',
         borderRadius: 8,
         padding: 10,
         marginBottom: 10,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
     },
     pecaLabel: {
         color: "#fff",
         fontSize: 16,
         fontWeight: "500",
         flex: 2,
-        paddingLeft: 10,
     },
     pecaQuantity: {
-        color: "#ffffffcc",
+        color: "#a8a8a8",
         fontSize: 14,
-        fontWeight: "400",
-        paddingHorizontal: 10,
         textAlign: "center",
     },
     quantityControl: {
-        fontSize: 20,
+        fontSize: 18,
         color: "#FFF",
-        backgroundColor: "#555",
+        backgroundColor: "#444",
         borderRadius: 5,
-        paddingVertical: 2,
-        paddingHorizontal: 8,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
         textAlign: "center",
         marginHorizontal: 5,
         elevation: 3,
@@ -405,59 +406,47 @@ const styles = StyleSheet.create({
     removeText: {
         color: "#FF4444",
         fontSize: 14,
-        fontWeight: "600",
+        fontWeight: "500",
         padding: 8,
-        backgroundColor: "#2C2C2C",
+        backgroundColor: "#3a3a3c",
         borderRadius: 5,
         marginLeft: 10,
-        shadowColor: '#FF4444',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.4,
-        shadowRadius: 3,
     },
     btnAdicionarPeca: {
         width: "90%",
-        height: 45,
-        backgroundColor: "#4CAF50",
+        height: 50,
+        backgroundColor: "#28a745",
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 8,
+        borderRadius: 10,
         marginVertical: 10,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.3,
-        shadowRadius: 4,
+        shadowRadius: 5,
     },
     textBtn: {
-        fontSize: 16,
+        fontSize: 18,
         color: "#FFF",
         fontWeight: "600",
     },
     btnConfirmar: {
         width: "90%",
         height: 50,
-        backgroundColor: "#007BFF",
+        backgroundColor: "#007bff",
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 8,
+        borderRadius: 10,
         marginVertical: 10,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
     },
     btnCancelar: {
         width: "90%",
         height: 50,
-        backgroundColor: "#FF4444",
+        backgroundColor: "#dc3545",
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 8,
+        borderRadius: 10,
         marginTop: 10,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 4,
     },
     textBtnCancelar: {
         fontSize: 18,
@@ -468,30 +457,29 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
         padding: 20,
     },
     modalContent: {
         width: '90%',
-        backgroundColor: '#fff',
+        backgroundColor: '#f9f9f9',
         borderRadius: 10,
         padding: 20,
         alignItems: 'center',
     },
     modalCloseButton: {
         marginTop: 15,
-        paddingVertical: 10,
+        paddingVertical: 12,
         paddingHorizontal: 20,
-        backgroundColor: '#FF4444',
+        backgroundColor: '#dc3545',
         borderRadius: 8,
     },
     pecaModalItem: {
         fontSize: 16,
-        color: 'black',
+        color: '#333',
         marginVertical: 10,
         padding: 10,
         backgroundColor: '#f0f0f0',
         borderRadius: 5,
     },
 });
-
