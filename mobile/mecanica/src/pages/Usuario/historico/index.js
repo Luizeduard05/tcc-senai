@@ -54,7 +54,7 @@ export default function Historico() {
                 <TextInput style={styles.input} placeholder="Buscar por placa" />
             </View>
             <View style={styles.container}>
-                {orcamentos.length > 0 ? (
+                {Array.isArray(orcamentos) && orcamentos.length > 0 ? (
                     orcamentos.map((ordem) => {
                         const veiculo = veiculos[ordem.id_veiculo];
                         return (
