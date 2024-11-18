@@ -14,11 +14,14 @@ export default function NovoOrcamentoADM() {
     const [veiculosCliente, setVeiculosCliente] = useState([]); // Variavel para armazenar todos veiculos que um cliente possui
     const [veiculoSelecionado, setVeiculoSelecionado] = useState(null); // Variavel para armazenar o carro selecionado para agendamento
     const [pecas, setPecas] = useState([]); // Variavel para armazenar pecas do estoque
+    const [mecanicos, setMecanicos] = useState([]) // Variavel para guardar todos mecanicos
+    const [mecanicoSelecionado, setMecanicoSelecionado] = useState(null); // Variavel para armazenar cliente selecionado
 
     const [data, setData] = useState("") // Variavel para guardar a data que sera usada na requisição
     const status = "Aguardando Retorno"  // Variavel para guardar o status que sera usado na requisição
     const [mo, setMo] = useState("") // Variavel para guardar a mo inicial
     const [pecasSelecionadas, setPecasSelecionadas] = useState([]); // Variavel para guardar as pecas que serao enviadas a requisicao
+
 
     const getUsuarios = async () => { // Requisição para trazer todos usuarios que possui no sistema
         try {
@@ -29,6 +32,9 @@ export default function NovoOrcamentoADM() {
             });
             const clientesFiltrados = response.data.result.filter(usuario => usuario.tipo === 'CLI'); // Filtrando apenas os que sao clientes
             setClientes(clientesFiltrados);
+
+            const mecanicosFiltrados = response.data.result.filter(usuario => usuario.tipo === 'MEC'); // Filtrando apenas os que são mecanicos
+            setMecanicos(mecanicosFiltrados)
         } catch (error) {
             console.log(error);
         }
@@ -49,7 +55,7 @@ export default function NovoOrcamentoADM() {
     }
 
     useEffect(() => {
-        getUsuarios()
+        getUsuarios();
         getPecas();
     }, [])
 
@@ -70,24 +76,42 @@ export default function NovoOrcamentoADM() {
             })
             console.log(`PECAS ${response.data.pecas}`)
             setPecas(response.data.pecas)
+
+            const pecasTransformadas = response.data.pecas.map((peca) => ({
+                id: peca.id, // mapeando a propriedade id
+                nome_produto: peca.nome_produto, // mapeando nome
+                valor_produto: Number(peca.valor_produto).toFixed(2), // Convertendo o valor para string com 2 casas decimais
+            }));
+
+            console.log(pecasTransformadas)
         } catch (error) {
             console.log(error)
         }
     }
 
+    const formatMo = (valor) => valor.replace('.', ',');
 
     const postOS = async () => { // Requisição para cadastro de um novo orçamento
-        const itensOrçamento = pecasSelecionadas.map(item => ({ // Percorrendo o array e pegando dados
-            id_produto: item.id,
-            quantidade: item.quantidade
-        }))
+        const itensOrçamento = pecasSelecionadas.map(item => {
+            const valorNumber = Number(item.valor_produto); // Convertendo para Number
+            return {
+                id_produto: item.id,
+                quantidade: item.quantidade,
+                valor: item.quantidade * valorNumber // Multiplicando a quantidade pelo valor
+            };
+        });
 
+        // console.log(itensOrçamento)
+        console.log(mecanicoSelecionado)
         const body = {
             data: data,
             status: status,
-            mo: total().toString(), // Pegando o total mais a mao de obra
-            itens: itensOrçamento
+            mo: formatMo(mo) , // Pegando o total mais a mao de obra
+            itens: itensOrçamento,
+            mecanico: mecanicoSelecionado.pessoa_id,
+            total: Number(total()) 
         }
+        console.log(body.total)
 
         try {
             const response = await api.post("/os", body,
@@ -96,11 +120,12 @@ export default function NovoOrcamentoADM() {
                         Authorization: `Token ${token}`
                     },
                     params: {
-                        idVei: veiculoSelecionado.id,
-                        idPessoaVei: clienteSelecionado.id
+                        idVei: veiculoSelecionado,
+                        idPessoaVei: clienteSelecionado.pessoa_id
                     }
                 },
             )
+
             alert("Orçamento criado com sucesso:", response.data)
             // Limpando os campos
             setEmail("")
@@ -111,8 +136,11 @@ export default function NovoOrcamentoADM() {
 
         } catch (error) {
             console.log(error)
+            console.log(clienteSelecionado)
         }
     }
+
+    
 
 
 
@@ -147,15 +175,24 @@ export default function NovoOrcamentoADM() {
         }
     };
 
-    const total = () => { // Função para somar a mão de obra e as pecas
+    // const total = () => { // Função para somar a mão de obra e as pecas
+    //     const totalPecas = pecasSelecionadas.reduce((acc, peca) => {
+    //         return acc + (peca.valor_produto * peca.quantidade);
+    //     }, 0);
+    //     const maoDeObra = Number(mo);
+    //     const valorFinal = totalPecas + maoDeObra;
+    //     const valorEditado = valorFinal.toFixed(2);
+    //     const valorFinalString = valorEditado.toString()
+    //      return valorFinalString
+    // }
+
+    const total = () => { 
         const totalPecas = pecasSelecionadas.reduce((acc, peca) => {
             return acc + (peca.valor_produto * peca.quantidade);
         }, 0);
         const maoDeObra = Number(mo);
         const valorFinal = totalPecas + maoDeObra;
-        const valorEditado = valorFinal.toFixed(2);
-        const valorFinalString = valorEditado.toString()
-         return valorFinalString
+        return valorFinal.toFixed(2); // Retorna como string com 2 casas decimais
     }
 
     return (
@@ -245,6 +282,25 @@ export default function NovoOrcamentoADM() {
                         </View>
                     </View>
                 </Modal>
+
+                <View style={styles.inputGroup}>
+                    {pecasSelecionadas.length > 0 && (
+                        <>
+                            <Text style={styles.label}>Selecionar o mecanico:</Text>
+                            <Picker
+                                selectedValue={mecanicoSelecionado}
+                                style={styles.picker}
+                                onValueChange={(itemValue) => setMecanicoSelecionado(itemValue)}
+                            >
+                                <Picker.Item label="Selecione o mecanico" value={null} />
+                                {mecanicos.map(mecanico => (
+                                    <Picker.Item key={mecanico.pessoa_id} label={`${mecanico.nome} - ${mecanico.cpf}`} value={mecanico} />
+                                ))}
+                            </Picker>
+                        </>
+                    )}
+
+                </View>
 
                 <View style={styles.inputGroup}>
                     <Text style={styles.label}>Data:</Text>
