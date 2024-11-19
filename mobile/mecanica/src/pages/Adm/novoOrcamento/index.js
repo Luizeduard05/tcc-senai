@@ -15,7 +15,7 @@ export default function NovoOrcamentoADM() {
     const [veiculoSelecionado, setVeiculoSelecionado] = useState(null); // Variavel para armazenar o carro selecionado para agendamento
     const [pecas, setPecas] = useState([]); // Variavel para armazenar pecas do estoque
     const [mecanicos, setMecanicos] = useState([]) // Variavel para guardar todos mecanicos
-    const [mecanicoSelecionado, setMecanicoSelecionado] = useState(null); // Variavel para armazenar cliente selecionado
+    const [mecanicoSelecionado, setMecanicoSelecionado] = useState(null); // Variavel para armazenar mecanico selecionado
 
     const [data, setData] = useState("") // Variavel para guardar a data que sera usada na requisição
     const status = "Aguardando Retorno"  // Variavel para guardar o status que sera usado na requisição

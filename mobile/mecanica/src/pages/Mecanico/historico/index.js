@@ -18,7 +18,7 @@ export default function HistoricoMecanico() {
                     Authorization: `Token ${token}`
                 }
             });
-            // console.log(response.data);
+            // console.log(response.data.ordensServico);
             setHistorico(response.data.ordensServico);  // Armazena apenas ordensServico
         } catch (error) {
             console.log("Erro ao buscar histórico:", error);
