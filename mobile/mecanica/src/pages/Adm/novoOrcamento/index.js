@@ -4,9 +4,12 @@ import { Picker } from '@react-native-picker/picker';
 import { useAuth } from "../../../context/AuthContext";
 import api from "../../../services/api/api";
 import { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native"
+
 
 export default function NovoOrcamentoADM() {
     const { token } = useAuth();
+    const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
 
     const [clientes, setClientes] = useState([]) // Variavel para guardar todos clientes
@@ -22,6 +25,9 @@ export default function NovoOrcamentoADM() {
     const [mo, setMo] = useState("") // Variavel para guardar a mo inicial
     const [pecasSelecionadas, setPecasSelecionadas] = useState([]); // Variavel para guardar as pecas que serao enviadas a requisicao
 
+    const navegaOrcamentos = () => {
+        navigation.navigate("HistoricoADM")
+    }
 
     const getUsuarios = async () => { // Requisição para trazer todos usuarios que possui no sistema
         try {
@@ -120,13 +126,14 @@ export default function NovoOrcamentoADM() {
                     }
                 },
             )
-            alert("Orçamento criado com sucesso:", response.data)
+            // alert("Orçamento criado com sucesso:", response.data)
             // Limpando os campos
-            setEmail("")
+            setClienteSelecionado(null);
             setVeiculoSelecionado(null)
-            setPecasSelecionadas([])
-            setData("")
-            setMo("")
+            setPecasSelecionadas([]);
+            setData("");
+            setMo("");
+            navegaOrcamentos();
 
         } catch (error) {
             console.log(error)

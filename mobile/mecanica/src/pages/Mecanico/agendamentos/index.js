@@ -32,7 +32,7 @@ export default function AgendamentosMecanico() {
             style={styles.androidSafeArea}>
 
             <View style={styles.container}>
-                {agendamentos.length > 0 ? (
+                {Array.isArray(agendamentos) && agendamentos.length > 0 ? (
                     agendamentos.map((agendamento) => (
                         <View key={agendamento.id} style={styles.agendamentoItem}>
                             <View style={styles.alinha}>
@@ -46,7 +46,7 @@ export default function AgendamentosMecanico() {
                         </View>
                     ))
                 ) : (
-                    <Text style={styles.noDataText}>Nenhuma Agendamento existente</Text>
+                    <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>Nenhuma Agendamento encontrado</Text>
                 )}
             </View>
         </LinearGradient>

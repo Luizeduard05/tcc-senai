@@ -124,7 +124,7 @@ export default function VisualizaPeca() {
                 />
             </View>
             <View style={styles.container}>
-            {pecas && filterPecas().length > 0 ? (
+                {pecas && filterPecas().length > 0 ? (
                     filterPecas().map((peca) => (
                         <View style={styles.historicoItem} key={Number(peca.id)}>
                             <Text style={styles.textVeiculo}>{peca.nome_produto}</Text>
@@ -141,11 +141,10 @@ export default function VisualizaPeca() {
                         </View>
                     ))
                 ) : (
-                    <Text style={{ backgroundColor: "#fff", textAlign: "center" }}>
+                    <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>
                         Nenhuma peça encontrada
                     </Text>
                 )}
-
 
                 <Modal visible={modalVisible} transparent={true} animationType="slide">
                     <View style={styles.modalContainer}>

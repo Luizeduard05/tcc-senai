@@ -4,9 +4,11 @@ import { useAuth } from "../../../context/AuthContext";
 import { Picker } from '@react-native-picker/picker';
 import { useEffect, useState } from "react";
 import api from "../../../services/api/api";
+import { useNavigation } from "@react-navigation/native";
 
 export default function NovoOrcamentoMecanico() {
     const {token, id} = useAuth();
+    const navigation = useNavigation();
     const [modalVisible, setModalVisible] = useState(false);
 
     const [clientes, setClientes] = useState([]) // Variavel para guardar todos clientes
@@ -15,7 +17,7 @@ export default function NovoOrcamentoMecanico() {
     const [veiculoSelecionado, setVeiculoSelecionado] = useState(null); // Variavel para armazenar o carro selecionado para agendamento
     const [pecas, setPecas] = useState([]); // Variavel para armazenar pecas do estoque
     const [mecanicoSelecionado, setMecanicoSelecionado] = useState(null); // Variavel para armazenar mecanico selecionado
-    // const mecanico = mecanicoSelecionado[0];
+    const mecanico = mecanicoSelecionado[0];
 
 
     const [data, setData] = useState("") // Variavel para guardar a data que sera usada na requisição

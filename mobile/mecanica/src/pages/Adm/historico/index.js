@@ -2,8 +2,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, Platform, StatusBar, View, Text, TouchableOpacity, TextInput, ScrollView } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useAuth } from "../../../context/AuthContext";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import api from "../../../services/api/api";
+import { useFocusEffect } from "@react-navigation/native";
 
 // OBSERVAÇÃO: A ideia é após o usuario clicar na icone da prancheta aparecer as proximas informações de agendamento dados como email do dono do carro, modelo do veiculo, e se for possivel trazer as pecas que foram usadas na mão de obra
 
@@ -25,9 +26,11 @@ export default function HistoricoADM() {
         }
     };
 
-    useEffect(() => {
-        getOrcamentos();
-    }, []);
+    useFocusEffect( // Toda vez que a tela entra em foco executa a função para atualização da lista de orcamentos
+        useCallback(() => {
+            getOrcamentos()
+        }, [])
+    )
 
     return (
         <LinearGradient colors={['#000000', 'rgba(0, 0, 0, 0.5)']} style={styles.androidSafeArea}>
@@ -40,20 +43,31 @@ export default function HistoricoADM() {
 
             <View style={styles.container}>
                 <ScrollView>
-                    {historico.map((item) => (
-                        <View key={item.id_os} style={styles.historicoItem}>
-                            <Text style={styles.textVeiculo}>Veículo: {item.placa}</Text>
-                            {/* <Text style={styles.textVeiculo}>Modelo: {item.modelo}</Text> */}
-                            {/* <Text style={styles.textVeiculo}>Email Cliente: {item.email}</Text> */}
-                            <View style={styles.alinha}>
-                                <Text style={styles.textDados}>{item.data.slice(0, 10)}</Text>
-                                <Text style={styles.textDados}>R${item.total}</Text>
-                            </View>
-                            <TouchableOpacity style={styles.icon}>
-                                <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={32} color="white" />
-                            </TouchableOpacity>
-                        </View>
-                    ))}
+                    <View style={styles.container}>
+                        <ScrollView>
+                            {historico.length > 0 ? (
+                                historico.map((item) => (
+                                    <View key={item.id_os} style={styles.historicoItem}>
+                                        <Text style={styles.textVeiculo}>Veículo: {item.placa}</Text>
+                                        {/* <Text style={styles.textVeiculo}>Modelo: {item.modelo}</Text> */}
+                                        {/* <Text style={styles.textVeiculo}>Email Cliente: {item.email}</Text> */}
+                                        <View style={styles.alinha}>
+                                            <Text style={styles.textDados}>{item.data.slice(0, 10)}</Text>
+                                            <Text style={styles.textDados}>R${item.total}</Text>
+                                        </View>
+                                        <TouchableOpacity style={styles.icon}>
+                                            <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={32} color="white" />
+                                        </TouchableOpacity>
+                                    </View>
+                                ))
+                            ) : (
+                                <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>
+                                    Nenhuma orçamento encontrado
+                                </Text>
+                            )}
+                        </ScrollView>
+                    </View>
+
                 </ScrollView>
             </View>
 
