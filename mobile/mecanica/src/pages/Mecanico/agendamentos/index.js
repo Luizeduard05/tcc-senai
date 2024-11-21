@@ -1,48 +1,53 @@
 import { LinearGradient } from "expo-linear-gradient"
 import { StyleSheet, Platform, StatusBar, View, Text } from "react-native"
-
+import { useAuth } from "../../../context/AuthContext";
+import { useEffect, useState } from "react";
+import api from "../../../services/api/api";
 
 export default function AgendamentosMecanico() {
+    const { token } = useAuth();
+    const [agendamentos, setAgendamentos] = useState([]); // Variavel para guardar todos agendamentos
+
+    const getAgendamentos = async () => {  // Requisição para trazer os agendamentos
+        try {
+            const response = await api.get("/agendamentos", {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            })
+            // console.log(response.data.result)
+            setAgendamentos(response.data.result)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => { // Trazendo os agendamentos quando o componente é iniciado
+        getAgendamentos()
+    }, [])
+
     return (
         <LinearGradient colors={
             ['#000000', 'rgba(0, 0, 0, 0.5)']}
             style={styles.androidSafeArea}>
 
             <View style={styles.container}>
-                <View style={styles.agendamentoItem}>
-
-                    <View style={styles.alinha}>
-                        <Text style={styles.textHora}>15:30</Text>
-                        <Text style={styles.textData}>20/11/2024</Text>
-                    </View>
-                    <Text style={styles.textObs}><Text style={{ fontWeight: "bold" }}>Observação</Text>: Realizar troca de oléo</Text>
-                    <View style={styles.linhaVermelha}>
-
-                    </View>
-                </View>
-                <View style={styles.agendamentoItem}>
-
-                    <View style={styles.alinha}>
-                        <Text style={styles.textHora}>15:30</Text>
-                        <Text style={styles.textData}>20/11/2024</Text>
-                    </View>
-                    <Text style={styles.textObs}><Text style={{ fontWeight: "bold" }}>Observação</Text>: Realizar troca de oléo</Text>
-                    <View style={styles.linhaVermelha}>
-
-                    </View>
-                </View>
-                <View style={styles.agendamentoItem}>
-
-                    <View style={styles.alinha}>
-                        <Text style={styles.textHora}>15:30</Text>
-                        <Text style={styles.textData}>20/11/2024</Text>
-                    </View>
-                    <Text style={styles.textObs}><Text style={{ fontWeight: "bold" }}>Observação</Text>: Realizar troca de oléo</Text>
-                    <View style={styles.linhaVermelha}>
-
-                    </View>
-                </View>
-
+                {Array.isArray(agendamentos) && agendamentos.length > 0 ? (
+                    agendamentos.map((agendamento) => (
+                        <View key={agendamento.id} style={styles.agendamentoItem}>
+                            <View style={styles.alinha}>
+                                <Text style={styles.textHora}>{agendamento.Data_e_hora.slice(12, 17)}</Text>
+                                <Text style={styles.textData}>{agendamento.Data_e_hora.slice(0, 10)}</Text>
+                            </View>
+                            <Text style={styles.textObs}>
+                                <Text style={{ fontWeight: "bold" }}>Observação:</Text> {agendamento.Observação}
+                            </Text>
+                            <View style={styles.linhaVermelha} />
+                        </View>
+                    ))
+                ) : (
+                    <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>Nenhuma Agendamento encontrado</Text>
+                )}
             </View>
         </LinearGradient>
     )
@@ -87,8 +92,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 1,
         bottom: 1,
-        left: 0, 
-        width: 7, 
+        left: 0,
+        width: 7,
         backgroundColor: "red",
         borderRadius: 10,
     }

@@ -6,9 +6,11 @@ import { useAuth } from "../../../context/AuthContext";
 import { Picker } from "@react-native-picker/picker";
 import { FontAwesome } from "@expo/vector-icons";
 import { validaCEP, validaComplemento, validaCPF, validaNome, validaNumeroResidencia, validaTelefone, validaEmail, validaSenha } from "../../../utils/inputValidation";
+import { useNavigation } from "@react-navigation/native";
 
 export default function CadastroAdmMec() {
     const { token } = useAuth()
+    const navigate = useNavigation();
 
     const [step, setStep] = useState(1); // Variavel para armazenar etapas do formulario
 
@@ -37,6 +39,10 @@ export default function CadastroAdmMec() {
 
     const [emailError, setEmailError] = useState(null); // Variavel responsavel por retornar o erro de validação dos inputs
     const [senhaError, setSenhaError] = useState(null); // Variavel responsavel por retornar o erro de validação dos inputs
+
+    const navegaUsuariosCadastrados = () => {
+        navigate.navigate("GerenciaUser")
+    }
 
     const addNovoFunc = async () => {
         // Validando email e senha
@@ -86,6 +92,8 @@ export default function CadastroAdmMec() {
             setCep('');
             setTelefone('');
             setSenha('');
+            setStep(1)
+            navegaUsuariosCadastrados()
 
         } catch (error) {
             console.log(error)

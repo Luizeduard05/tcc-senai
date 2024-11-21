@@ -62,7 +62,7 @@ export default function NovaPeca() {
                     }
                 }
             );
-            Alert.alert(`Peça ${nome} cadastrada`);
+            // Alert.alert(`Peça ${nome} cadastrada`);
             // console.log(response.data);
             limparCamposForm();
             navegaVisualizaPecas();
@@ -70,7 +70,6 @@ export default function NovaPeca() {
             console.log("Erro ao cadastrar a peça:", error);
         }
     };
-
 
     return (
         <LinearGradient

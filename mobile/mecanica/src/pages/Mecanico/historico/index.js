@@ -2,8 +2,9 @@ import { LinearGradient } from "expo-linear-gradient"
 import { StyleSheet, Platform, StatusBar, View, Text, TouchableOpacity, TextInput } from "react-native"
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons"
 import { useAuth } from "../../../context/AuthContext";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import api from "../../../services/api/api";
+import { useFocusEffect } from "@react-navigation/native";
 
 // OBSERVAÇÃO: A ideia é após o usuario clicar na icone da prancheta aparecer as proximas informações de agendamento dados como email do dono do carro, modelo do veiculo, e se for possivel trazer as pecas que foram usadas na mão de obra
 
@@ -18,16 +19,22 @@ export default function HistoricoMecanico() {
                     Authorization: `Token ${token}`
                 }
             });
-            // console.log(response.data);
+            // console.log(response.data.ordensServico);
             setHistorico(response.data.ordensServico);  // Armazena apenas ordensServico
         } catch (error) {
             console.log("Erro ao buscar histórico:", error);
         }
     };
 
-    useEffect(() => {
-        getOrcamentos();
-    }, []);
+    // useEffect(() => {
+    //     getOrcamentos();
+    // }, []);
+
+    useFocusEffect( // Toda vez que a tela entrar em foco executara a função
+        useCallback(() => {
+            getOrcamentos()
+        }, [])
+    )
 
     return (
         <LinearGradient colors={
@@ -42,19 +49,26 @@ export default function HistoricoMecanico() {
             </View>
             <View style={styles.container}>
 
-                {historico.map((item) => (
-(                    <View style={styles.historicoItem} key={item.id_os}>
-                        <Text style={styles.textVeiculo}>Placa: {item.placa}</Text>
-                        <View style={styles.alinha}>
-                            <Text style={styles.textDados}>{item.data.slice(0,10)}</Text>
-                            <Text style={styles.textDados}>R${item.total}</Text>
+                {historico.length > 0 ? (
+                    historico.map((item) => (
+                        <View style={styles.historicoItem} key={item.id_os}>
+                            <Text style={styles.textVeiculo}>Placa: {item.placa}</Text>
+                            <View style={styles.alinha}>
+                                <Text style={styles.textDados}>{item.data.slice(0, 10)}</Text>
+                                <Text style={styles.textDados}>R${item.total}</Text>
                             </View>
                             <TouchableOpacity style={styles.icon}>
                                 <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={32} color="white" />
                             </TouchableOpacity>
-                        
-                    </View>)
-                ))}
+
+                        </View>
+                    ))
+                )
+                    : (
+                        <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>
+                            Nenhuma orçamento encontrado
+                        </Text>
+                    )}
             </View>
         </LinearGradient>
     )

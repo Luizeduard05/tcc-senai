@@ -2,8 +2,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import { StyleSheet, Text, View, Platform, StatusBar, TouchableOpacity, FlatList, Alert, Modal, TextInput, ScrollView } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
 import { useAuth } from "../../../context/AuthContext";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import api from "../../../services/api/api";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function GerenciaUser() {
     const { token } = useAuth();
@@ -143,9 +144,12 @@ export default function GerenciaUser() {
         </View>
     );
 
-    useEffect(() => { // Função responsavel por carregar o usuarios na inicialização da pagina
-        getUsers()
-    }, [])
+    useFocusEffect( // Toda vez que a tela entra em foco executa a função para atualização da lista de usuarios
+        useCallback(() => {
+            getUsers()
+        }, [])
+    )
+
 
     return (
         <LinearGradient colors={['#000000', 'rgba(0, 0, 0, 0.5)']} style={styles.androidSafeArea}>

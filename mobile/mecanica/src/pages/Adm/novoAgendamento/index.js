@@ -4,9 +4,11 @@ import { Picker } from '@react-native-picker/picker';
 import { useAuth } from "../../../context/AuthContext";
 import api from "../../../services/api/api";
 import { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 
 export default function NovoAgendamento() {
     const { token } = useAuth();
+    const navigation = useNavigation("")
 
     const [clientes, setClientes] = useState([]); // Variavel para armazenar todos clientes que possui no sistema
     const [clienteSelecionado, setClienteSelecionado] = useState(null); // Variavel para armazenar cliente selecionado
@@ -16,6 +18,10 @@ export default function NovoAgendamento() {
     // Campos do forms
     const [dataHora, setDataHora] = useState("");
     const [observacao, setObservacao] = useState("");
+
+    const navegaAgendamento = () => {
+        navigation.navigate("AgendamentoADM")
+    }
 
     const getUsuarios = async () => { // Requisição para trazer todos usuarios que possui no sistema
         try {
@@ -60,6 +66,11 @@ export default function NovoAgendamento() {
                 }
             );
             console.log("Agendamento realizado com sucesso:", response.data);
+            setClienteSelecionado(null);
+            setVeiculoSelecionado(null);
+            setDataHora("");
+            setObservacao("");
+            navegaAgendamento()
         } catch (error) {
             console.log(error);
         }

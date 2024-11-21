@@ -1,8 +1,9 @@
 import { LinearGradient } from "expo-linear-gradient"
 import { StyleSheet, Platform, StatusBar, View, Text } from "react-native"
 import { useAuth } from "../../../context/AuthContext";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import api from "../../../services/api/api";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function AgendamentosADM() {
     const { token } = useAuth();
@@ -22,9 +23,15 @@ export default function AgendamentosADM() {
         }
     }
 
-    useEffect(() => { // Trazendo os agendamentos quando o componente é iniciado
-        getAgendamentos()
-    }, [])
+    // useEffect(() => { // Trazendo os agendamentos quando o componente é iniciado
+    //     getAgendamentos()
+    // }, [])
+
+    useFocusEffect(
+        useCallback(() => {
+            getAgendamentos()
+        }, [])
+    )
 
     return (
         <LinearGradient colors={
@@ -32,7 +39,7 @@ export default function AgendamentosADM() {
             style={styles.androidSafeArea}>
 
             <View style={styles.container}>
-                {agendamentos.length > 0 ? (
+                {Array.isArray(agendamentos) && agendamentos.length > 0 ? (
                     agendamentos.map((agendamento) => (
                         <View key={agendamento.id} style={styles.agendamentoItem}>
                             <View style={styles.alinha}>
@@ -46,7 +53,7 @@ export default function AgendamentosADM() {
                         </View>
                     ))
                 ) : (
-                    <Text style={styles.noDataText}>Nenhuma Agendamento existente</Text>
+                    <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>Nenhuma Agendamento encontrado</Text>
                 )}
             </View>
         </LinearGradient>

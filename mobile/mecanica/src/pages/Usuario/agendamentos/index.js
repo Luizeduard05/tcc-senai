@@ -1,14 +1,12 @@
-import { LinearGradient } from "expo-linear-gradient"
-import { StyleSheet, Platform, StatusBar, View, Text } from "react-native"
+import { LinearGradient } from "expo-linear-gradient";
+import { StyleSheet, Platform, StatusBar, View, Text } from "react-native";
 import { useAuth } from "../../../context/AuthContext";
 import { useEffect, useState } from "react";
 import api from "../../../services/api/api";
 
-
 export default function Agendamentos() {
-    const { token, id } = useAuth()
-
-    const [agendamentos, setAgendamentos] = useState([]) 
+    const { token, id } = useAuth();
+    const [agendamentos, setAgendamentos] = useState([]);
 
     const getAgendamentos = async () => {
         try {
@@ -16,61 +14,41 @@ export default function Agendamentos() {
                 headers: {
                     Authorization: `Token ${token}`
                 }
-            })
-            console.log(response.data)
+            });
+            setAgendamentos(response.data);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    }
+    };
 
-    useEffect(()=> {
-        getAgendamentos()
-    },[])
+    useEffect(() => {
+        getAgendamentos();
+    }, []);
 
     return (
-        <LinearGradient colors={
-            ['#000000', 'rgba(0, 0, 0, 0.5)']}
-            style={styles.androidSafeArea}>
-
+        <LinearGradient colors={['#000000', 'rgba(0, 0, 0, 0.5)']} style={styles.androidSafeArea}>
             <View style={styles.container}>
-                <View style={styles.agendamentoItem}>
-
-                    <View style={styles.alinha}>
-                        <Text style={styles.textHora}>15:30</Text>
-                        <Text style={styles.textData}>20/11/2024</Text>
-                    </View>
-                    <Text style={styles.textObs}><Text style={{ fontWeight: "bold" }}>Observação</Text>: Realizar troca de oléo</Text>
-                    <View style={styles.linhaVermelha}>
-
-                    </View>
-                </View>
-                <View style={styles.agendamentoItem}>
-
-                    <View style={styles.alinha}>
-                        <Text style={styles.textHora}>15:30</Text>
-                        <Text style={styles.textData}>20/11/2024</Text>
-                    </View>
-                    <Text style={styles.textObs}><Text style={{ fontWeight: "bold" }}>Observação</Text>: Realizar troca de oléo</Text>
-                    <View style={styles.linhaVermelha}>
-
-                    </View>
-                </View>
-                <View style={styles.agendamentoItem}>
-
-                    <View style={styles.alinha}>
-                        <Text style={styles.textHora}>15:30</Text>
-                        <Text style={styles.textData}>20/11/2024</Text>
-                    </View>
-                    <Text style={styles.textObs}><Text style={{ fontWeight: "bold" }}>Observação</Text>: Realizar troca de oléo</Text>
-                    <View style={styles.linhaVermelha}>
-
-                    </View>
-                </View>
-
+                {Array.isArray(agendamentos) && agendamentos.length > 0 ? (
+                    agendamentos.map((agendamento, index) => (
+                        <View key={index} style={styles.agendamentoItem}>
+                            <View style={styles.alinha}>
+                                <Text style={styles.textHora}>{agendamento.Data_e_hora.slice(12, 17)}</Text>
+                                <Text style={styles.textData}>{agendamento.Data_e_hora.slice(0, 10)}</Text>
+                            </View>
+                            <Text style={styles.textObs}>
+                                <Text style={{ fontWeight: "bold" }}>Observação:</Text> {agendamento.Observação}
+                            </Text>
+                            <View style={styles.linhaVermelha} />
+                        </View>
+                    ))
+                ) : (
+                    <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>Nenhum agendamento encontrado.</Text>
+                )}
             </View>
         </LinearGradient>
-    )
+    );
 }
+
 const styles = StyleSheet.create({
     androidSafeArea: {
         flex: 1,
@@ -98,21 +76,21 @@ const styles = StyleSheet.create({
     },
     textHora: {
         fontWeight: "bold",
-        fontSize: 20
+        fontSize: 20,
     },
     textData: {
         color: "#777777",
-        fontSize: 20
+        fontSize: 20,
     },
     textObs: {
-        fontSize: 18
+        fontSize: 18,
     },
     linhaVermelha: {
         position: 'absolute',
         top: 1,
         bottom: 1,
-        left: 0, 
-        width: 7, 
+        left: 0,
+        width: 7,
         backgroundColor: "red",
         borderRadius: 10,
     }
