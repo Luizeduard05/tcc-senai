@@ -1,9 +1,9 @@
+import { useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { Platform, StatusBar, StyleSheet, View, Text, ScrollView, TouchableOpacity, Modal, TextInput } from "react-native";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { useAuth } from "../../../context/AuthContext";
 import api from "../../../services/api/api";
-import { useEffect, useState } from "react";
-import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 
 export default function PerfilCLI() {
   const { token, id } = useAuth();
@@ -25,7 +25,6 @@ export default function PerfilCLI() {
   // Manipulando modal
   const [editModalVisible, setEditModalVisible] = useState(false);
 
-
   const getPerfil = async () => { // Requisição para trazer o perfil do usuario
     try {
       const response = await api.get(`/usuario/${id}`, {
@@ -33,7 +32,7 @@ export default function PerfilCLI() {
           Authorization: `Token ${token}`,
         },
       });
-      setInfoPerfil(response.data.result);
+      setInfoPerfil(response.data.result); // Atribuindo a resposta da requisição a variavel
     } catch (error) {
       console.log(error);
     }
@@ -41,7 +40,7 @@ export default function PerfilCLI() {
 
   const putPerfil = async () => { // Requisição para atualizar usuario 
     try {
-      await api.put(`usuarios/${id}`, {
+      const response = await api.put(`usuarios/${id}`, {
         nome: nome,
         cpf: cpf,
         email: email,
@@ -52,13 +51,20 @@ export default function PerfilCLI() {
         complemento: complemento,
         cep: cep,
         telefone: telefone
-      })
+      },
+        { headers: { Authorization: `Token ${token}` } }
+      )
+      // console.log(response.data)
+      setEditModalVisible(false)
+      getPerfil()
+      alert("Dados atualizados")
     } catch (error) {
       console.log(error)
+      alert("Ocorreu um erro")
     }
   }
 
-  const confirmEdit = () => {
+  const confirmEdit = () => { // Função do botão para iniciar edição
     // Atribuindo os dados do cliente ao modal de edicao
     setNome(perfil.nome)
     setCPF(perfil.cpf);
@@ -207,7 +213,7 @@ export default function PerfilCLI() {
                 style={styles.input}
                 placeholderTextColor="#cccccc"
                 value={complemento}
-                onChangeText={(text) => setEstado(complemento)}
+                onChangeText={(text) => setComplemento(text)}
               />
 
               <TextInput
@@ -217,7 +223,7 @@ export default function PerfilCLI() {
                 onChangeText={(text) => setEmail(text)}
               />
 
-              <TouchableOpacity style={styles.button} onPress={putPerfil}>
+              <TouchableOpacity style={styles.button} onPress={putPerfil} >
                 <Text style={styles.buttonText}>Salvar Alterações</Text>
               </TouchableOpacity>
 
