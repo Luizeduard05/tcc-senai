@@ -17,13 +17,16 @@ export default function NovoOrcamentoMecanico() {
     const [veiculoSelecionado, setVeiculoSelecionado] = useState(null); // Variavel para armazenar o carro selecionado para agendamento
     const [pecas, setPecas] = useState([]); // Variavel para armazenar pecas do estoque
     const [mecanicoSelecionado, setMecanicoSelecionado] = useState(null); // Variavel para armazenar mecanico selecionado
-    const mecanico = mecanicoSelecionado[0];
-
+    // const mecanico = mecanicoSelecionado[0];
 
     const [data, setData] = useState("") // Variavel para guardar a data que sera usada na requisição
     const status = "Aguardando Retorno"  // Variavel para guardar o status que sera usado na requisição
     const [mo, setMo] = useState("") // Variavel para guardar a mo inicial
     const [pecasSelecionadas, setPecasSelecionadas] = useState([]); // Variavel para guardar as pecas que serao enviadas a requisicao
+
+    const navegaOrcamento = () => {
+        navigation.navigate("HistoricoMecanico")
+    }
 
     const getUsuarios = async () => { // Requisição para trazer todos usuarios que possui no sistema
         try {
@@ -135,16 +138,18 @@ export default function NovoOrcamentoMecanico() {
                     }
                 },
             )
-            alert("Orçamento criado com sucesso:", response.data)
+            // alert("Orçamento criado com sucesso:", response.data)
             // Limpando os campos
+            setClienteSelecionado(null)
             setVeiculoSelecionado(null)
             setPecasSelecionadas([])
             setData("")
             setMo("")
+            navegaOrcamento("")
 
         } catch (error) {
             console.log(error)
-            console.log(clienteSelecionado)
+            alert("Ocorreu um erro")
         }
     }
 
