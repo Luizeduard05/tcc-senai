@@ -5,6 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 import { useEffect, useState } from "react";
 import api from "../../../services/api/api";
 import { useNavigation } from "@react-navigation/native";
+import { MaskedTextInput } from 'react-native-mask-text';
 
 export default function NovoOrcamentoMecanico() {
     const {token, id} = useAuth();

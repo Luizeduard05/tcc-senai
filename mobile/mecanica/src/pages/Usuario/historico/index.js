@@ -114,6 +114,7 @@ export default function Historico() {
                                             <Text style={styles.modalText}>Produto: {item.nome_produto}</Text>
                                             <Text style={styles.modalText}>Marca: {item.marca_produto}</Text>
                                             <Text style={styles.modalText}>Valor: R${parseFloat(item.valor_produto).toFixed(2)}</Text>
+                                            <Text style={styles.modalText}>Quantidade: {item.quantidade}</Text>
                                         </View>
                                     ))
 
