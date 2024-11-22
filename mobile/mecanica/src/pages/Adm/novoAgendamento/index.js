@@ -5,6 +5,7 @@ import { useAuth } from "../../../context/AuthContext";
 import api from "../../../services/api/api";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { MaskedTextInput } from 'react-native-mask-text';
 
 export default function NovoAgendamento() {
     const { token } = useAuth();
@@ -118,14 +119,15 @@ export default function NovoAgendamento() {
                             </Picker>
                         </>
                     )}
-
                     <Text style={styles.label}>Data e Hora</Text>
-                    <TextInput
+                    <MaskedTextInput
                         style={styles.input}
-                        placeholder="MM-DD-AAAA HH:MM"
+                        mask="99/99/9999 99:99"
+                        placeholder="dd/mm/yyyy hh:mm"
                         placeholderTextColor="#999"
                         value={dataHora}
-                        onChangeText={setDataHora}
+                        onChangeText={(masked, unmasked) => setDataHora(masked)} // masked = valor formatado
+                        keyboardType="numeric"
                     />
 
                     <Text style={styles.label}>Observação *</Text>

@@ -5,7 +5,7 @@ import { useAuth } from "../../../context/AuthContext";
 import api from "../../../services/api/api";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native"
-
+import { MaskedTextInput } from 'react-native-mask-text';
 
 export default function NovoOrcamentoADM() {
     const { token } = useAuth();
@@ -186,7 +186,7 @@ export default function NovoOrcamentoADM() {
             colors={['#000000', 'rgba(0, 0, 0, 0.5)']}
             style={styles.androidSafeArea}
         >
-            <ScrollView contentContainerStyle={styles.scrollView}>
+            <ScrollView contentContainerStyle={styles.scrollView} >
                 <View style={styles.container}>
 
                     <View style={styles.inputGroup}>
@@ -243,6 +243,7 @@ export default function NovoOrcamentoADM() {
                                             </TouchableOpacity>
                                         </View>
                                     )}
+                                    scrollEnabled={false}
                                 />
                                 <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.btnAdicionarPeca}>
                                     <Text style={styles.textBtn}>Adicionar Peça</Text>
@@ -252,7 +253,7 @@ export default function NovoOrcamentoADM() {
 
                     </View>
 
-                    <Modal visible={modalVisible} transparent={true} animationType="slide">
+                    {/* <Modal visible={modalVisible} transparent={true} animationType="slide">
                         <View style={styles.modalContainer}>
                             <View style={styles.modalContent}>
                                 <FlatList
@@ -263,6 +264,26 @@ export default function NovoOrcamentoADM() {
                                             <Text style={styles.pecaModalItem}>{item.nome_produto} - {item.valor_produto}</Text>
                                         </TouchableOpacity>
                                     )}
+                                    scrollEnabled={false}
+                                />
+                                <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalCloseButton}>
+                                    <Text style={styles.textBtnCancelar}>Fechar</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal> */}
+                    <Modal visible={modalVisible} transparent={true} animationType="slide">
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                <FlatList
+                                    data={pecas}
+                                    keyExtractor={(item) => item.id.toString()}
+                                    renderItem={({ item }) => (
+                                        <TouchableOpacity onPress={() => handleSelectPeca(item)} style={styles.pecaModalItem}>
+                                            <Text style={styles.pecaText}>{item.nome_produto} - {item.valor_produto}</Text>
+                                        </TouchableOpacity>
+                                    )}
+                                    scrollEnabled={false}
                                 />
                                 <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalCloseButton}>
                                     <Text style={styles.textBtnCancelar}>Fechar</Text>
@@ -292,7 +313,15 @@ export default function NovoOrcamentoADM() {
 
                     <View style={styles.inputGroup}>
                         <Text style={styles.label}>Data:</Text>
-                        <TextInput style={styles.input} value={data} onChangeText={setData} />
+                        <MaskedTextInput
+                            style={styles.input}
+                            mask="99/99/9999"
+                            placeholder="dd/mm/yyyy"
+                            placeholderTextColor="#999"
+                            value={data}
+                            onChangeText={(masked, unmasked) => setData(masked)} // masked = valor formatado
+                            keyboardType="numeric"
+                        />
                     </View>
 
                     <View style={styles.inputGroup}>
@@ -420,7 +449,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     btnAdicionarPeca: {
-        width: "90%",
+        width: "100%",
         height: 50,
         backgroundColor: "#28a745",
         justifyContent: "center",
@@ -464,29 +493,55 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        padding: 20,
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        paddingHorizontal: 20,
+        paddingVertical: 50,
     },
     modalContent: {
-        width: '90%',
-        backgroundColor: '#f9f9f9',
-        borderRadius: 10,
+        width: '95%',
+        maxHeight: '80%',
+        backgroundColor: '#ffffff',
+        borderRadius: 15,
         padding: 20,
+        elevation: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
         alignItems: 'center',
     },
     modalCloseButton: {
-        marginTop: 15,
+        marginTop: 20,
         paddingVertical: 12,
-        paddingHorizontal: 20,
-        backgroundColor: '#dc3545',
+        paddingHorizontal: 25,
+        backgroundColor: '#007bff',
         borderRadius: 8,
+        elevation: 2,
+        shadowColor: '#007bff',
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+    },
+    textBtnCancelar: {
+        fontSize: 16,
+        color: '#ffffff',
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
     pecaModalItem: {
+        width: '100%',
+        paddingVertical: 12,
+        paddingHorizontal: 15,
+        backgroundColor: '#f7f7f7',
+        borderRadius: 8,
+        marginVertical: 8,
+        borderWidth: 1,
+        borderColor: '#ddd',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    pecaText: {
         fontSize: 16,
         color: '#333',
-        marginVertical: 10,
-        padding: 10,
-        backgroundColor: '#f0f0f0',
-        borderRadius: 5,
+        fontWeight: '500',
     },
 });

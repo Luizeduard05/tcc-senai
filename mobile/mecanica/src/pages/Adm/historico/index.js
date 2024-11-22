@@ -41,8 +41,6 @@ export default function HistoricoADM() {
                 />
             </View>
 
-            <View style={styles.container}>
-                <ScrollView>
                     <View style={styles.container}>
                         <ScrollView>
                             {historico.length > 0 ? (
@@ -67,10 +65,6 @@ export default function HistoricoADM() {
                             )}
                         </ScrollView>
                     </View>
-
-                </ScrollView>
-            </View>
-
         </LinearGradient>
     );
 }
