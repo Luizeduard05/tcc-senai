@@ -140,7 +140,7 @@ const osController = {
 
         try {
             const [rows] = await classOs.selecionarItensOs(idOS);
-            console.log("asasas", rows);
+
             return res.json({ rows });
         } catch (error) {
             console.error('Erro ao buscar peças dessa Os:', error);

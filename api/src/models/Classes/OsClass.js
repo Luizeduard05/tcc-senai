@@ -174,7 +174,8 @@ class classOs {
               i.id AS id_itens_os,
               p.nome_produto, 
               p.marca_produto, 
-              p.valor_produto
+              p.valor_produto,
+              i.quantidade
             FROM tbl_ordem_de_serviço o
             LEFT JOIN tbl_itens_os i ON o.id = i.id_os
             LEFT JOIN tbl_produtos p ON i.id_produto = p.id          
