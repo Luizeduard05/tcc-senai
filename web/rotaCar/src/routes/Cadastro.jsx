@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../../service/api";
 import styleCad from "./Cadastro.module.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -47,6 +47,27 @@ const Cadastro = () => {
 
         }
     };
+
+    const buscarCep = async () => { // Função para busca de CEP
+        try {
+            const response = await fetch(`https://viacep.com.br/ws/${formData.cep}/json/`)
+            const data = await response.json();
+
+            if (!data.erro) {
+                setFormData(prevState => ({
+                    ...prevState,
+                    logradouro: data.logradouro,
+                    bairro: data.bairro,
+                    estado: data.uf
+                }));
+            } else {
+                alert("CEP não encontrado");
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
 
     return (
@@ -351,13 +372,9 @@ const Cadastro = () => {
                             </div>
 
                             <div className={styleCad.inputRight}>
-                                <div className={styleCad.inputBox}>
-                                    <input type="text" name="complemento" value={formData.complemento} required onChange={handleChange} />
-                                    <i>Complemento</i>
-                                </div>
                                 <div className={styleCad.Cepcontent}>
                                     <div className={styleCad.inputBox}>
-                                        <input type="number" name="cep" value={formData.cep} required onChange={handleChange} />
+                                        <input type="number" name="cep" value={formData.cep} required onChange={handleChange} onBlur={buscarCep} />
                                         <i>CEP</i>
                                     </div>
                                     <div className={styleCad.inputBox}>
@@ -366,7 +383,7 @@ const Cadastro = () => {
                                     </div>
                                 </div>
                                 <div className={styleCad.inputBox}>
-                                    <input type="text" name="logradouro" value={formData.logradouro} required onChange={handleChange} />
+                                    <input type="text" name="logradouro" value={formData.logradouro} required onChange={handleChange}/>
                                     <i>Logradouro</i>
                                 </div>
                                 <div className={styleCad.inputBox}>
@@ -376,6 +393,10 @@ const Cadastro = () => {
                                 <div className={styleCad.inputBox}>
                                     <input type="text" name="estado" value={formData.estado} required onChange={handleChange} />
                                     <i>Estado</i>
+                                </div>
+                                <div className={styleCad.inputBox}>
+                                    <input type="text" name="complemento" value={formData.complemento} required onChange={handleChange} />
+                                    <i>Complemento</i>
                                 </div>
                             </div>
 

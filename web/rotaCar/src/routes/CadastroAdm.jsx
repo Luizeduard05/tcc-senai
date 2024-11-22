@@ -54,6 +54,26 @@ const CadastroAdm = () => {
         }
     };
 
+    const buscarCep = async () => { // Função para busca de CEP
+        try {
+            const response = await fetch(`https://viacep.com.br/ws/${formData.cep}/json/`)
+            const data = await response.json();
+
+            if (!data.erro) {
+                setFormData(prevState => ({
+                    ...prevState,
+                    logradouro: data.logradouro,
+                    bairro: data.bairro,
+                    estado: data.uf
+                }));
+            } else {
+                alert("CEP não encontrado");
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
     return (
 
@@ -357,18 +377,16 @@ const CadastroAdm = () => {
                             </div>
 
                             <div className={styleCadAdm.inputRight}>
-                                <div className={styleCadAdm.inputBox}>
-                                    <input type="text" name="complemento" value={formData.complemento} required onChange={handleChange} />
-                                    <i>Complemento</i>
-                                </div>
+
                                 <div className={styleCadAdm.Cepcontent}>
                                     <div className={styleCadAdm.inputBox}>
-                                        <input type="number" name="cep" value={formData.cep} required onChange={handleChange} />
+                                        <input type="number" name="cep" value={formData.cep} required onChange={handleChange} onBlur={buscarCep} />
                                         <i>CEP</i>
                                     </div>
                                     <div className={styleCadAdm.inputBox}>
-                                        <input type="text" name="numero" value={formData.numero} required onChange={handleChange} />
-                                        <i>Número</i>
+                                        <input type="text" name="complemento" value={formData.complemento} required onChange={handleChange} />
+                                        <i>Complemento</i>
+
                                     </div>
                                 </div>
                                 <div className={styleCadAdm.inputBox}>
@@ -377,8 +395,8 @@ const CadastroAdm = () => {
                                 </div>
                                 <div className={styleCadAdm.Cepcontent}>
                                     <div className={styleCadAdm.inputBox}>
-                                        <input type="text" name="bairro" value={formData.bairro} required onChange={handleChange} />
-                                        <i>Bairro</i>
+                                        <input type="text" name="numero" value={formData.numero} required onChange={handleChange} />
+                                        <i>Número</i>
                                     </div>
 
                                     <div className={styleCadAdm.inputBox}>
@@ -386,9 +404,14 @@ const CadastroAdm = () => {
                                         <i>Estado</i>
                                     </div>
                                 </div>
+                                <div className={styleCadAdm.inputBox}>
+                                    <input type="text" name="bairro" value={formData.bairro} required onChange={handleChange} />
+                                    <i>Bairro</i>
+
+                                </div>
 
                                 <div className={styleCadAdm.inputBox}>
-                                   
+
                                     <select
                                         name="tipo"
                                         value={formData.tipo}
