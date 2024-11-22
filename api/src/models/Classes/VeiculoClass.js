@@ -128,15 +128,15 @@ class Veiculo {
 
 
     // Método comentado: seria responsável por excluir um veículo do banco
-    // static deleteRegistroVei = async (idVei) => {
-    //     const con = await conectarBancoDeDados();
-    //     try {
-    //         const result = await con.query(`DELETE FROM tbl_veiculo WHERE id = ?`, [idVei]);
-    //         return result; 
-    //     } catch (error) {
-    //         throw new Error(`Erro ao excluir veículo: ${error.message}`);
-    //     }
-    // };
+    static deleteRegistroVei = async (idVei) => {
+        const con = await conectarBancoDeDados();
+        try {
+            const result = await con.query(`DELETE FROM tbl_veiculo WHERE id = ?`, [idVei]);
+            return result; 
+        } catch (error) {
+            throw new Error(`Erro ao excluir veículo: ${error.message}`);
+        }
+    };
 
 
 }
