@@ -6,8 +6,7 @@ import api from "../../service/api";
 const Historico = () => {
     const { id, token, tipo } = useAuth();
     const [Os, setOs] = useState([]);
-    const [nomeMap, setNomeMap] = useState({});
-    const [veiculos, setVeiculos] = useState([]);
+    const [nomeMap, setNomeMap] = useState([]);
 
     const statusMap = {
         0: 'Aguardando Retorno',
@@ -19,53 +18,38 @@ const Historico = () => {
         try {
             let ordensServico = [];
     
-            // Verifica o tipo de usuário e carrega as ordens de serviço
+            // Busca ordens de serviço
             if (tipo === "ADM") {
                 const responseOs = await api.get(`/orcamentos`, {
                     headers: { Authorization: `Token ${token}` }
                 });
                 ordensServico = responseOs.data.ordensServico;
-            } else if (tipo === "MEC") {
-                const responseOs = await api.get(`/orcamentos`, {
+    
+                const responseUsuarios = await api.get(`/todosUser`, {
                     headers: { Authorization: `Token ${token}` }
                 });
-                ordensServico = responseOs.data.ordensServico.filter(
-                    (ordem) => ordem.id_mecanico === id
-                );
-            } else if (tipo === "CLI") {
+                const usuariosData = responseUsuarios.data.result;
+
+                // Criar um mapa de nomes de clientes com base no ID
+                const nomeClienteMap = {};
+                usuariosData.forEach(user => {
+                    if (user.tipo === 'CLI') {
+                        nomeClienteMap[user.pessoa_id] = user.nome;
+                    }
+                });
+                setNomeMap(nomeClienteMap);
+            }
+    
+            if (tipo === "CLI") {
                 const responseOs = await api.get(`/os/${id}`, {
                     headers: { Authorization: `Token ${token}` }
                 });
                 ordensServico = responseOs.data.ordensServico;
             }
     
-            // Fetch veículos se for cliente
-            if (tipo === "CLI") {
-                const responseVeiculos = await api.get(`/veiculos/${id}`, {
-                    headers: { Authorization: `Token ${token}` }
-                });
-                const veiculosData = responseVeiculos.data.person || [];
-                setVeiculos(veiculosData);
+            setOs(ordensServico);
     
-                // Associa veículos às ordens de serviço
-                const ordensComVeiculos = ordensServico.map((ordem) => {
-                    const veiculoAssociado = veiculosData.find(
-                        (veiculo) => veiculo.id === ordem.id_veiculo
-                    );
-    
-                    return {
-                        ...ordem,
-                        veiculo: veiculoAssociado || null, // Se não encontrar, define como null
-                    };
-                });
-    
-                setOs(ordensComVeiculos);
-                console.log("Ordens de Serviço com veículos associados:", ordensComVeiculos);
-            } else {
-                setOs(ordensServico);
-            }
-    
-            console.log("Veículos:", veiculos);
+            console.log("Ordens de Serviço com dados de veículos:", ordensServico);
         } catch (error) {
             console.error("Erro ao buscar dados do usuário:", error);
         }
@@ -75,7 +59,6 @@ const Historico = () => {
     useEffect(() => {
         fetchUserData();
     }, [tipo, id]);
-    
 
     const formatDate = (dateString) => {
         if (!dateString) return 'Data não disponível';
@@ -103,18 +86,20 @@ const Historico = () => {
                 </thead>
                 <tbody id="corpo-tabela-dados">
                     {Array.isArray(Os) && Os.length > 0 ? (
-                        Os.map((ordem, index) => (
-                            <tr key={index}>
-                                <td>{ordem.veiculo ? ordem.veiculo.modelo : 'Modelo não disponível'}</td>
-                                <td>{ordem.veiculo ? ordem.veiculo.placa : 'Placa não disponível'}</td>
-                                <td>{ordem.total || 'N/A'}</td>
-                                <td>{statusMap[ordem.status] || 'Desconhecido'}</td>
-                                <td>{ordem.data ? formatDate(ordem.data) : 'Data não disponível'}</td>
-                                {tipo !== "CLI" && (
-                                    <td>{nomeMap[ordem.id_pessoa] || 'N/A'}</td>
-                                )}
-                            </tr>
-                        ))
+                        Os.map((ordem, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td>{ordem.modelo || 'Modelo não disponível'}</td>
+                                    <td>{ordem.placa || 'Placa não disponível'}</td>
+                                    <td>{ordem.total || 'N/A'}</td>
+                                    <td>{statusMap[ordem.status] || 'Desconhecido'}</td>
+                                    <td>{ordem.data ? formatDate(ordem.data) : 'Data não disponível'}</td>
+                                    {tipo !== "CLI" && (
+                                        <td>{nomeMap[ordem.id_pessoa] || 'N/A'}</td>
+                                    )}
+                                </tr>
+                            );
+                        })
                     ) : (
                         <tr>
                             <td colSpan={tipo !== "CLI" ? 6 : 5}>Nenhum orçamento encontrado.</td>
