@@ -29,6 +29,10 @@ export default function NovoOrcamentoMecanico() {
         navigation.navigate("HistoricoMecanico")
     }
 
+    const navegaHome = () => {
+        navigation.navigate("Home");
+    }
+
     const getUsuarios = async () => { // Requisição para trazer todos usuarios que possui no sistema
         try {
             const response = await api.get(`/todosUser`, {
@@ -217,7 +221,7 @@ export default function NovoOrcamentoMecanico() {
                     </View>
 
                     <View style={styles.inputGroup}>
-                        {clienteSelecionado && (
+                        {clienteSelecionado && veiculosCliente?.length > 0 && (
                             <>
                                 <Text style={styles.label}>Selecionar Veículo:</Text>
                                 <Picker
@@ -257,6 +261,7 @@ export default function NovoOrcamentoMecanico() {
                                             </TouchableOpacity>
                                         </View>
                                     )}
+                                    scrollEnabled={false}
                                 />
                                 <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.btnAdicionarPeca}>
                                     <Text style={styles.textBtn}>Adicionar Peça</Text>
@@ -287,7 +292,15 @@ export default function NovoOrcamentoMecanico() {
 
                     <View style={styles.inputGroup}>
                         <Text style={styles.label}>Data:</Text>
-                        <TextInput style={styles.input} value={data} onChangeText={setData} />
+                        <MaskedTextInput
+                            style={styles.input}
+                            mask="99/99/9999"
+                            placeholder="dd/mm/yyyy"
+                            placeholderTextColor="#999"
+                            value={data}
+                            onChangeText={(masked, unmasked) => setData(masked)} // masked = valor formatado
+                            keyboardType="numeric"
+                        />
                     </View>
 
                     <View style={styles.inputGroup}>
@@ -308,7 +321,7 @@ export default function NovoOrcamentoMecanico() {
                         <Text style={styles.textBtn}>Confirmar</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.btnCancelar}>
+                    <TouchableOpacity style={styles.btnCancelar} onPress={navegaHome}>
                         <Text style={styles.textBtnCancelar}>Cancelar</Text>
                     </TouchableOpacity>
                 </View>
@@ -415,7 +428,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     btnAdicionarPeca: {
-        width: "90%",
+        width: "100%",
         height: 50,
         backgroundColor: "#28a745",
         justifyContent: "center",

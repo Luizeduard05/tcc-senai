@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { Platform, StatusBar, StyleSheet, View, Text, Button, TextInput } from "react-native";
+import { Platform, StatusBar, StyleSheet, View, Text, Button, TextInput, Alert } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import { useAuth } from "../../../context/AuthContext";
 import api from "../../../services/api/api";
@@ -9,7 +9,7 @@ import { MaskedTextInput } from 'react-native-mask-text';
 
 export default function NovoAgendamento() {
     const { token } = useAuth();
-    const navigation = useNavigation("")
+    const navigation = useNavigation()
 
     const [clientes, setClientes] = useState([]); // Variavel para armazenar todos clientes que possui no sistema
     const [clienteSelecionado, setClienteSelecionado] = useState(null); // Variavel para armazenar cliente selecionado
@@ -45,7 +45,7 @@ export default function NovoAgendamento() {
                     Authorization: `Token ${token}`
                 }
             });
-            setVeiculosCliente(response.data.person);
+            setVeiculosCliente(response.data.person || []);
         } catch (error) {
             console.log(error);
         }
@@ -83,6 +83,7 @@ export default function NovoAgendamento() {
 
     useEffect(() => { // Monitorando para quando o cliente for setado trazer os dados de veiculos
         if (clienteSelecionado) {
+            setVeiculosCliente([]);  // Limpa o estado antes de buscar novos dados
             getVeiculos(clienteSelecionado.pessoa_id);
         }
     }, [clienteSelecionado]);
@@ -96,7 +97,10 @@ export default function NovoAgendamento() {
                     <Picker
                         selectedValue={clienteSelecionado}
                         style={styles.picker}
-                        onValueChange={(itemValue) => setClienteSelecionado(itemValue)}
+                        onValueChange={(itemValue) => {
+                            setClienteSelecionado(itemValue);
+                            setVeiculoSelecionado(null);
+                        }}
                     >
                         <Picker.Item label="Selecione um cliente" value={null} />
                         {clientes.map(cliente => (
@@ -104,7 +108,7 @@ export default function NovoAgendamento() {
                         ))}
                     </Picker>
 
-                    {clienteSelecionado && (
+                    {clienteSelecionado && veiculosCliente?.length > 0 && (
                         <>
                             <Text style={styles.label}>Selecione o Veículo</Text>
                             <Picker

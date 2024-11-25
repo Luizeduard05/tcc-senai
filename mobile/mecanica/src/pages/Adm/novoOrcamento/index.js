@@ -29,6 +29,10 @@ export default function NovoOrcamentoADM() {
         navigation.navigate("HistoricoADM")
     }
 
+    const navegaHome = () => {
+        navigation.navigate("Home")
+    }
+
     const getUsuarios = async () => { // Requisição para trazer todos usuarios que possui no sistema
         try {
             const response = await api.get(`/todosUser`, {
@@ -203,7 +207,7 @@ export default function NovoOrcamentoADM() {
                     </View>
 
                     <View style={styles.inputGroup}>
-                        {clienteSelecionado && (
+                        {clienteSelecionado && veiculosCliente?.length > 0 && (
                             <>
                                 <Text style={styles.label}>Selecionar Veículo:</Text>
                                 <Picker
@@ -252,26 +256,7 @@ export default function NovoOrcamentoADM() {
                         )}
 
                     </View>
-
-                    {/* <Modal visible={modalVisible} transparent={true} animationType="slide">
-                        <View style={styles.modalContainer}>
-                            <View style={styles.modalContent}>
-                                <FlatList
-                                    data={pecas}
-                                    keyExtractor={(item) => item.id.toString()}
-                                    renderItem={({ item }) => (
-                                        <TouchableOpacity onPress={() => handleSelectPeca(item)}>
-                                            <Text style={styles.pecaModalItem}>{item.nome_produto} - {item.valor_produto}</Text>
-                                        </TouchableOpacity>
-                                    )}
-                                    scrollEnabled={false}
-                                />
-                                <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalCloseButton}>
-                                    <Text style={styles.textBtnCancelar}>Fechar</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </Modal> */}
+                    
                     <Modal visible={modalVisible} transparent={true} animationType="slide">
                         <View style={styles.modalContainer}>
                             <View style={styles.modalContent}>
@@ -342,7 +327,7 @@ export default function NovoOrcamentoADM() {
                         <Text style={styles.textBtn}>Confirmar</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.btnCancelar}>
+                    <TouchableOpacity style={styles.btnCancelar} onPress={navegaHome} >
                         <Text style={styles.textBtnCancelar}>Cancelar</Text>
                     </TouchableOpacity>
                 </View>

@@ -44,7 +44,7 @@ export default function CadastroAdmMec() {
         navigate.navigate("GerenciaUser")
     }
 
-    const addNovoFunc = async () => {
+    const addNovoFunc = async () => { // Requisição para cadastro de novo usuario
         // Validando email e senha
         const emailValidationError = validaEmail(email);
         const senhaValidationError = validaSenha(senha);
@@ -77,7 +77,7 @@ export default function CadastroAdmMec() {
                     }
                 }
             )
-            console.log(response.data)
+            // console.log(response.data)
             alert("Usuario cadastrado")
 
             setNome('');
@@ -154,6 +154,7 @@ export default function CadastroAdmMec() {
                 break;
         }
     }
+
     const previousStep = () => setStep(step - 1);
 
     return (

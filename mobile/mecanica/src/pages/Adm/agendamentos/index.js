@@ -1,9 +1,9 @@
 import { LinearGradient } from "expo-linear-gradient"
 import { StyleSheet, Platform, StatusBar, View, Text } from "react-native"
 import { useAuth } from "../../../context/AuthContext";
-import { useCallback, useEffect, useState } from "react";
-import api from "../../../services/api/api";
+import { useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
+import api from "../../../services/api/api";
 
 export default function AgendamentosADM() {
     const { token } = useAuth();
@@ -23,11 +23,7 @@ export default function AgendamentosADM() {
         }
     }
 
-    // useEffect(() => { // Trazendo os agendamentos quando o componente é iniciado
-    //     getAgendamentos()
-    // }, [])
-
-    useFocusEffect(
+    useFocusEffect( // Sempre que a pagina é focada chama a requisição de agendamentos
         useCallback(() => {
             getAgendamentos()
         }, [])

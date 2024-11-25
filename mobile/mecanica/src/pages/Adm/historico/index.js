@@ -41,30 +41,30 @@ export default function HistoricoADM() {
                 />
             </View>
 
-                    <View style={styles.container}>
-                        <ScrollView>
-                            {historico.length > 0 ? (
-                                historico.map((item) => (
-                                    <View key={item.id_os} style={styles.historicoItem}>
-                                        <Text style={styles.textVeiculo}>Veículo: {item.placa}</Text>
-                                        {/* <Text style={styles.textVeiculo}>Modelo: {item.modelo}</Text> */}
-                                        {/* <Text style={styles.textVeiculo}>Email Cliente: {item.email}</Text> */}
-                                        <View style={styles.alinha}>
-                                            <Text style={styles.textDados}>{item.data.slice(0, 10)}</Text>
-                                            <Text style={styles.textDados}>R${item.total}</Text>
-                                        </View>
-                                        <TouchableOpacity style={styles.icon}>
-                                            <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={32} color="white" />
-                                        </TouchableOpacity>
-                                    </View>
-                                ))
-                            ) : (
-                                <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>
-                                    Nenhuma orçamento encontrado
-                                </Text>
-                            )}
-                        </ScrollView>
-                    </View>
+            <View style={styles.container}>
+                <ScrollView>
+                    {historico.length > 0 ? (
+                        historico.map((item) => (
+                            <View key={item.id_os} style={styles.historicoItem}>
+                                <Text style={styles.textVeiculo}>Veículo: {item.placa}</Text>
+                                {/* <Text style={styles.textVeiculo}>Modelo: {item.modelo}</Text> */}
+                                {/* <Text style={styles.textVeiculo}>Email Cliente: {item.email}</Text> */}
+                                <View style={styles.alinha}>
+                                    <Text style={styles.textDados}>{item.data.slice(0, 10)}</Text>
+                                    <Text style={styles.textDados}>R${item.total}</Text>
+                                </View>
+                                <TouchableOpacity style={styles.icon}>
+                                    <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={32} color="white" />
+                                </TouchableOpacity>
+                            </View>
+                        ))
+                    ) : (
+                        <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>
+                            Nenhuma orçamento encontrado
+                        </Text>
+                    )}
+                </ScrollView>
+            </View>
         </LinearGradient>
     );
 }
