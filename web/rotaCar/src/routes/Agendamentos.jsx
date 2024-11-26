@@ -2,7 +2,8 @@ import stylesA from "./Agendamentos.module.css";
 import { useState, useEffect } from "react";
 import { useAuth } from "../Context/ContextUser";
 import api from "../../service/api";
-import { parse, format, isToday, isThisWeek, compareAsc } from "date-fns";
+import { parse, format, isToday, isThisWeek, compareAsc,parseISO } from "date-fns";
+import Header from "../component/Header";
 
 const Agendamentos = () => {
     const { token } = useAuth();
@@ -50,28 +51,42 @@ const Agendamentos = () => {
 
     const handleUpdate = async (event) => {
         event.preventDefault();
-
+    
         try {
             const agendamentoAtualizado = {
-                ...agendamentoEmEdicao,
-                Data_e_hora: format(parse(dataHora, "yyyy-MM-dd'T'HH:mm", new Date()), "dd/MM/yyyy, HH:mm:ss"),
-                Observação: observacao,
+                id: agendamentoEmEdicao.id,
+                Data_e_hora: format(
+                    parseISO(agendamentoEmEdicao.Data_e_hora), // Converte para ISO
+                    "yyyy-MM-dd'T'HH:mm:ss"
+                ),
+                Observação: agendamentoEmEdicao.Observação,
+                id_os: agendamentoEmEdicao.id_os || null,
+                id_veiculo_os: agendamentoEmEdicao.id_veiculo_os,
+                id_pessoa_veiculo_os: agendamentoEmEdicao.id_pessoa_veiculo_os,
             };
-
-            const response = await api.put(`/agendamentos/${agendamentoEmEdicao.id}`, agendamentoAtualizado, {
-                headers: { Authorization: `Token ${token}` },
-            });
-
-            setAgendamentos(agendamentos.map((item) => 
-                item.id === agendamentoEmEdicao.id ? response.data.result : item
-            ));
-
+    
+            const response = await api.put(
+                `/agendar/${agendamentoEmEdicao.id}`,
+                agendamentoAtualizado,
+                {
+                    headers: { Authorization: `Token ${token}` },
+                }
+            );
+    
+            setAgendamentos(
+                agendamentos.map((item) =>
+                    item.id === agendamentoEmEdicao.id ? response.data.result : item
+                )
+            );
+    
             setAgendamentoEmEdicao(null); // Fecha o modal de edição
         } catch (error) {
             console.error("Erro ao atualizar agendamento:", error);
         }
     };
-
+    
+    
+    
     const processarAgendamentos = () => {
         const hoje = [];
         const semana = [];
@@ -107,51 +122,122 @@ const Agendamentos = () => {
     const { hoje, semana, outros } = processarAgendamentos();
 
     return (
-        <section className={stylesA.Pai}>
-            <h1 className={stylesA.Titulo}>Agendamentos</h1>
+        <>
+            <Header />
 
-            <div className={stylesA.Categoria}>
+            <section className={stylesA.Pai}>
+
+                <h1 className={stylesA.Titulo}>Agendamentos</h1>
                 <h2>Hoje</h2>
-                {hoje.length > 0 ? (
-                    hoje.map((item) => (
-                        <div className={stylesA.Card} key={item.id}>
-                            <p className={stylesA.NomeUser} ><strong>Cliente:</strong> {getNomeUsuario(item.id_pessoa_veiculo_os)}</p>
-                            <p><strong>Data e Hora:</strong> {item.Data_e_hora}</p>
-                            <p><strong>Observação:</strong> {item.Observação}</p>
-                            
-                            <button onClick={() => handleEdit(item)}>Editar</button>
-                            <button onClick={() => handleDelete(item.id)}>Excluir</button>
-                        </div>
-                    ))
-                ) : (
-                    <p>Nenhum agendamento para hoje.</p>
-                )}
-            </div>
+                <div className={stylesA.Categoria1}>
 
-            {/* O formulário de edição aparece quando há um agendamento em edição */}
-            {agendamentoEmEdicao && (
-                <form onSubmit={handleUpdate}>
-                    <label>
-                        Data e Hora:
-                        <input
-                            type="datetime-local"
-                            value={agendamentoEmEdicao.Data_e_hora}
-                            onChange={(e) => setAgendamentoEmEdicao({ ...agendamentoEmEdicao, Data_e_hora: e.target.value })}
-                            required
-                        />
-                    </label>
-                    <label>
-                        Observação:
-                        <textarea
-                            value={agendamentoEmEdicao.Observação}
-                            onChange={(e) => setAgendamentoEmEdicao({ ...agendamentoEmEdicao, Observação: e.target.value })}
-                            required
-                        />
-                    </label>
-                    <button type="submit">Atualizar Agendamento</button>
-                </form>
-            )}
-        </section>
+                    {hoje.length > 0 ? (
+                        hoje.map((item) => (
+                            <div className={stylesA.Card} key={item.id}>
+                                <p className={stylesA.NomeUser} ><strong>Cliente:</strong> {getNomeUsuario(item.id_pessoa_veiculo_os)}</p>
+                                <p><strong>Data e Hora:</strong> {item.Data_e_hora}</p>
+                                <p><strong>Observação:</strong> {item.Observação}</p>
+
+                                <button onClick={() => handleEdit(item)}>Editar</button>
+                                <button onClick={() => handleDelete(item.id)}>Excluir</button>
+                            </div>
+                        ))
+                    ) : (
+                        <p>Nenhum agendamento para hoje.</p>
+                    )}
+                </div>
+                <h2>Esta Semana</h2>
+                <div className={stylesA.Categoria2}>
+
+                    {semana.length > 0 ? (
+                        semana.map((item) => (
+                            <div className={stylesA.Card} key={item.id}>
+                                <p className={stylesA.NomeUser} ><strong>Cliente:</strong> {getNomeUsuario(item.id_pessoa_veiculo_os)}</p>
+                                <p><strong>Data e Hora:</strong> {item.Data_e_hora}</p>
+                                <p><strong>Observação:</strong> {item.Observação}</p>
+                                <p><strong>Cliente:</strong> {getNomeUsuario(item.id_pessoa_veiculo_os)}</p>
+                            </div>
+                        ))
+                    ) : (
+                        <p>Nenhum agendamento para esta semana.</p>
+                    )}
+                </div>
+                <h2>Outros</h2>
+                <div className={stylesA.Categoria3}>
+
+                    {outros.length > 0 ? (
+                        outros.map((item) => (
+                            <div className={stylesA.Card} key={item.id}>
+                                <p className={stylesA.NomeUser} ><strong>Cliente:</strong> {getNomeUsuario(item.id_pessoa_veiculo_os)}</p>
+                                <p><strong>Data e Hora:</strong> {item.Data_e_hora}</p>
+                                <p><strong>Observação:</strong> {item.Observação}</p>
+                                <p><strong>Cliente:</strong> {getNomeUsuario(item.id_pessoa_veiculo_os)}</p>
+                            </div>
+                        ))
+                    ) : (
+                        <p>Nenhum agendamento encontrado.</p>
+                    )}
+                </div>
+
+                {/* O formulário de edição aparece quando há um agendamento em edição */}
+                {agendamentoEmEdicao && (
+                    <>
+                        {/* Nome do cliente fixo no meio da tela */}
+
+
+                        {/* Formulário de edição */}
+                        <form
+                            onSubmit={handleUpdate}
+                            className={`${stylesA.Formulario} ${stylesA.FormularioEdicao}`}
+
+                        >
+                            <div className={stylesA.ClienteEdicao}>
+                                <p className={stylesA.NomeUserF}>Editando: {getNomeUsuario(agendamentoEmEdicao.id_pessoa_veiculo_os)}</p>
+                            </div>
+                            <label>
+                                Data e Hora:
+                                <input
+                                    type="datetime-local"
+                                    value={agendamentoEmEdicao.Data_e_hora}
+                                    onChange={(e) =>
+                                        setAgendamentoEmEdicao({
+                                            ...agendamentoEmEdicao,
+                                            Data_e_hora: e.target.value,
+                                        })
+                                    }
+                                    required
+                                />
+                            </label>
+                            <label>
+                                Observação:
+                                <textarea
+                                    value={agendamentoEmEdicao.Observação}
+                                    onChange={(e) =>
+                                        setAgendamentoEmEdicao({
+                                            ...agendamentoEmEdicao,
+                                            Observação: e.target.value,
+                                        })
+                                    }
+                                    required
+                                />
+                            </label>
+                            <button type="submit" className={stylesA.BotaoSalvar}>
+                                Atualizar Agendamento
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setAgendamentoEmEdicao(null)}
+                                className={stylesA.BotaoCancelar}
+                            >
+                                Cancelar
+                            </button>
+                        </form>
+                    </>
+                )}
+
+
+            </section>
+        </>
     );
 };
 
