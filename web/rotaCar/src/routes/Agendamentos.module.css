@@ -6,7 +6,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 20px;
+    padding: 86px 20px;
     overflow-x: hidden;
     font-family: Arial, sans-serif;
 }
@@ -137,6 +137,11 @@ h2{
 .NomeUser {
     font-size: 1.3rem !important;
 }
+.NomeUserF {
+    font-size: 1.3rem !important;
+    padding: 1rem;
+    color: #a5a5a5;
+}
 /* Agendamentos.module.css */
 
 .Card button {
@@ -175,4 +180,121 @@ h2{
 
 .Card button:nth-child(2):hover {
     background-color: #d40000; /* Tom mais escuro de vermelho */
+}
+
+
+
+.Categoria1,
+.Categoria2,
+.Categoria3{
+    display: flex;
+        gap: 2rem;
+        justify-content: center;
+        padding: 1rem;
+        width: 100%;
+        flex-wrap: wrap;
+}
+
+/* Estilização do formulário de edição */
+.ClienteEdicao {
+
+}
+
+/* Animação para o nome do cliente */
+@keyframes aparecerNome {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.Formulario {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ff0000; /* Vermelho para destaque */
+    color: #fff;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    z-index: 1000; /* Certifique-se de que está acima de tudo */
+    animation: aparecerNome 0.5s ease-in-out;
+}
+
+.FormularioEdicao {
+    background-color: #ffe5e5; /* Fundo mais claro para destacar */
+    border-color: #d40000; /* Tom mais escuro de vermelho */
+}
+
+.Formulario label {
+    font-weight: bold;
+    color: #333;
+}
+
+.Formulario input,
+.Formulario textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.Formulario input:focus,
+.Formulario textarea:focus {
+    border-color: #ff0000; /* Destaque no foco */
+    outline: none;
+}
+
+.BotaoSalvar,
+.BotaoCancelar {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.BotaoSalvar {
+    background-color: #ff0000;
+    color: #fff;
+    font-weight: bold;
+}
+
+.BotaoSalvar:hover {
+    background-color: #d40000; /* Vermelho mais escuro */
+    transform: scale(1.05); /* Leve aumento ao passar o mouse */
+}
+
+.BotaoCancelar {
+    background-color: #000000;
+    color: #fff;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.BotaoCancelar:hover {
+    background-color: #333;
+    transform: scale(1.05);
+}
+
+/* Animação para o formulário de edição */
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

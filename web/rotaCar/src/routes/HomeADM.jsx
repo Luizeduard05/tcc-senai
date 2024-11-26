@@ -79,6 +79,26 @@ const HomeADM = () => {
                     </motion.div>
                 )}
 
+                {tipo === 'ADM' && (
+                    <motion.div
+                        className={styleHomeAdm.cbox}
+                        onClick={() => navigate('/cadastroAgendamento')}
+                        variants={cardVariants}
+                        whileHover="hover"
+                        whileTap="tap"
+                    >
+                        <div className={styleHomeAdm.icon}>
+                            <i className="fa fa-user"></i>
+                        </div>
+                        <div className={styleHomeAdm.descr}>
+                            <div className={styleHomeAdm.fTxt}>
+                                <h3>Novo Agendamento</h3>
+                                <h4>Cadastre um novo Agendamento.</h4>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+
                 {/* Condicional para o Card Cadastro de Peças */}
                 {/* {tipo === 'ADM' && (
                     <motion.div
