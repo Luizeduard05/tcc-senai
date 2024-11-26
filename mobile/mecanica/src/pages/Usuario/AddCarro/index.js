@@ -245,7 +245,7 @@ export default function AddCarro() {
                             <Text style={styles.vehicleItem}>{veiculo.modelo} - {veiculo.placa}</Text>
                             <View style={{ flexDirection: "row" }}>
                                 <TouchableOpacity onPress={() => confirmEdit(veiculo)}>
-                                    <FontAwesome name="pencil" size={24} color="blue" style={{ marginRight: 10 }} />
+                                    <FontAwesome name="pencil" size={24} color="white" style={{ marginRight: 10 }} />
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={() => confirmDelete(veiculo)}>
                                     <FontAwesome name="trash" size={24} color="red" />

@@ -65,7 +65,7 @@ router.get('/veiculos/:idPessoa', autenticarToken, veiculoControllers.buscarVeic
 router.put('/veiculos/:id', autenticarToken, veiculoControllers.editarVeiculo);
 
 // Rota para deletar veículo 
-//router.delete('/veiculos/:id', autenticarToken, veiculoControllers.deletarVeiculo);
+router.delete('/veiculos/:id', autenticarToken, veiculoControllers.deletarVeiculo);
 
 //Rota para Buscar veículo por placa
 router.post('/veiculo/placa', autenticarToken, veiculoControllers.buscarVeiculoPorPlaca);
@@ -125,7 +125,7 @@ router.get('/todasPecas', autenticarToken, PecasController.listarPecas);
 router.put('/pecas/:id', autenticarToken, PecasController.editarPecas);
 
 // Rota para deletar PEÇAS 
-//router.delete('/pecas/:id', autenticarToken, PecasController.deletarPecas);
+router.delete('/pecas/:id', autenticarToken, PecasController.deletarPecas);
 
 
 export default router;

@@ -1,18 +1,19 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, Platform, StatusBar, View, Text, TouchableOpacity, TextInput, ScrollView } from "react-native";
+import { StyleSheet, Platform, StatusBar, View, Text, TouchableOpacity, TextInput, ScrollView, Modal } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useAuth } from "../../../context/AuthContext";
 import { useCallback, useEffect, useState } from "react";
 import api from "../../../services/api/api";
 import { useFocusEffect } from "@react-navigation/native";
 
-// OBSERVAÇÃO: A ideia é após o usuario clicar na icone da prancheta aparecer as proximas informações de agendamento dados como email do dono do carro, modelo do veiculo, e se for possivel trazer as pecas que foram usadas na mão de obra
-
 export default function HistoricoADM() {
     const { token } = useAuth();
-    const [historico, setHistorico] = useState([]);
+    const [historico, setHistorico] = useState([]); // Variavel para guardar todos orçamentos
+    const [detalhes, setDetalhes] = useState([]); // Variavel para guardar detalhes da "os"
+    const [orcamentoSelecionado, setOrcamentoSelecionado] = useState(null); // Variavel para guardar "os" selecionada 
+    const [modalVisible, setModalVisible] = useState(false);
 
-    const getOrcamentos = async () => {
+    const getOrcamentos = async () => { // Requisição para trazer todos orçamentos
         try {
             const response = await api.get("/orcamentos", {
                 headers: {
@@ -20,11 +21,26 @@ export default function HistoricoADM() {
                 }
             });
             // console.log(response.data);
-            setHistorico(response.data.ordensServico);  // Armazena apenas ordensServico
+            setHistorico(response.data.ordensServico);
         } catch (error) {
             console.log("Erro ao buscar histórico:", error);
         }
     };
+
+    const getDetalhesOrcamento = async (id_os) => { // Requisição para trazer detalhes da os
+        try {
+            const response = await api.get(`/osPecas/${id_os}`, {
+                headers: { Authorization: `Token ${token}` }
+            });
+            const selectedOrcamento = historico.find((orcamento) => orcamento.id_os === id_os);
+            setOrcamentoSelecionado(selectedOrcamento); // Guarda a OS selecionada
+            setDetalhes(response.data.rows); // Guarda os detalhes da OS
+            setModalVisible(true);
+        } catch (error) {
+            console.log("Erro ao buscar detalhes:", error);
+        }
+    };
+
 
     useFocusEffect( // Toda vez que a tela entra em foco executa a função para atualização da lista de orcamentos
         useCallback(() => {
@@ -41,30 +57,70 @@ export default function HistoricoADM() {
                 />
             </View>
 
-                    <View style={styles.container}>
-                        <ScrollView>
-                            {historico.length > 0 ? (
-                                historico.map((item) => (
-                                    <View key={item.id_os} style={styles.historicoItem}>
-                                        <Text style={styles.textVeiculo}>Veículo: {item.placa}</Text>
-                                        {/* <Text style={styles.textVeiculo}>Modelo: {item.modelo}</Text> */}
-                                        {/* <Text style={styles.textVeiculo}>Email Cliente: {item.email}</Text> */}
-                                        <View style={styles.alinha}>
-                                            <Text style={styles.textDados}>{item.data.slice(0, 10)}</Text>
-                                            <Text style={styles.textDados}>R${item.total}</Text>
+            <View style={styles.container}>
+                <ScrollView>
+                    {historico.length > 0 ? (
+                        historico.map((item) => (
+                            <View key={item.id_os} style={styles.historicoItem}>
+                                <Text style={styles.textVeiculo}>Veículo: {item.placa}</Text>
+                                <View style={styles.alinha}>
+                                    <Text style={styles.textDados}>{item.data.slice(0, 10)}</Text>
+                                    <Text style={styles.textDados}>R${item.total}</Text>
+                                </View>
+                                <TouchableOpacity style={styles.icon} onPress={() => getDetalhesOrcamento(item.id_os)}>
+                                    <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={32} color="white" />
+                                </TouchableOpacity>
+                            </View>
+                        ))
+                    ) : (
+                        <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>
+                            Nenhuma orçamento encontrado
+                        </Text>
+                    )}
+                </ScrollView>
+
+                {modalVisible && (
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={() => setModalVisible(false)}
+                    >
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                <Text style={styles.modalTitle}>Detalhes do Orçamento</Text>
+                                {orcamentoSelecionado && (
+                                    <>
+                                        <Text>Veículo: {orcamentoSelecionado.modelo} ({orcamentoSelecionado.placa})</Text>
+                                        <Text>Data: {orcamentoSelecionado.data.slice(0, 10)}</Text>
+                                        <Text>Mão de obra: {orcamentoSelecionado.mo}</Text>
+                                        <Text>Total: R$ {orcamentoSelecionado.total}</Text>
+                                    </>
+                                )}
+                                <Text style={styles.modalSubtitle}>Produtos:</Text>
+                                {detalhes.length > 0 ? (
+                                    detalhes.map((produto) => (
+                                        <View key={produto.id_itens_os} style={styles.produtoItem}>
+                                            <Text>Nome: {produto.nome_produto}</Text>
+                                            <Text>Marca: {produto.marca_produto}</Text>
+                                            <Text>Valor: R$ {produto.valor_produto}</Text>
+                                            <Text>Quantidade: {produto.quantidade}</Text>
                                         </View>
-                                        <TouchableOpacity style={styles.icon}>
-                                            <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={32} color="white" />
-                                        </TouchableOpacity>
-                                    </View>
-                                ))
-                            ) : (
-                                <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>
-                                    Nenhuma orçamento encontrado
-                                </Text>
-                            )}
-                        </ScrollView>
-                    </View>
+                                    ))
+                                ) : (
+                                    <Text>Nenhum produto encontrado.</Text>
+                                )}
+                                <TouchableOpacity
+                                    style={styles.closeButton}
+                                    onPress={() => setModalVisible(false)}
+                                >
+                                    <Text style={styles.closeButtonText}>Fechar</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </Modal>
+                )}
+            </View>
         </LinearGradient>
     );
 }
@@ -131,5 +187,41 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 16,
         paddingVertical: 10,
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+    },
+    modalContent: {
+        width: "90%",
+        backgroundColor: "#fff",
+        borderRadius: 10,
+        padding: 20,
+        alignItems: "center",
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: "bold",
+        marginBottom: 10,
+    },
+    modalSubtitle: {
+        fontSize: 16,
+        fontWeight: "bold",
+        marginTop: 10,
+    },
+    produtoItem: {
+        marginBottom: 5,
+    },
+    closeButton: {
+        marginTop: 20,
+        backgroundColor: "#000",
+        borderRadius: 5,
+        padding: 10,
+    },
+    closeButtonText: {
+        color: "#fff",
+        fontWeight: "bold",
     },
 });

@@ -8,19 +8,41 @@ export default function AgendamentosMecanico() {
     const { token } = useAuth();
     const [agendamentos, setAgendamentos] = useState([]); // Variavel para guardar todos agendamentos
 
-    const getAgendamentos = async () => {  // Requisição para trazer os agendamentos
+    const getAgendamentos = async () => { // Requisicao para trazer todos os agendamentos 
         try {
             const response = await api.get("/agendamentos", {
                 headers: {
-                    Authorization: `Token ${token}`
-                }
-            })
-            // console.log(response.data.result)
-            setAgendamentos(response.data.result)
+                    Authorization: `Token ${token}`,
+                },
+            });
+
+            const agendamentosData = response.data.result;
+            const agendamentosComProprietarios = await Promise.all( // Fazendo um map para associar os agendamentos aos propreitarios
+                agendamentosData.map(async (agendamento) => {
+                    const proprietario = await getDetalhesAgendamento(agendamento.id_pessoa_veiculo_os);
+                    return { ...agendamento, proprietario };
+                })
+            );
+            setAgendamentos(agendamentosComProprietarios);
         } catch (error) {
-            console.log(error);
+            console.error("Erro ao buscar agendamentos:", error);
         }
-    }
+    };
+
+    const getDetalhesAgendamento = async (id_pessoa_veiculo_os) => {
+        try {
+            const response = await api.get(`/usuario/${id_pessoa_veiculo_os}`, {
+                headers: {
+                    Authorization: `Token ${token}`,
+                },
+            });
+            const detalhes = response.data.result;
+            return Array.isArray(detalhes) && detalhes.length > 0 ? detalhes[0] : null;
+        } catch (error) {
+            console.error(`Erro ao buscar detalhes do agendamento ${id_pessoa_veiculo_os}:`, error);
+            return null; // Retorna null se a requisição falhar
+        }
+    };
 
     useEffect(() => { // Trazendo os agendamentos quando o componente é iniciado
         getAgendamentos()
@@ -32,6 +54,7 @@ export default function AgendamentosMecanico() {
             style={styles.androidSafeArea}>
 
             <View style={styles.container}>
+                {console.log("Agendamentos prontos para renderização:", agendamentos)}
                 {Array.isArray(agendamentos) && agendamentos.length > 0 ? (
                     agendamentos.map((agendamento) => (
                         <View key={agendamento.id} style={styles.agendamentoItem}>
@@ -42,6 +65,7 @@ export default function AgendamentosMecanico() {
                             <Text style={styles.textObs}>
                                 <Text style={{ fontWeight: "bold" }}>Observação:</Text> {agendamento.Observação}
                             </Text>
+                            <Text style={styles.textData}>Proprietario: {agendamento.proprietario?.nome || "Desconhecido"}</Text>
                             <View style={styles.linhaVermelha} />
                         </View>
                     ))

@@ -70,7 +70,7 @@ export default function Historico() {
                 <TextInput style={styles.input} placeholder="Buscar por placa" placeholderTextColor="#777" />
             </View>
             <View style={styles.container}>
-                {orcamentos.length > 0 ? (
+                {Array.isArray(orcamentos) && orcamentos.length > 0 ? (
                     orcamentos.map((ordem) => {
                         const veiculo = veiculos[ordem.id_veiculo];
                         return (
@@ -93,7 +93,7 @@ export default function Historico() {
                         );
                     })
                 ) : (
-                    <Text style={styles.textDados}>Nenhum orçamento encontrado</Text>
+                    <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>Nenhum orçamento encontrado</Text>
                 )}
             </View>
 
@@ -114,6 +114,7 @@ export default function Historico() {
                                             <Text style={styles.modalText}>Produto: {item.nome_produto}</Text>
                                             <Text style={styles.modalText}>Marca: {item.marca_produto}</Text>
                                             <Text style={styles.modalText}>Valor: R${parseFloat(item.valor_produto).toFixed(2)}</Text>
+                                            <Text style={styles.modalText}>Quantidade: {item.quantidade}</Text>
                                         </View>
                                     ))
 
