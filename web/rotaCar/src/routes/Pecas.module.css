@@ -1,0 +1,181 @@
+.container {
+    padding: 20px;
+    background: linear-gradient(135deg, #000000, #333333);
+    color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    font-size: 2.5rem;
+    color: #ff0000;
+    margin-bottom: 20px;
+}
+
+.addButton {
+    background: #ff0000;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.addButton:hover {
+    background: #e60000;
+    box-shadow: 0 6px 12px rgba(255, 0, 0, 0.5);
+}
+
+.tableContainer {
+    width: 100%;
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #ffffff;
+    background: #333333;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.table th,
+.table td {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #444444;
+}
+
+.table th {
+    background: #ff0000;
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+.table tr:nth-child(odd) {
+    background: #444444;
+}
+
+.table tr:nth-child(even) {
+    background: #555555;
+}
+
+.editButton,
+.deleteButton {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.editButton:hover {
+    background: #ff6600;
+    color: #ffffff;
+}
+
+.deleteButton:hover {
+    background: #cc0000;
+    color: #ffffff;
+}
+
+.modal {
+    background: #ffffff;
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+    border-radius: 10px;
+    position: relative;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.overlay {
+    background: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalForm h2 {
+    font-size: 1.5rem;
+    color: #ff0000;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.modalForm input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+}
+
+.modalForm input:focus {
+    border-color: #ff0000;
+    outline: none;
+}
+
+.modalActions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.saveButton,
+.cancelButton {
+    padding: 10px 15px;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.saveButton {
+    background: #ff0000;
+    color: #ffffff;
+}
+
+.saveButton:hover {
+    background: #e60000;
+}
+
+.cancelButton {
+    background: #cccccc;
+    color: #333333;
+}
+
+.cancelButton:hover {
+    background: #aaaaaa;
+}

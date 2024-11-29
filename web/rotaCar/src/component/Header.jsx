@@ -29,6 +29,12 @@ const Header = () => {
                         </Link>
                     )}
 
+                    {tipo == 'ADM'&&(
+                        <Link to="/homeAdm">
+                            <p>menu principal</p>
+                        </Link>
+                    )}
+
                     {tipo === "CLI" && (
                         <Link to="/cadastroveiculo">
                             <p>meus veiculos</p>
@@ -45,13 +51,7 @@ const Header = () => {
                         </Link>
                     )}
 
-                    <Link to="/saiba-mais">
-                        <p>Saiba Mais</p>
-                    </Link>
-
-                    <Link to="/servicos">
-                        <p>Serviços</p>
-                    </Link>
+                   
                 </div>
             </div>
         </div>
