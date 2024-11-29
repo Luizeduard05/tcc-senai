@@ -12,6 +12,9 @@ import HomeAdm from './routes/HomeADM.jsx'
 import CadastroOs from './routes/CadastroOs.jsx'
 import CadastroVeiculo from './routes/CadastroVeiculo.jsx'
 import CadastroAdm from './routes/cadastroAdm.jsx'
+import Agendamentos from './routes/agendamentos.jsx'
+import CadastroAgendamento from './routes/CadastroAgendamentos.jsx'
+import Pecas from './routes/Pecas.jsx'
 
 // import Agendamento from './routes/historico.jsx'
 
@@ -30,8 +33,10 @@ const router = createBrowserRouter([
       {path: "/homeAdm", element: <HomeAdm/>},
       {path: "/cadastroOs", element: <CadastroOs/>},
       {path: "/cadastroveiculo", element: <CadastroVeiculo/>},
-      {path: "/cadastroAdm", element: <CadastroAdm/>}
-      // { path: "/agendamento", element: <Agendamentos/> }
+      {path: "/cadastroAdm", element: <CadastroAdm/>},
+      { path: "/agendamento", element: <Agendamentos/> },
+      { path: "/cadastroAgendamento", element: <CadastroAgendamento/> },
+      { path: "/pecas", element: <Pecas/> }
 
 
     ]
