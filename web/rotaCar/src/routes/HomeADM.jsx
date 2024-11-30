@@ -140,6 +140,7 @@ const HomeADM = () => {
                 </motion.div>
 
                 {/* Card Orçamentos */}
+                {tipo === "ADM" && ( 
                 <motion.div
                     className={styleHomeAdm.cbox}
                     onClick={() => navigate('/historico')}
@@ -157,6 +158,28 @@ const HomeADM = () => {
                         </div>
                     </div>
                 </motion.div>
+                )}
+
+                {tipo === "MEC" && ( //rota luiz do mec 
+                     <motion.div
+                     className={styleHomeAdm.cbox}
+                     onClick={() => navigate('/historicoMEC')} //passar rota aqui 
+                     variants={cardVariants}
+                     whileHover="hover"
+                     whileTap="tap"
+                 >
+                     <div className={styleHomeAdm.icon}>
+                         <i className="fa fa-file"></i>
+                     </div>
+                     <div className={styleHomeAdm.descr}>
+                         <div className={styleHomeAdm.fTxt}>
+                             <h3>Orçamentos</h3>
+                             <h4>Consulte e gerencie os orçamentos pendentes.</h4>
+                         </div>
+                     </div>
+                 </motion.div>
+                )}
+               
 
                 {/* Card Peças */}
                 {tipo === "ADM" && (
