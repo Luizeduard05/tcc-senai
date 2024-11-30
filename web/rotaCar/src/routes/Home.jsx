@@ -74,7 +74,7 @@ const Home = () => {
                 </div>
             </section>
             <section className="principaisServico">
-
+                    
             </section>
 
             <section className="marcas">
@@ -265,3 +265,24 @@ const Home = () => {
 };
 
 export default Home;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
