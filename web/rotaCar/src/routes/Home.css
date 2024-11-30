@@ -255,9 +255,10 @@ img.carros {
 }
 
 .swiper-slide img {
+    padding: 16px;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     transition: 1s;
 }
 
@@ -286,10 +287,7 @@ img.carros {
     background: rgba(123, 123, 123, 0.4);
 }
 
-.swiper-slide-active img {
-    transform: scale(1.3);
-    object-position: 50% 0%;
-}
+
 
 .swiper-slide-active p {
     transform: rotate(0deg) scale(1);
