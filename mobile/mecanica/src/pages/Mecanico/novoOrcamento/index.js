@@ -118,7 +118,7 @@ export default function NovoOrcamentoMecanico() {
             return {
                 id_produto: item.id,
                 quantidade: item.quantidade,
-                valor: item.quantidade * valorNumber // Multiplicando a quantidade pelo valor
+                valor: valorNumber
             };
         });
         const mecanico = mecanicoSelecionado[0];

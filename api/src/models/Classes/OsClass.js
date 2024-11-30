@@ -146,6 +146,7 @@ class classOs {
               o.status, 
               o.total, 
               o.mo,
+              o.id_mecanico,
               v.placa, 
               v.modelo, 
               p.id AS id_pessoa,

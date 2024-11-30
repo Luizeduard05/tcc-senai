@@ -107,7 +107,7 @@ export default function NovoOrcamentoADM() {
             return {
                 id_produto: item.id,
                 quantidade: item.quantidade,
-                valor: item.quantidade * valorNumber // Multiplicando a quantidade pelo valor
+                valor: valorNumber // Multiplicando a quantidade pelo valor
             };
         });
         const body = {
