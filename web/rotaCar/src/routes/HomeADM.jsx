@@ -143,24 +143,24 @@ const HomeADM = () => {
                         </div>
                     </motion.div>
 
-                    {/* Card Orçamentos */}
-                    <motion.div
-                        className={styleHomeAdm.cbox}
-                        onClick={() => navigate('/historico')}
-                        variants={cardVariants}
-                        whileHover="hover"
-                        whileTap="tap"
-                    >
-                        <div className={styleHomeAdm.icon}>
-                            <i className="fa fa-file"></i>
+                {/* Card Orçamentos */}
+                <motion.div
+                    className={styleHomeAdm.cbox}
+                    onClick={() => navigate('/historico')}
+                    variants={cardVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                >
+                    <div className={styleHomeAdm.icon}>
+                        <i className="fa fa-file"></i>
+                    </div>
+                    <div className={styleHomeAdm.descr}>
+                        <div className={styleHomeAdm.fTxt}>
+                            <h3>Orçamentos</h3>
+                            <h4>Consulte e gerencie os orçamentos pendentes.</h4>
                         </div>
-                        <div className={styleHomeAdm.descr}>
-                            <div className={styleHomeAdm.fTxt}>
-                                <h3>Orçamentos</h3>
-                                <h4>Consulte e gerencie os orçamentos pendentes.</h4>
-                            </div>
-                        </div>
-                    </motion.div>
+                    </div>
+                </motion.div>
 
                     {/* Card Peças */}
                     {tipo === "ADM" && (
