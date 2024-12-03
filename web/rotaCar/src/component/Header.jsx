@@ -29,6 +29,16 @@ const Header = () => {
                         </Link>
                     )}
 
+                    {token ? (
+                        <Link to="/perfil">
+                        <p>Perfil</p>
+                    </Link>
+                    ) : (
+                        <a href="
+                        "><p>serviços</p></a>
+                        
+                    )}
+
                     {tipo == 'ADM'&&(
                         <Link to="/homeAdm">
                             <p>menu principal</p>
