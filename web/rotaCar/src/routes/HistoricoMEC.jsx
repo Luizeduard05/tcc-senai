@@ -115,7 +115,7 @@ const HistoricoMEC = () => {
                                     <td>
                                         <button
                                             onClick={() => handleProntuarioClick(ordem.id_os)}
-                                            className={stylesH.iconButton}
+                                            className={stylesHM.iconButton}
                                             title="Ver Prontuário"
                                         >
                                             📋

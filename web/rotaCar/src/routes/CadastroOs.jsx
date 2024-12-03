@@ -4,7 +4,7 @@ import styleCadOs from "./Cadastro.module.css";
 import { useAuth } from "../Context/ContextUser";
 
 const CadastroOs = () => {
-    const { token } = useAuth();
+    const { token, tipo, id } = useAuth();
     const [veiculos, setVeiculos] = useState([]);
 
     const [formData, setFormData] = useState({
@@ -17,6 +17,7 @@ const CadastroOs = () => {
         mecanico: ""
     });
     const [usuarios, setUsuarios] = useState([]);
+    const [mecanicos, setMecanicos] = useState([]);
     const [produtos, setProdutos] = useState([]);
     const [total, setTotal] = useState(0);
 
@@ -25,8 +26,25 @@ const CadastroOs = () => {
             const response = await api.get("/todosUser", {
                 headers: { Authorization: `Token ${token}` }
             });
-            setUsuarios(response.data.result);
-            console.log(response.data.result);
+            // setUsuarios(response.data.result);
+
+            const usuariosFiltrados = response.data.result.filter(usuario => usuario.tipo === "CLI");
+
+            if (tipo === "MEC") {
+                const response = await api.get(`/usuario/${id}`, {
+                    headers: { Authorization: `Token ${token}` }
+                })
+                // setMecanicos(response.data.result);
+                const mecanicoId = response.data.result.pessoa_id; // Ajuste conforme a estrutura da resposta
+                setFormData(prevFormData => ({ ...prevFormData, mecanico: mecanicoId }));
+            } else {
+                const mecanicosFiltrados = response.data.result.filter(mecanico => mecanico.tipo === "MEC");
+                setMecanicos(mecanicosFiltrados);
+            }
+
+
+            setUsuarios(usuariosFiltrados);
+            // console.log(response.data.result);
         };
 
         const fetchProdutos = async () => {
@@ -57,8 +75,8 @@ const CadastroOs = () => {
             [name]: value, // Atualiza o estado corretamente
         });
     };
-    
-    
+
+
 
     const handleItemChange = (index, e) => {
         const { name, value } = e.target;
@@ -89,51 +107,56 @@ const CadastroOs = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         console.log("Data selecionada:", formData.data);
-        console.log("ID do Veículo selecionado:", formData.idVei); 
-    
+        console.log("ID do Veículo selecionado:", formData.idVei);
+
         if (!formData.data || !formData.idVei) { // Verifica se data e idVei estão presentes
             console.error("Data ou ID do veículo não foram fornecidos.");
             return;
         }
-    
+
         const formattedDate = new Date(formData.data).toISOString().split('T')[0];
         console.log("Data formatada:", formattedDate);
-    
+
+        // const dataToSend = {
+        //     ...formData,
+        //     data: formattedDate,
+        // };
+
         const dataToSend = {
             ...formData,
-            data: formattedDate,
+            mecanico: formData.mecanico || id, // Usa o id do mecânico logado, caso não esteja preenchido
         };
-    
+        
         try {
             const response = await api.post("/os", dataToSend, {
                 headers: { Authorization: `Token ${token}` },
-                params: {idVei: formData.idVei, idPessoaVei: formData.idPessoaVei}
+                params: { idVei: formData.idVei, idPessoaVei: formData.idPessoaVei }
             });
             console.log("Resposta da API:", response.data);
         } catch (error) {
             console.error("Erro na requisição:", error);
         }
     };
-    
-    
+
+
 
 
 
 
     const handleUserChange = async (e) => {
         const userId = e.target.value;
-        setFormData({ ...formData, idPessoaVei: userId, idVei: "" }); 
-    
+        setFormData({ ...formData, idPessoaVei: userId, idVei: "" });
+
         if (userId) {
             try {
                 const response = await api.get(`/veiculos/${userId}`, {
                     headers: { Authorization: `Token ${token}` }
                 });
-    
+
                 console.log("Resposta completa da API para veículos:", response);
-    
+
                 if (response && response.data && response.data.person && response.data.person.length > 0) {
                     setVeiculos(response.data.person);
                 } else {
@@ -148,7 +171,7 @@ const CadastroOs = () => {
             setVeiculos([]);
         }
     };
-    
+
 
 
     return (
@@ -162,7 +185,7 @@ const CadastroOs = () => {
                                 <input
                                     type="date"
                                     name="data"
-                                    value={formData.data || ''} 
+                                    value={formData.data || ''}
                                     onChange={handleChange}
                                     required
                                 />
@@ -193,23 +216,25 @@ const CadastroOs = () => {
                                     <option value="">Selecione um veículo</option>
                                     {veiculos.map(veiculo => (
                                         <option key={veiculo.id} value={veiculo.id}>
-                                            {`${veiculo.placa} - ${veiculo.modelo}`} 
+                                            {`${veiculo.placa} - ${veiculo.modelo}`}
                                         </option>
                                     ))}
                                 </select>
                                 <i>Veículo</i>
                             </div>
 
-
+                            {tipo === "ADM" && 
                             <div className={styleCadOs.inputBox}>
                                 <select name="mecanico" value={formData.mecanico} onChange={handleChange} required>
                                     <option value="">Selecione um mecânico</option>
-                                    {usuarios.map(user => (
+                                    {mecanicos.map(user => (
                                         <option key={user.pessoa_id} value={user.pessoa_id}>{user.nome}</option>
                                     ))}
                                 </select>
                                 <i>Mecânico</i>
                             </div>
+                            }
+
                             {formData.itens.map((item, index) => (
                                 <div key={index} className={styleCadOs.itemContainer}>
                                     <div className={styleCadOs.inputBox}>
