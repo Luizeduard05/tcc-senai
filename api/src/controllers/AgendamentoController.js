@@ -92,7 +92,7 @@ const agendamentoController = {
 
         console.log('data_e_hora recebida:', data_e_hora);
 
-        if (!data_e_hora || !observacao || !id_os) {
+        if (!data_e_hora || !observacao ) {
             return res.status(400).json({ message: 'Todos os campos são obrigatórios.' });
         }
 
