@@ -1,0 +1,146 @@
+.container {
+    padding: 20px;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+.profileHeader {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: linear-gradient(90deg, #000, #ff0000);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    animation: slideDown 0.8s ease-out;
+}
+
+.profileImage {
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    border-radius: 50%;
+    border: 4px solid #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.profilePicture {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profileInfo h1 {
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.profileInfo p {
+    margin: 5px 0;
+}
+
+.location {
+    font-style: italic;
+    color: #ccc;
+}
+
+.profileDetails {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.card {
+    flex: 1;
+    min-width: 300px;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.8s ease-in-out;
+}
+
+.card h3 {
+    margin-bottom: 15px;
+    color: #ff0000;
+}
+
+.card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.logo img{
+    display: none; 
+
+}
+
+.card ul li {
+    margin: 10px 0;
+}
+
+.card p {
+    margin: 10px 0;
+    color: #333;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    color: white;
+    background: #ff0000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+}
+
+.button:hover {
+    background: #cc0000;
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.card ul li {
+    margin: 10px 0;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.card ul li strong {
+    color: #ff0000;
+}
+

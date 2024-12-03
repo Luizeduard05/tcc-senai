@@ -15,6 +15,7 @@ import CadastroAdm from './routes/cadastroAdm.jsx'
 import Agendamentos from './routes/agendamentos.jsx'
 import CadastroAgendamento from './routes/CadastroAgendamentos.jsx'
 import Pecas from './routes/Pecas.jsx'
+import Perfil from './routes/Perfil.jsx'
 
 // import Agendamento from './routes/historico.jsx'
 
@@ -36,12 +37,16 @@ const router = createBrowserRouter([
       {path: "/cadastroAdm", element: <CadastroAdm/>},
       { path: "/agendamento", element: <Agendamentos/> },
       { path: "/cadastroAgendamento", element: <CadastroAgendamento/> },
-      { path: "/pecas", element: <Pecas/> }
+      { path: "/pecas", element: <Pecas/> },
+      { path: "/perfil", element: <Perfil/> },
+
 
 
     ]
   }
 ]);
+
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
