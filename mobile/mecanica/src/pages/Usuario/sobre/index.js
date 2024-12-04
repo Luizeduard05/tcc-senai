@@ -10,7 +10,7 @@ export default function Sobre() {
     };
 
     const openWhatsApp = () => { // Função de redirecionamento para wpp
-        Linking.openURL('https://wa.me/5591999999999'); 
+        Linking.openURL('https://wa.me/55919971481498'); 
     };
 
     return (
