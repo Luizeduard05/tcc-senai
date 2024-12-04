@@ -16,6 +16,7 @@ import Agendamentos from './routes/agendamentos.jsx'
 import CadastroAgendamento from './routes/CadastroAgendamentos.jsx'
 import Pecas from './routes/Pecas.jsx'
 import Perfil from './routes/Perfil.jsx'
+import HistoricoMEC from './routes/HistoricoMEC.jsx'
 
 // import Agendamento from './routes/historico.jsx'
 
@@ -30,6 +31,7 @@ const router = createBrowserRouter([
       { path: "/cadastro", element: <Cadastro /> },
       { path: "/intranet", element: <Intranet/> },
       { path: "/historico", element: <Historico/> },
+      { path: "historicoMEC", element: <HistoricoMEC/>},
       { path: "/login", element: <Login/> },
       {path: "/homeAdm", element: <HomeAdm/>},
       {path: "/cadastroOs", element: <CadastroOs/>},

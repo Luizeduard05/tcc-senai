@@ -25,9 +25,9 @@ const HomeADM = () => {
 
     return (
         <>
-         <Header/>
+            <Header />
             <motion.section
-               
+
                 className={styleHomeAdm.SecaoPai}
                 initial="hidden"
                 animate="visible"
@@ -143,24 +143,48 @@ const HomeADM = () => {
                         </div>
                     </motion.div>
 
-                {/* Card Orçamentos */}
-                <motion.div
-                    className={styleHomeAdm.cbox}
-                    onClick={() => navigate('/historico')}
-                    variants={cardVariants}
-                    whileHover="hover"
-                    whileTap="tap"
-                >
-                    <div className={styleHomeAdm.icon}>
-                        <i className="fa fa-file"></i>
-                    </div>
-                    <div className={styleHomeAdm.descr}>
-                        <div className={styleHomeAdm.fTxt}>
-                            <h3>Orçamentos</h3>
-                            <h4>Consulte e gerencie os orçamentos pendentes.</h4>
-                        </div>
-                    </div>
-                </motion.div>
+                    {/* Card Orçamentos */}
+                    {tipo === "ADM" &&
+                        <motion.div
+                            className={styleHomeAdm.cbox}
+                            onClick={() => navigate('/historico')}
+                            variants={cardVariants}
+                            whileHover="hover"
+                            whileTap="tap"
+                        >
+                            <div className={styleHomeAdm.icon}>
+                                <i className="fa fa-file"></i>
+                            </div>
+                            <div className={styleHomeAdm.descr}>
+                                <div className={styleHomeAdm.fTxt}>
+                                    <h3>Orçamentos</h3>
+                                    <h4>Consulte e gerencie os orçamentos pendentes.</h4>
+                                </div>
+                            </div>
+                        </motion.div>
+                    }
+
+
+                    {tipo === "MEC" &&
+                        <motion.div
+                            className={styleHomeAdm.cbox}
+                            onClick={() => navigate('/historicoMEC')}
+                            variants={cardVariants}
+                            whileHover="hover"
+                            whileTap="tap"
+                        >
+                            <div className={styleHomeAdm.icon}>
+                                <i className="fa fa-file"></i>
+                            </div>
+                            <div className={styleHomeAdm.descr}>
+                                <div className={styleHomeAdm.fTxt}>
+                                    <h3>Orçamentos</h3>
+                                    <h4>Consulte e gerencie os orçamentos pendentes.</h4>
+                                </div>
+                            </div>
+                        </motion.div>
+                    }
+
 
                     {/* Card Peças */}
                     {tipo === "ADM" && (
