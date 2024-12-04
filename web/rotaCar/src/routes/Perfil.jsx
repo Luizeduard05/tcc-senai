@@ -5,17 +5,40 @@ import api from "../../service/api";
 import Header from "../component/Header";
 
 const Perfil = () => {
-    const { user, token, id } = useAuth();
+    const { tipo, token, id } = useAuth();
     const [orcamentos, setOrcamentos] = useState([]); // Inicializado como array vazio
     const [veiculos, setVeiculos] = useState([]);
     const [agendamentos, setAgendamentos] = useState([]);
     const [userData, setUserData] = useState(null);
     const [ordensServico, setOrdensServico] = useState([]);
+    const [profileImage, setProfileImage] = useState(null);
+
+    const handleProfileImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                setProfileImage(reader.result); // Salva a imagem no estado
+                localStorage.setItem("profileImage", reader.result); // Armazena no Local Storage
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    useEffect(() => {
+        const savedImage = localStorage.getItem("profileImage");
+        if (savedImage) {
+            setProfileImage(savedImage);
+        }
+    }, []);
+
 
 
 
 
     // Função para buscar perfil do usuário
+
+
     const fetchUserProfile = async () => {
         try {
             const response = await api.get(`/usuario/${id}`, {
@@ -68,15 +91,17 @@ const Perfil = () => {
     // Função para buscar agendamentos
     const fetchAgendamentos = async () => {
         try {
-            const response = await api.get(`/agendamentos/${id}`, {
+            const response = await api.get(`/agendar/pessoa/${id}`, {
                 headers: { Authorization: `Token ${token}` },
             });
 
-            setAgendamentos(response.data?.result || []); // Define como array vazio se não houver resultado
+            // Acessa os dados corretamente e define o estado com os agendamentos
+            setAgendamentos(response.data || []);
         } catch (error) {
             console.error("Erro ao buscar agendamentos:", error);
         }
     };
+
 
     // Chamada das funções no useEffect
     useEffect(() => {
@@ -95,43 +120,65 @@ const Perfil = () => {
                     <>
                         <div className={stylesPerfil.profileHeader}>
                             <div className={stylesPerfil.profileImage}>
-                                <img
-                                    src=""
-                                    alt="Imagem do perfil"
-                                    className={stylesPerfil.profilePicture}
+                                <label htmlFor="profileImageUpload">
+                                    {profileImage ? (
+                                        <img
+                                            src={profileImage}
+                                            alt="Imagem do perfil"
+                                            className={stylesPerfil.profilePicture}
+                                        />
+                                    ) : (
+                                        <img
+                                            src="/default-profile.png"
+                                            alt="Imagem do perfil padrão"
+                                            className={stylesPerfil.profilePicture}
+                                        />
+                                    )}
+                                </label>
+                                <input
+                                    type="file"
+                                    id="profileImageUpload"
+                                    accept="image/*"
+                                    style={{ display: "none" }}
+                                    onChange={handleProfileImageChange}
                                 />
                             </div>
+
                             <div className={stylesPerfil.profileInfo}>
                                 <h1>{userData.nome}</h1>
-                            
+
                                 <p className={stylesPerfil.location}>
                                     {userData.logradouro}, {userData.bairro}, {userData.estado}
                                 </p>
                             </div>
                         </div>
 
+
+
                         <div className={stylesPerfil.profileDetails}>
                             <div className={stylesPerfil.card}>
                                 <h3>Meus Dados</h3>
                                 <div className={stylesPerfil.profileInfo}>
-                                <h1>{userData.nome}</h1>
-                                <p>{userData.email}</p>
-                                <p>{userData.cpf}</p>
-                                <p>{userData.telefone}</p>
-                                <p className={stylesPerfil.location}>
-                                    {userData.logradouro}, {userData.bairro}, {userData.estado}
-                                </p>
-                            </div>
+                                    <h1>{userData.nome}</h1>
+                                    <p>{userData.email}</p>
+                                    <p>{userData.cpf}</p>
+                                    <p>{userData.telefone}</p>
+                                    <p className={stylesPerfil.location}>
+                                        {userData.logradouro}, {userData.bairro}, {userData.estado}
+                                    </p>
+                                </div>
                             </div>
 
-                            <div className={stylesPerfil.card}>
+                            
+                            {tipo === "CLI"&&(
+                                <div className={stylesPerfil.card}>
                                 <h3>Últimos Orçamentos</h3>
                                 {ordensServico.length > 0 ? (
                                     <ul>
                                         {/* Exibe apenas as 2 últimas ordens de serviço */}
                                         {ordensServico.slice(0, 2).map((ordem) => (
                                             <li key={ordem.id}>
-                                                
+
                                                 <strong>Data:</strong> {new Date(ordem.data).toLocaleDateString()}<br />
                                                 <strong>Status:</strong> {ordem.status === 0 ? "Pendente" : "Concluída"}<br />
                                                 <strong>Total:</strong> R$ {ordem.total}<br />
@@ -143,6 +190,11 @@ const Perfil = () => {
                                     <p>Nenhuma ordem de serviço encontrada.</p>
                                 )}
                             </div>
+
+                            )}
+
+                            
+                            
 
                             <div className={stylesPerfil.card}>
                                 <h3>Seus Veículos</h3>
@@ -166,22 +218,25 @@ const Perfil = () => {
                                 )}
                             </div>
 
-                            <div className={stylesPerfil.card}>
-                                <h3>Últimos Agendamentos</h3>
-                                {agendamentos.length > 0 ? (
-                                    <ul>
-                                        {agendamentos.slice(0, 3).map((agendamento) => (
-                                            <li key={agendamento.id}>
-                                                <strong>Data:</strong> {new Date(agendamento.data).toLocaleDateString()} -
-                                                <strong> Serviço:</strong> {agendamento.servico}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    <p>Nenhum agendamento encontrado.</p>
-                                )}
-                            </div>
+
+                        </div><br />
+                        <div className={stylesPerfil.card}>
+                            <h3>Últimos Agendamentos</h3>
+                            {agendamentos.length > 0 ? (
+                                <ul>
+                                    {agendamentos.slice(0, 3).map((agendamento) => (
+                                        <li key={agendamento.id}>
+                                            <strong>Data:</strong> {agendamento.Data_e_hora}<br />
+                                            <strong>Serviço:</strong> {agendamento.Observação}<br />
+                                            <strong>Modelo:</strong> {agendamento.modelo} ({agendamento.placa})
+                                        </li>
+                                    ))}
+                                </ul>
+                            ) : (
+                                <p>Nenhum agendamento encontrado.</p>
+                            )}
                         </div>
+
                     </>
                 ) : (
                     <div className={stylesPerfil.loading}>

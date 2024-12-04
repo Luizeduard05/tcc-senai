@@ -41,6 +41,7 @@ const router = createBrowserRouter([
       { path: "/cadastroAgendamento", element: <CadastroAgendamento/> },
       { path: "/pecas", element: <Pecas/> },
       { path: "/perfil", element: <Perfil/> },
+      
 
 
     ]
