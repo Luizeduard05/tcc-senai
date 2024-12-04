@@ -29,6 +29,7 @@ const HistoricoMEC = () => {
             // console.log(response.data);
             // Filtrando os relacionada ao mecanico
             const osFiltradas = response.data.ordensServico.filter(os => os.id_mecanico === id)
+            console.log(osFiltradas)
 
             const responseUsuarios = await api.get(`/todosUser`, {
                 headers: { Authorization: `Token ${token}` },
@@ -132,10 +133,10 @@ const HistoricoMEC = () => {
                 </table>
 
                 {showProntuario && prontuario && (
-                    <div className={stylesH.modal}>
-                        <div className={stylesH.modalContent}>
+                    <div className={stylesHM.modal}>
+                        <div className={stylesHM.modalContent}>
                             <h2>Prontuário</h2>
-                            <table className={stylesH.container}>
+                            <table className={stylesHM.container}>
                                 <thead>
                                     <tr>
                                         <th>Peças Usadas</th>
