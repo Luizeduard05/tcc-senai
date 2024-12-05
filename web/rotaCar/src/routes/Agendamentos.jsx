@@ -2,16 +2,35 @@ import stylesA from "./Agendamentos.module.css";
 import { useState, useEffect } from "react";
 import { useAuth } from "../Context/ContextUser";
 import api from "../../service/api";
-import { parse, format, isToday, isThisWeek, compareAsc,parseISO } from "date-fns";
+import { parse, format, isToday, isThisWeek, compareAsc, parseISO } from "date-fns";
 import Header from "../component/Header";
 
 const Agendamentos = () => {
-    const { token } = useAuth();
+
+
+
+
+    const { token, tipo, id } = useAuth();
     const [agendamentos, setAgendamentos] = useState([]);
     const [usuarios, setUsuarios] = useState([]);
     const [agendamentoEmEdicao, setAgendamentoEmEdicao] = useState(null);
 
+
+
+
+
     useEffect(() => {
+        if (tipo === 'CLI') {
+            api.get(`/agendar/pessoa/${id}`, { headers: { Authorization: `Token ${token}` } })
+                .then((response) => {
+                    setAgendamentos(response.data.result || []);
+                })
+                .catch((error) => {
+                    console.error("Erro ao buscar agendamentos:", error);
+                });
+        }
+
+
         api.get("/agendamentos", { headers: { Authorization: `Token ${token}` } })
             .then((response) => {
                 setAgendamentos(response.data.result || []);
@@ -19,6 +38,8 @@ const Agendamentos = () => {
             .catch((error) => {
                 console.error("Erro ao buscar agendamentos:", error);
             });
+        
+
 
         api.get("/todosUser", { headers: { Authorization: `Token ${token}` } })
             .then((response) => {
@@ -51,7 +72,7 @@ const Agendamentos = () => {
 
     const handleUpdate = async (event) => {
         event.preventDefault();
-    
+
         try {
             const agendamentoAtualizado = {
                 id: agendamentoEmEdicao.id,
@@ -64,7 +85,7 @@ const Agendamentos = () => {
                 id_veiculo_os: agendamentoEmEdicao.id_veiculo_os,
                 id_pessoa_veiculo_os: agendamentoEmEdicao.id_pessoa_veiculo_os,
             };
-    
+
             const response = await api.put(
                 `/agendar/${agendamentoEmEdicao.id}`,
                 agendamentoAtualizado,
@@ -72,21 +93,21 @@ const Agendamentos = () => {
                     headers: { Authorization: `Token ${token}` },
                 }
             );
-    
+
             setAgendamentos(
                 agendamentos.map((item) =>
                     item.id === agendamentoEmEdicao.id ? response.data.result : item
                 )
             );
-    
+
             setAgendamentoEmEdicao(null); // Fecha o modal de edição
         } catch (error) {
             console.error("Erro ao atualizar agendamento:", error);
         }
     };
-    
-    
-    
+
+
+
     const processarAgendamentos = () => {
         const hoje = [];
         const semana = [];

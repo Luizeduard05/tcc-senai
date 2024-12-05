@@ -92,7 +92,7 @@ const HomeADM = () => {
                             whileTap="tap"
                         >
                             <div className={styleHomeAdm.icon}>
-                                <i className="fa fa-user"></i>
+                            <i class="fa fa-plus"></i>
                             </div>
                             <div className={styleHomeAdm.descr}>
                                 <div className={styleHomeAdm.fTxt}>
