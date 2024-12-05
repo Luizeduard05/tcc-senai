@@ -56,7 +56,7 @@ const Header = () => {
                         </Link>
                     )}
                     {tipo === "CLI" && (
-                        <Link to="/cadastroveiculo">
+                        <Link to="/agendamento">
                             <p>Agendamentos</p>
                         </Link>
                     )}
