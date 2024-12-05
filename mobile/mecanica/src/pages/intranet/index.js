@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
         marginTop: 150,
     },
     carImage: {
-        width: 200, 
+        width: 185, 
         height: 125, 
         resizeMode: "contain", 
         marginHorizontal: 5, 

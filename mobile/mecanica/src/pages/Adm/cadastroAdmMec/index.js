@@ -171,6 +171,7 @@ export default function CadastroAdmMec() {
                                 onValueChange={(itemValue) => setTipoSelecionado(itemValue)}
                                 style={styles.inputs}
                             >
+                                <Picker.Item label="Selecione um tipo de usuário" value={null} />
                                 {tiposUsuario.map((tipo) => (
                                     <Picker.Item
                                         key={tipo.id}

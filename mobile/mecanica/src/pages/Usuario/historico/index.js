@@ -61,10 +61,13 @@ export default function Historico() {
     };
 
     const filtroOrcamentosPorPlaca = () => {
+
+        if(orcamentos != undefined) { // Verificando se o array possui alguma informação
         return orcamentos.filter((ordem) => {
             const veiculo = veiculos[ordem.id_veiculo];
             return veiculo && veiculo.placa.toLowerCase().includes(search.toLowerCase());
         });
+        }
     };
 
     useEffect(() => {
