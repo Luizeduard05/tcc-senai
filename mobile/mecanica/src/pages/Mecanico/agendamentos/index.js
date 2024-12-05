@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient"
-import { StyleSheet, Platform, StatusBar, View, Text } from "react-native"
+import { StyleSheet, Platform, StatusBar, View, Text, ScrollView } from "react-native"
 import { useAuth } from "../../../context/AuthContext";
 import { useEffect, useState } from "react";
 import api from "../../../services/api/api";
@@ -54,24 +54,25 @@ export default function AgendamentosMecanico() {
             style={styles.androidSafeArea}>
 
             <View style={styles.container}>
-                {console.log("Agendamentos prontos para renderização:", agendamentos)}
-                {Array.isArray(agendamentos) && agendamentos.length > 0 ? (
-                    agendamentos.map((agendamento) => (
-                        <View key={agendamento.id} style={styles.agendamentoItem}>
-                            <View style={styles.alinha}>
-                                <Text style={styles.textHora}>{agendamento.Data_e_hora.slice(12, 17)}</Text>
-                                <Text style={styles.textData}>{agendamento.Data_e_hora.slice(0, 10)}</Text>
+                <ScrollView>
+                    {Array.isArray(agendamentos) && agendamentos.length > 0 ? (
+                        agendamentos.map((agendamento) => (
+                            <View key={agendamento.id} style={styles.agendamentoItem}>
+                                <View style={styles.alinha}>
+                                    <Text style={styles.textHora}>{agendamento.Data_e_hora.slice(12, 17)}</Text>
+                                    <Text style={styles.textData}>{agendamento.Data_e_hora.slice(0, 10)}</Text>
+                                </View>
+                                <Text style={styles.textObs}>
+                                    <Text style={{ fontWeight: "bold" }}>Observação:</Text> {agendamento.Observação}
+                                </Text>
+                                <Text style={styles.textData}>Proprietario: {agendamento.proprietario?.nome || "Desconhecido"}</Text>
+                                <View style={styles.linhaVermelha} />
                             </View>
-                            <Text style={styles.textObs}>
-                                <Text style={{ fontWeight: "bold" }}>Observação:</Text> {agendamento.Observação}
-                            </Text>
-                            <Text style={styles.textData}>Proprietario: {agendamento.proprietario?.nome || "Desconhecido"}</Text>
-                            <View style={styles.linhaVermelha} />
-                        </View>
-                    ))
-                ) : (
-                    <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>Nenhuma Agendamento encontrado</Text>
-                )}
+                        ))
+                    ) : (
+                        <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>Nenhuma Agendamento encontrado</Text>
+                    )}
+                </ScrollView>
             </View>
         </LinearGradient>
     )

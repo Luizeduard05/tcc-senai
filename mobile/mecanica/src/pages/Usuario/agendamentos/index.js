@@ -39,12 +39,13 @@ export default function Agendamentos() {
                                 <Text style={{ fontWeight: "bold" }}>Observação:</Text> {agendamento.Observação}
                             </Text>
                             <View style={styles.alinha}>
-                                <Text style={styles.textHora}>Placa:{agendamento.placa}</Text>
+                                <Text style={styles.textData}>Placa: {agendamento.placa}</Text>
                                 <Text style={styles.textData}>{agendamento.modelo}</Text>
                             </View>
                             <View style={styles.linhaVermelha} />
                         </View>
                     ))
+
                 ) : (
                     <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>Nenhum agendamento encontrado.</Text>
                 )}
