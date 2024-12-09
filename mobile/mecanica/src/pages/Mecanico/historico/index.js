@@ -12,6 +12,7 @@ export default function HistoricoMecanico() {
     const [detalhes, setDetalhes] = useState([]); // Variavel para guardar detalhes da "os"
     const [orcamentoSelecionado, setOrcamentoSelecionado] = useState(null); // Variavel para guardar "os" selecionada 
     const [modalVisible, setModalVisible] = useState(false);
+    const [search, setSearch] = useState("");
 
     const getOrcamentos = async () => { // Requisição para trazer todos orçamentos
         try {
@@ -41,6 +42,12 @@ export default function HistoricoMecanico() {
         }
     };
 
+    const filterPorPlaca = () => {
+        return historico.filter((placa) =>
+            placa.placa.toLowerCase().includes(search.toLowerCase())
+        )
+    }
+
     useFocusEffect( // Toda vez que a tela entra em foco executa a função para atualização da lista de orcamentos
         useCallback(() => {
             getOrcamentos()
@@ -53,20 +60,22 @@ export default function HistoricoMecanico() {
                 <TextInput
                     style={styles.input}
                     placeholder="Buscar por placa"
+                    value={search}
+                    onChangeText={setSearch}
                 />
             </View>
 
             <View style={styles.container}>
-                <ScrollView>
-                    {historico.length > 0 ? (
-                        historico.map((item) => (
-                            <View key={item.id_os} style={styles.historicoItem}>
-                                <Text style={styles.textVeiculo}>Veículo: {item.placa}</Text>
+            <ScrollView>
+                    {historico && filterPorPlaca().length > 0 ? (
+                        filterPorPlaca().map((historico) => (
+                            <View key={historico.id_os} style={styles.historicoItem}>
+                                <Text style={styles.textVeiculo}>Veículo: {historico.placa}</Text>
                                 <View style={styles.alinha}>
-                                    <Text style={styles.textDados}>{item.data.slice(0, 10)}</Text>
-                                    <Text style={styles.textDados}>R${item.total}</Text>
+                                    <Text style={styles.textDados}>{historico.data.slice(0, 10)}</Text>
+                                    <Text style={styles.textDados}>R${historico.total}</Text>
                                 </View>
-                                <TouchableOpacity style={styles.icon} onPress={() => getDetalhesOrcamento(item.id_os)}>
+                                <TouchableOpacity style={styles.icon} onPress={() => getDetalhesOrcamento(historico.id_os)}>
                                     <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={32} color="white" />
                                 </TouchableOpacity>
                             </View>

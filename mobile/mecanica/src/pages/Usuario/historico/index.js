@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { StyleSheet, Platform, StatusBar, View, Text, TouchableOpacity, TextInput, Modal, Pressable } from "react-native";
+import { StyleSheet, Platform, StatusBar, View, Text, TouchableOpacity, TextInput, Modal, Pressable, ScrollView } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
@@ -12,6 +12,7 @@ export default function Historico() {
     const [detalhes, setDetalhes] = useState([]); // Variavel para guardar detalhes da "os"
     const [orcamentoSelecionado, setOrcamentoSelecionado] = useState(null); // Variavel para guardar "os" selecionada 
     const [modalVisible, setModalVisible] = useState(false);
+    const [search, setSearch] = useState("");
 
     const getOrcamentos = async () => { // Requisição para trazer as "os"
         try {
@@ -59,6 +60,16 @@ export default function Historico() {
         }
     };
 
+    const filtroOrcamentosPorPlaca = () => {
+
+        if(orcamentos != undefined) { // Verificando se o array possui alguma informação
+        return orcamentos.filter((ordem) => {
+            const veiculo = veiculos[ordem.id_veiculo];
+            return veiculo && veiculo.placa.toLowerCase().includes(search.toLowerCase());
+        });
+        }
+    };
+
     useEffect(() => {
         getOrcamentos();
         getVeiculos();
@@ -67,34 +78,42 @@ export default function Historico() {
     return (
         <LinearGradient colors={['#000000', 'rgba(0, 0, 0, 0.5)']} style={styles.androidSafeArea}>
             <View style={styles.inputBusca}>
-                <TextInput style={styles.input} placeholder="Buscar por placa" placeholderTextColor="#777" />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Buscar por placa"
+                    placeholderTextColor="#777"
+                    value={search}
+                    onChangeText={setSearch}
+                />
             </View>
             <View style={styles.container}>
-                {Array.isArray(orcamentos) && orcamentos.length > 0 ? (
-                    orcamentos.map((ordem) => {
-                        const veiculo = veiculos[ordem.id_veiculo];
-                        return (
-                            <View style={styles.historicoItem} key={ordem.id}>
-                                <Text style={styles.textVeiculo}>
-                                    Veículo: {veiculo ? veiculo.placa : "Desconhecido"}
-                                </Text>
-                                <View style={styles.alinha}>
-                                    <Text style={styles.textDados}>
-                                        {new Date(ordem.data).toLocaleDateString('pt-BR')}
+                <ScrollView>
+                    {Array.isArray(filtroOrcamentosPorPlaca()) && filtroOrcamentosPorPlaca().length > 0 ? (
+                        filtroOrcamentosPorPlaca().map((ordem) => {
+                            const veiculo = veiculos[ordem.id_veiculo];
+                            return (
+                                <View style={styles.historicoItem} key={ordem.id}>
+                                    <Text style={styles.textVeiculo}>
+                                        Veículo: {veiculo ? veiculo.placa : "Desconhecido"}
                                     </Text>
-                                    <Text style={styles.textDados}>
-                                        R${parseFloat(ordem.total).toFixed(2)}
-                                    </Text>
+                                    <View style={styles.alinha}>
+                                        <Text style={styles.textDados}>
+                                            {new Date(ordem.data).toLocaleDateString('pt-BR')}
+                                        </Text>
+                                        <Text style={styles.textDados}>
+                                            R${parseFloat(ordem.total).toFixed(2)}
+                                        </Text>
+                                    </View>
+                                    <TouchableOpacity style={styles.icon} onPress={() => getDetalhesOrcamento(ordem)}>
+                                        <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={32} color="white" />
+                                    </TouchableOpacity>
                                 </View>
-                                <TouchableOpacity style={styles.icon} onPress={() => getDetalhesOrcamento(ordem)}>
-                                    <MaterialCommunityIcons name="clipboard-text-multiple-outline" size={32} color="white" />
-                                </TouchableOpacity>
-                            </View>
-                        );
-                    })
-                ) : (
-                    <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>Nenhum orçamento encontrado</Text>
-                )}
+                            );
+                        })
+                    ) : (
+                        <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>Nenhum orçamento encontrado</Text>
+                    )}
+                </ScrollView>
             </View>
 
             {/* Modal de Detalhes */}

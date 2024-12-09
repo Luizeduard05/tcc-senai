@@ -1,5 +1,5 @@
 import { LinearGradient } from "expo-linear-gradient"
-import { StyleSheet, Platform, StatusBar, View, Text } from "react-native"
+import { StyleSheet, Platform, StatusBar, View, Text, ScrollView } from "react-native"
 import { useAuth } from "../../../context/AuthContext";
 import { useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
@@ -9,19 +9,41 @@ export default function AgendamentosADM() {
     const { token } = useAuth();
     const [agendamentos, setAgendamentos] = useState([]); // Variavel para guardar todos agendamentos
 
-    const getAgendamentos = async () => {  // Requisição para trazer os agendamentos
+    const getAgendamentos = async () => { // Requisicao para trazer todos os agendamentos 
         try {
             const response = await api.get("/agendamentos", {
                 headers: {
-                    Authorization: `Token ${token}`
-                }
-            })
-            // console.log(response.data.result)
-            setAgendamentos(response.data.result)
+                    Authorization: `Token ${token}`,
+                },
+            });
+
+            const agendamentosData = response.data.result;
+            const agendamentosComProprietarios = await Promise.all( // Fazendo um map para associar os agendamentos aos propreitarios
+                agendamentosData.map(async (agendamento) => {
+                    const proprietario = await getDetalhesAgendamento(agendamento.id_pessoa_veiculo_os);
+                    return { ...agendamento, proprietario };
+                })
+            );
+            setAgendamentos(agendamentosComProprietarios);
         } catch (error) {
-            console.log(error);
+            console.error("Erro ao buscar agendamentos:", error);
         }
-    }
+    };
+
+    const getDetalhesAgendamento = async (id_pessoa_veiculo_os) => {
+        try {
+            const response = await api.get(`/usuario/${id_pessoa_veiculo_os}`, {
+                headers: {
+                    Authorization: `Token ${token}`,
+                },
+            });
+            const detalhes = response.data.result;
+            return Array.isArray(detalhes) && detalhes.length > 0 ? detalhes[0] : null;
+        } catch (error) {
+            console.error(`Erro ao buscar detalhes do agendamento ${id_pessoa_veiculo_os}:`, error);
+            return null; // Retorna null se a requisição falhar
+        }
+    };
 
     useFocusEffect( // Sempre que a pagina é focada chama a requisição de agendamentos
         useCallback(() => {
@@ -35,22 +57,25 @@ export default function AgendamentosADM() {
             style={styles.androidSafeArea}>
 
             <View style={styles.container}>
-                {Array.isArray(agendamentos) && agendamentos.length > 0 ? (
-                    agendamentos.map((agendamento) => (
-                        <View key={agendamento.id} style={styles.agendamentoItem}>
-                            <View style={styles.alinha}>
-                                <Text style={styles.textHora}>{agendamento.Data_e_hora.slice(12, 17)}</Text>
-                                <Text style={styles.textData}>{agendamento.Data_e_hora.slice(0, 10)}</Text>
+                <ScrollView>
+                    {Array.isArray(agendamentos) && agendamentos.length > 0 ? (
+                        agendamentos.map((agendamento) => (
+                            <View key={agendamento.id} style={styles.agendamentoItem}>
+                                <View style={styles.alinha}>
+                                    <Text style={styles.textHora}>{agendamento.Data_e_hora.slice(12, 17)}</Text>
+                                    <Text style={styles.textData}>{agendamento.Data_e_hora.slice(0, 10)}</Text>
+                                </View>
+                                <Text style={styles.textObs}>
+                                    <Text style={{ fontWeight: "bold" }}>Observação:</Text> {agendamento.Observação}
+                                </Text>
+                                <Text style={styles.textData}>Proprietario: {agendamento.proprietario?.nome || "Desconhecido"}</Text>
+                                <View style={styles.linhaVermelha} />
                             </View>
-                            <Text style={styles.textObs}>
-                                <Text style={{ fontWeight: "bold" }}>Observação:</Text> {agendamento.Observação}
-                            </Text>
-                            <View style={styles.linhaVermelha} />
-                        </View>
-                    ))
-                ) : (
-                    <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>Nenhuma Agendamento encontrado</Text>
-                )}
+                        ))
+                    ) : (
+                        <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>Nenhuma Agendamento encontrado</Text>
+                    )}
+                </ScrollView>
             </View>
         </LinearGradient>
     )

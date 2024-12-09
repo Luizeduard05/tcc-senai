@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     }, 
     container: { 
         flex: 0, 
-        height: '80%',
+        height: '90%',
         margin: 30, 
         borderRadius: 10, 
         justifyContent: 'space-between', 
