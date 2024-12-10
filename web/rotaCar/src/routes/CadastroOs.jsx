@@ -75,13 +75,13 @@ const CadastroOs = () => {
     // }, [formData.itens, formData.mo]);
 
     // Calcular total
-useEffect(() => {
-    const totalItens = formData.itens.reduce(
-        (acc, item) => acc + parseFloat(item.valor || 0) * parseInt(item.quantidade || 1),
-        0
-    );
-    setTotal(totalItens + parseFloat(formData.mo || 0));
-}, [formData.itens, formData.mo]);
+    useEffect(() => {
+        const totalItens = formData.itens.reduce(
+            (acc, item) => acc + parseFloat(item.valor || 0) * parseInt(item.quantidade || 1),
+            0
+        );
+        setTotal(totalItens + parseFloat(formData.mo || 0));
+    }, [formData.itens, formData.mo]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -483,14 +483,10 @@ useEffect(() => {
                                 <i>Data</i>
                             </div>
 
-                            <div className={styleCadOs.inputBox}>
-                                <input type="text" name="status" value={formData.status} onChange={handleChange} required />
-                                <i>Status</i>
-                            </div>
-                            <div className={styleCadOs.inputBox}>
-                                <input type="text" name="mo" value={formData.mo} onChange={handleChange} required />
-                                <i>Mão de obra</i>
-                            </div>
+
+
+
+
                             <div className={styleCadOs.inputBox}>
                                 <select name="idPessoaVei" value={formData.idPessoaVei} onChange={handleUserChange} required>
                                     <option value="">Selecione uma pessoa</option>
@@ -500,6 +496,14 @@ useEffect(() => {
                                 </select>
                                 <i>Pessoa</i>
                             </div>
+
+                            <div className={styleCadOs.inputBox}>
+                                <input type="text" name="status" value={formData.status} onChange={handleChange} required />
+                                <i>Status</i>
+                            </div>
+
+
+
                             <div className={styleCadOs.inputBox}>
                                 <select name="idVei" value={formData.idVei} onChange={handleChange}>
                                     <option value="">Selecione um veículo</option>
@@ -511,6 +515,15 @@ useEffect(() => {
                                 </select>
                                 <i>Veículo</i>
                             </div>
+
+
+
+
+                            <div className={styleCadOs.inputBox}>
+                                <input type="text" name="mo" value={formData.mo} onChange={handleChange} required />
+                                <i>Mão de obra</i>
+                            </div>
+
 
                             {tipo === "ADM" &&
                                 <div className={styleCadOs.inputBox}>
@@ -561,17 +574,6 @@ useEffect(() => {
                                                 +
                                             </button>
                                             <i className="inputIcon">Quantidade</i>
-                                        </div>
-
-                                        <div className={styleCadOs.inputBox}>
-                                            <input
-                                                type="text"
-                                                className={styleCadOs.inputField}
-                                                name="valor"
-                                                value={item.valor}
-                                                readOnly
-                                            />
-                                            <i className="inputIcon">Valor</i>
                                         </div>
 
                                         <div className={styleCadOs.inputBox}>
