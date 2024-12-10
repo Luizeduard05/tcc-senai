@@ -20,18 +20,29 @@ const Agendamentos = () => {
 
 
     useEffect(() => {
-        if (tipo === 'CLI') {
-            api.get(`/agendar/pessoa/${id}`, { headers: { Authorization: `Token ${token}` } })
-                .then((response) => {
-                    setAgendamentos(response.data.result || []);
-                })
-                .catch((error) => {
-                    console.error("Erro ao buscar agendamentos:", error);
-                });
+       
+
+       
+        
+    }, [token]);
+
+    
+
+
+    const getAgendamentos = async () => {
+        try {
+            const response = await api.get(`/agendar/pessoa/${id}`, {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            });
+            setAgendamentos(response.data);
+        } catch (error) {
+            console.log(error);
         }
 
-
-        api.get("/agendamentos", { headers: { Authorization: `Token ${token}` } })
+        if(tipo === 'ADM' || tipo === 'MEC'){
+            api.get("/agendamentos", { headers: { Authorization: `Token ${token}` } })
             .then((response) => {
                 setAgendamentos(response.data.result || []);
             })
@@ -48,11 +59,19 @@ const Agendamentos = () => {
             .catch((error) => {
                 console.error("Erro ao buscar usuários:", error);
             });
-    }, [token]);
+        }
+    };
+
+    useEffect(() => {
+        getAgendamentos();
+    }, []);
+
+
+    
 
     const getNomeUsuario = (pessoaId) => {
         const usuario = usuarios.find((u) => u.pessoa_id === pessoaId);
-        return usuario ? usuario.nome : "Desconhecido";
+        return usuario ? usuario.nome : "Eu";
     };
 
     const handleDelete = async (id) => {
@@ -176,7 +195,7 @@ const Agendamentos = () => {
                                 <p className={stylesA.NomeUser} ><strong>Cliente:</strong> {getNomeUsuario(item.id_pessoa_veiculo_os)}</p>
                                 <p><strong>Data e Hora:</strong> {item.Data_e_hora}</p>
                                 <p><strong>Observação:</strong> {item.Observação}</p>
-                                <p><strong>Cliente:</strong> {getNomeUsuario(item.id_pessoa_veiculo_os)}</p>
+                                
                             </div>
                         ))
                     ) : (
@@ -192,7 +211,7 @@ const Agendamentos = () => {
                                 <p className={stylesA.NomeUser} ><strong>Cliente:</strong> {getNomeUsuario(item.id_pessoa_veiculo_os)}</p>
                                 <p><strong>Data e Hora:</strong> {item.Data_e_hora}</p>
                                 <p><strong>Observação:</strong> {item.Observação}</p>
-                                <p><strong>Cliente:</strong> {getNomeUsuario(item.id_pessoa_veiculo_os)}</p>
+                                
                             </div>
                         ))
                     ) : (
