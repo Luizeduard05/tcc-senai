@@ -337,3 +337,125 @@ input[type="submit"]:active {
 .itemContainer button:active {
     transform: scale(0.95);
 }
+
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro semi-transparente */
+    z-index: 1000; /* Garante que o modal estará acima de outros elementos */
+  }
+  
+  .modalContent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    z-index: 1010; /* Acima do overlay */
+  }
+
+  /* Card de cada item na lista */
+.itemCard {
+    background: #444;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.itemInfo {
+    display: flex;
+    gap: 20px;
+}
+
+.itemName,
+.itemQuantity,
+.itemPrice {
+    display: flex;
+    align-items: center;
+}
+
+.itemName span,
+.itemPrice span {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #fff;
+}
+
+.quantityInput {
+    width: 50px;
+    background: #333;
+    border: 2px solid #444;
+    padding: 10px;
+    text-align: center;
+    font-size: 1em;
+    color: #fff;
+    border-radius: 4px;
+}
+
+.buttonQuantity {
+    background: #555;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.buttonQuantity:hover {
+    background: #666;
+}
+
+.removeButton {
+    background: #e74c3c;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.removeButton:hover {
+    background: #c0392b;
+}
+
+.addItemButton {
+    background: #3498db;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.addItemButton:hover {
+    background: #2980b9;
+}
+
+.total h3 {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #fff;
+}
+
+.buttonCad input[type="submit"] {
+    padding: 10px 20px;
+    background: #2ecc71;
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
