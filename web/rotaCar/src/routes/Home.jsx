@@ -3,14 +3,20 @@ import Swiper from "swiper/bundle";
 import "./Home.css";
 import logoCarro from "../assets/logoCarro.png";
 import CarrosImg from "../assets/carros-imagem.png";
-import boschLogo from "../assets/Bosch-Logo-2002.png";
+import boschLogo from "../assets/Bosch-Logo-20022.png";
+import pirelliLogo from "../assets/pirelli2.png";
+import michelinLogo from "../assets/michelinLogo2.png";
+import goodyearLogo from "../assets/goodyearLogo2.jpg";
+import delphiLogo from "../assets/delphiLogo2.png";
+import acdelcoLogo from "../assets/acdelcoLogo2.png";
+
 import { Link } from "react-router-dom";
 import Header from "../component/Header";
 
 
 const Home = () => {
 
-    const {nome, tipo} = useContext
+    const { nome, tipo } = useContext
 
     useEffect(() => {
         var swiper = new Swiper(".swiper", {
@@ -40,7 +46,7 @@ const Home = () => {
         <>
             <section className="topoPagina">
                 <div className="containerTp">
-                    <Header/>
+                    <Header />
                     {/* <div className="navBar">
                         <div className="conteudoSuperior">
                             <div className="logo">
@@ -74,7 +80,7 @@ const Home = () => {
                 </div>
             </section>
             <section className="principaisServico">
-                    
+
             </section>
 
             <section className="marcas">
@@ -83,27 +89,27 @@ const Home = () => {
                         <div className="swiper-wrapper">
                             <div className="swiper-slide">
                                 <img src={boschLogo} alt="Bosch Logo" />
-                                <p>bosch</p>
+                                <p>Bosch</p>
                             </div>
                             <div className="swiper-slide">
-                                <img src={logoCarro} alt="Bosch Logo" />
-                                <p>bosch</p>
+                                <img src={pirelliLogo} alt="Bosch Logo" />
+                                <p>Pirelli</p>
                             </div>
                             <div className="swiper-slide">
-                                <img src={CarrosImg} alt="Bosch Logo" />
-                                <p>bosch</p>
+                                <img src={michelinLogo} alt="Bosch Logo" />
+                                <p>Michelin</p>
                             </div>
                             <div className="swiper-slide">
-                                <img src={boschLogo} alt="Bosch Logo" />
-                                <p>bosch</p>
+                                <img src={goodyearLogo} alt="Bosch Logo" />
+                                <p>GoodYear</p>
                             </div>
                             <div className="swiper-slide">
-                                <img src={boschLogo} alt="Bosch Logo" />
-                                <p>bosch</p>
+                                <img src={delphiLogo} alt="Bosch Logo" />
+                                <p>Delphi</p>
                             </div>
                             <div className="swiper-slide">
-                                <img src={boschLogo} alt="Bosch Logo" />
-                                <p>bosch</p>
+                                <img src={acdelcoLogo} alt="Bosch Logo" />
+                                <p>Acdelco</p>
                             </div>
 
                         </div>
@@ -121,19 +127,20 @@ const Home = () => {
                                 <div className="bg"></div>
                                 <div className="overlay"></div>
                                 <div className="inner">
-                                    <h2>Suspensão</h2>
-                                    <h4>Lorem ipsum dolor sit amet</h4>
+                                    <h2>Troca de Óleo e Filtros</h2>
+                                    <h4>A troca regular de óleo é fundamental para garantir a lubrificação adequada das peças móveis do motor, além de reduzir o risco de superaquecimento.</h4>
                                 </div>
-                                <div className="serv-num">03</div>
+                                <div className="serv-num">01</div>
                             </div>
                         </div>
                         <div className="content-back">
                             <div className="cf-inner">
                                 <div className="inner">
                                     <div className="dec-icon">
-                                        <i className="fas fa-bomb"></i>
+                                    <i class="fa-solid fa-oil-can"></i>
+
                                     </div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar.</p>
+                                    <p>Esse é um dos serviços mais comuns em uma oficina. Consiste na troca do óleo do motor e dos filtros de óleo e de ar, essenciais para o bom funcionamento do motor e para evitar o desgaste prematuro de suas partes.</p>
                                 </div>
                             </div>
                         </div>
@@ -141,22 +148,23 @@ const Home = () => {
                     <div className="content-inner">
                         <div className="content-front">
                             <div className="cf-inner">
-                                <div className="bg"></div>
+                                <div className="bg2"></div>
                                 <div className="overlay"></div>
                                 <div className="inner">
-                                    <h2>Suspensão</h2>
-                                    <h4>Lorem ipsum dolor sit amet</h4>
+                                    <h2>Troca de Pastilhas de Freio</h2>
+                                    <h4>Pastilhas de freio desgastadas podem comprometer a eficiência de frenagem, aumentando o risco de acidentes. A troca deve ser feita quando elas atingem a espessura mínima recomendada.</h4>
                                 </div>
-                                <div className="serv-num">03</div>
+                                <div className="serv-num">02</div>
                             </div>
                         </div>
                         <div className="content-back">
                             <div className="cf-inner">
                                 <div className="inner">
                                     <div className="dec-icon">
-                                        <i className="fas fa-bomb"></i>
+                                  <i class="fa-solid fa-gears"></i>
                                     </div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar.</p>
+                                    <p>O serviço envolve a substituição das pastilhas de freio, um componente crucial para a segurança do veículo.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -164,11 +172,11 @@ const Home = () => {
                     <div className="content-inner">
                         <div className="content-front">
                             <div className="cf-inner">
-                                <div className="bg"></div>
+                                <div className="bg3"></div>
                                 <div className="overlay"></div>
                                 <div className="inner">
-                                    <h2>Suspensão</h2>
-                                    <h4>Lorem ipsum dolor sit amet</h4>
+                                    <h2>Alinhamento e Balanceamento</h2>
+                                    <h4>Isso melhora a estabilidade e a segurança do veículo, além de evitar o desgaste irregular dos pneus e aumentar sua durabilidade.</h4>
                                 </div>
                                 <div className="serv-num">03</div>
                             </div>
@@ -177,9 +185,9 @@ const Home = () => {
                             <div className="cf-inner">
                                 <div className="inner">
                                     <div className="dec-icon">
-                                        <i className="fas fa-bomb"></i>
+                                    <i class="fa-solid fa-gear"></i>
                                     </div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar.</p>
+                                    <p> O alinhamento e o balanceamento são feitos para corrigir a direção do veículo e garantir que os pneus se desgastem de maneira uniforme.</p>
                                 </div>
                             </div>
                         </div>
@@ -189,22 +197,22 @@ const Home = () => {
                     <div className="content-inner">
                         <div className="content-front">
                             <div className="cf-inner">
-                                <div className="bg"></div>
+                                <div className="bg4"></div>
                                 <div className="overlay"></div>
                                 <div className="inner">
-                                    <h2>Suspensão</h2>
-                                    <h4>Lorem ipsum dolor sit amet</h4>
+                                    <h2>Troca de Pneus</h2>
+                                    <h4>Pneus em bom estado são essenciais para a segurança, desempenho e eficiência do combustível. A troca é necessária quando os pneus estão carecas ou apresentam danos irreparáveis.</h4>
                                 </div>
-                                <div className="serv-num">03</div>
+                                <div className="serv-num">04</div>
                             </div>
                         </div>
                         <div className="content-back">
                             <div className="cf-inner">
                                 <div className="inner">
                                     <div className="dec-icon">
-                                        <i className="fas fa-bomb"></i>
+                                        <i className="fa fa-car"></i>
                                     </div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar.</p>
+                                    <p>Substituição de pneus desgastados ou danificados, além de realizar a verificação de sua calibragem e estado geral.</p>
                                 </div>
                             </div>
                         </div>
@@ -212,22 +220,22 @@ const Home = () => {
                     <div className="content-inner">
                         <div className="content-front">
                             <div className="cf-inner">
-                                <div className="bg"></div>
+                                <div className="bg5"></div>
                                 <div className="overlay"></div>
                                 <div className="inner">
-                                    <h2>Suspensão</h2>
-                                    <h4>Lorem ipsum dolor sit amet</h4>
+                                    <h2>Reparo de Sistema de Suspensão</h2>
+                                    <h4>A suspensão é responsável pelo conforto e pela estabilidade do veículo, além de ajudar a manter os pneus em contato com a estrada.</h4>
                                 </div>
-                                <div className="serv-num">03</div>
+                                <div className="serv-num">05</div>
                             </div>
                         </div>
                         <div className="content-back">
                             <div className="cf-inner">
                                 <div className="inner">
                                     <div className="dec-icon">
-                                        <i className="fas fa-bomb"></i>
+                                        <i className="fa fa-car"></i>
                                     </div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar.</p>
+                                    <p>Inclui a revisão e reparo de componentes da suspensão do veículo, como amortecedores, molas e buchas.</p>
                                 </div>
                             </div>
                         </div>
@@ -235,22 +243,22 @@ const Home = () => {
                     <div className="content-inner">
                         <div className="content-front">
                             <div className="cf-inner">
-                                <div className="bg"></div>
+                                <div className="bg6"></div>
                                 <div className="overlay"></div>
                                 <div className="inner">
-                                    <h2>Suspensão</h2>
-                                    <h4>Lorem ipsum dolor sit amet</h4>
+                                    <h2>Diagnóstico e Reparo de Sistemas Eletrônicos</h2>
+                                    <h4>A maioria dos carros modernos possui sistemas eletrônicos sofisticados que controlam o desempenho do motor, consumo de combustível e segurança.</h4>
                                 </div>
-                                <div className="serv-num">03</div>
+                                <div className="serv-num">06</div>
                             </div>
                         </div>
                         <div className="content-back">
                             <div className="cf-inner">
                                 <div className="inner">
                                     <div className="dec-icon">
-                                        <i className="fas fa-bomb"></i>
+                                    <i class="fa-solid fa-car-battery"></i>
                                     </div>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar.</p>
+                                    <p>Esse serviço envolve o diagnóstico e a correção de problemas nos sistemas eletrônicos do veículo, como o sistema de injeção eletrônica, sensores, alternador, bateria e outros componentes eletrônicos.</p>
                                 </div>
                             </div>
                         </div>
