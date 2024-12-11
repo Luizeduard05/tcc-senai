@@ -12,18 +12,18 @@
     align-items: center;
     min-height: 100vh;
     background: #000;
+  
 }
 
 section .containerCad {
     position: absolute;
-    width: 100vw;
-    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 2px;
     flex-wrap: wrap;
     overflow: hidden;
+    height: 100vh;
 }
 
 section .containerCad::before {
@@ -79,13 +79,14 @@ section .containerCad .signin .content {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 40px;
+    gap: 10px;
 }
 
 section .containerCad .signin .content h2 {
     font-size: 2em;
     color: rgb(255, 255, 255);
     text-transform: uppercase;
+    padding: 0;
 }
 
 /* Para a formatação em grid */
