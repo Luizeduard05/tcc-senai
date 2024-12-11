@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import api from "../../service/api";
-import styleCadOs from "./CadastroOs.module.css";
-import { useAuth } from "../Context/ContextUser";
+import { motion } from 'framer-motion';
+import { useEffect, useState } from "react";
 import Modal from 'react-modal';
-import { motion } from 'framer-motion'
+import api from "../../service/api";
+import { useAuth } from "../Context/ContextUser";
+import styleCadOs from "./CadastroOs.module.css";
 
 Modal.setAppElement('#root');
 
@@ -614,41 +614,57 @@ const CadastroOs = () => {
                                 className={styleCadOs.modalContent}
                             >
                                 <motion.div transition={{ duration: 0.3 }}>
-                                    <h3>Selecione as Peças</h3>
-                                    <ul>
-                                        {produtos.map(produto => (
-                                            <li
-                                                key={produto.id}
-                                                onClick={() => handleItemClick(produto)}
-                                                style={{
-                                                    cursor: 'pointer',
-                                                    padding: '5px',
-                                                    border: '1px solid #ccc',
-                                                    marginBottom: '5px',
-                                                    backgroundColor: produtosSelecionados.find(item => item.id === produto.id) ? '#d3f9d8' : 'white'
-                                                }}
-                                            >
-                                                {produto.nome_produto} - R$ {produto.valor_produto}
-                                            </li>
-                                        ))}
-                                    </ul>
+                                    <div className={styleCadOs.dadosModal}>
+                                        <h3>Selecione as Peças</h3>
+                                        <ul>
+                                            {produtos.map(produto => (
+                                                <li
+                                                    key={produto.id}
+                                                    onClick={() => handleItemClick(produto)}
+                                                    style={{
+                                                        cursor: 'pointer',
+                                                        padding: '5px',
+                                                        border: '1px solid #ccc',
+                                                        marginBottom: '5px',
+                                                        backgroundColor: produtosSelecionados.find(item => item.id === produto.id) ? '#d3f9d8' : 'white'
+                                                    }}
+                                                >
+                                                    {produto.nome_produto} - R$ {produto.valor_produto}
+                                                </li>
+                                            ))}
+                                        </ul>
 
-                                    {produtosSelecionados.length > 0 && (
-                                        <div>
-                                            <h4>Itens Selecionados:</h4>
-                                            <ul>
-                                                {produtosSelecionados.map(produto => (
-                                                    <li key={produto.id}>
-                                                        {produto.nome_produto} - R$ {produto.valor_produto}
-                                                        <button onClick={() => removeItemSelecionado(produto)}>Remover</button>
-                                                    </li>
-                                                ))}
-                                            </ul>
+                                        {produtosSelecionados.length > 0 && (
+                                            <div className={styleCadOs.alinhaCenter}>
+                                                <h3>Itens Selecionados:</h3>
+                                                <ul>
+                                                    {produtosSelecionados.map(produto => (
+                                                        <li key={produto.id} className={styleCadOs.itensListaS}>
+                                                            {produto.nome_produto} - R$ {produto.valor_produto}
+                                                            <button
+                                                                className={styleCadOs.buttonRemove}
+                                                                onClick={() => removeItemSelecionado(produto)}
+                                                            >
+                                                                Remover
+                                                            </button>
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                                <div className={styleCadOs.alinhaCenterBtn}>
+                                        <button className={`${styleCadOs.button} ${styleCadOs.buttonClose}`} onClick={() => setModalAberto(false)}>
+                                            Fechar
+                                        </button>
+
+                                        <button className={`${styleCadOs.button} ${styleCadOs.buttonConfirm}`} onClick={addItens}>
+                                            Confirmar
+                                        </button>
                                         </div>
-                                    )}
+                                            </div>
 
-                                    <button onClick={addItens}>Confirmar</button>
-                                    <button onClick={() => setModalAberto(false)}>Fechar</button>
+                                        )}
+
+
+                                    </div>
                                 </motion.div>
                             </Modal>
                         </form>
