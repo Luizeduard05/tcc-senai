@@ -6,6 +6,7 @@ import PecasController from "../controllers/PecasController.js";
 import agendamentoController from "../controllers/AgendamentoController.js";
 import jwt from 'jsonwebtoken';
 import authMiddleware from "../../Middlewares/authMiddlewares.js";
+import ResetControler from "../controllers/RecupSenha.js";
 
 
 const router = Router();
@@ -51,6 +52,7 @@ router.post('/login', pessoaControllers.loginUsuario);
 // rota para trazer todos os cadastros
 router.get('/todosUser', autenticarToken, pessoaControllers.selecionarTodosUsuario);
 
+router.post('/RecupSenha', ResetControler.resetSenha);
 
 
 
