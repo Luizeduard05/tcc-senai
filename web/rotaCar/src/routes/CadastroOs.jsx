@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import api from "../../service/api";
-import styleCadOs from "./Cadastro.module.css";
+import styleCadOs from "./CadastroOs.module.css";
 import { useAuth } from "../Context/ContextUser";
+import Modal from 'react-modal';
+import { motion } from 'framer-motion'
+
+Modal.setAppElement('#root');
 
 const CadastroOs = () => {
     const { token, tipo, id } = useAuth();
@@ -13,13 +17,15 @@ const CadastroOs = () => {
         mo: "",
         idPessoaVei: "",
         idVei: "",
-        itens: [{ id_produto: "", quantidade: 1, valor: 0 }],
+        itens: [],
         mecanico: ""
     });
     const [usuarios, setUsuarios] = useState([]);
     const [mecanicos, setMecanicos] = useState([]);
     const [produtos, setProdutos] = useState([]);
+    const [produtosSelecionados, setProdutosSelecionados] = useState([]);
     const [total, setTotal] = useState(0);
+    const [modalAberto, setModalAberto] = useState(false); // Controle do modal
 
     useEffect(() => {
         const fetchUsuarios = async () => {
@@ -60,6 +66,15 @@ const CadastroOs = () => {
     }, [token]);
 
     // Calcular total
+    // useEffect(() => {
+    //     const totalItens = formData.itens.reduce(
+    //         (acc, item) => acc + parseFloat(item.valor || 0) * parseInt(item.quantidade || 1),
+    //         0
+    //     );
+    //     setTotal(totalItens + parseFloat(formData.mo || 0));
+    // }, [formData.itens, formData.mo]);
+
+    // Calcular total
     useEffect(() => {
         const totalItens = formData.itens.reduce(
             (acc, item) => acc + parseFloat(item.valor || 0) * parseInt(item.quantidade || 1),
@@ -72,11 +87,9 @@ const CadastroOs = () => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
-            [name]: value, // Atualiza o estado corretamente
+            [name]: value,
         });
     };
-
-
 
     const handleItemChange = (index, e) => {
         const { name, value } = e.target;
@@ -119,16 +132,11 @@ const CadastroOs = () => {
         const formattedDate = new Date(formData.data).toISOString().split('T')[0];
         console.log("Data formatada:", formattedDate);
 
-        // const dataToSend = {
-        //     ...formData,
-        //     data: formattedDate,
-        // };
-
         const dataToSend = {
             ...formData,
             mecanico: formData.mecanico || id, // Usa o id do mecânico logado, caso não esteja preenchido
         };
-        
+
         try {
             const response = await api.post("/os", dataToSend, {
                 headers: { Authorization: `Token ${token}` },
@@ -140,10 +148,34 @@ const CadastroOs = () => {
         }
     };
 
+    // Adicionar múltiplos itens à lista de peças
+    const addItens = () => {
+        const novosItens = produtosSelecionados.map(produto => ({
+            id_produto: produto.id,
+            quantidade: 1,
+            valor: produto.valor_produto
+        }));
 
+        setFormData(prevState => ({
+            ...prevState,
+            itens: [...prevState.itens, ...novosItens]
+        }));
+        setProdutosSelecionados([]); // Limpa os itens selecionados no modal
+        setModalAberto(false); // Fecha o modal após adicionar as peças
+    };
 
+    // Atualizar a seleção das peças
+    const handleItemClick = (produto) => {
+        // Verifica se a peça já foi selecionada
+        if (!produtosSelecionados.find(item => item.id === produto.id)) {
+            setProdutosSelecionados(prevItems => [...prevItems, produto]);
+        }
+    };
 
-
+    // Remover item da lista de itens selecionados no modal
+    const removeItemSelecionado = (produto) => {
+        setProdutosSelecionados(prevItems => prevItems.filter(item => item.id !== produto.id));
+    };
 
     const handleUserChange = async (e) => {
         const userId = e.target.value;
@@ -172,13 +204,11 @@ const CadastroOs = () => {
         }
     };
 
-
-
     return (
         <section className={styleCadOs.pai}>
-            
+
             <section className={styleCadOs.containerCad}>
-            <span></span>
+                <span></span>
                 <span></span>
                 <span></span>
                 <span></span>
@@ -455,14 +485,8 @@ const CadastroOs = () => {
 
 
 
-                            <div className={styleCadOs.inputBox}>
-                                <input type="text" name="status" value={formData.status} onChange={handleChange} required />
-                                <i>Status</i>
-                            </div>
-                            <div className={styleCadOs.inputBox}>
-                                <input type="text" name="mo" value={formData.mo} onChange={handleChange} required />
-                                <i>Mão de obra</i>
-                            </div>
+
+
                             <div className={styleCadOs.inputBox}>
                                 <select name="idPessoaVei" value={formData.idPessoaVei} onChange={handleUserChange} required>
                                     <option value="">Selecione uma pessoa</option>
@@ -472,6 +496,14 @@ const CadastroOs = () => {
                                 </select>
                                 <i>Pessoa</i>
                             </div>
+
+                            <div className={styleCadOs.inputBox}>
+                                <input type="text" name="status" value={formData.status} onChange={handleChange} required />
+                                <i>Status</i>
+                            </div>
+
+
+
                             <div className={styleCadOs.inputBox}>
                                 <select name="idVei" value={formData.idVei} onChange={handleChange}>
                                     <option value="">Selecione um veículo</option>
@@ -484,62 +516,141 @@ const CadastroOs = () => {
                                 <i>Veículo</i>
                             </div>
 
-                            {tipo === "ADM" && 
+
+
+
                             <div className={styleCadOs.inputBox}>
-                                <select name="mecanico" value={formData.mecanico} onChange={handleChange} required>
-                                    <option value="">Selecione um mecânico</option>
-                                    {mecanicos.map(user => (
-                                        <option key={user.pessoa_id} value={user.pessoa_id}>{user.nome}</option>
-                                    ))}
-                                </select>
-                                <i>Mecânico</i>
+                                <input type="text" name="mo" value={formData.mo} onChange={handleChange} required />
+                                <i>Mão de obra</i>
                             </div>
+
+
+                            {tipo === "ADM" &&
+                                <div className={styleCadOs.inputBox}>
+                                    <select name="mecanico" value={formData.mecanico} onChange={handleChange} required>
+                                        <option value="">Selecione um mecânico</option>
+                                        {mecanicos.map(user => (
+                                            <option key={user.pessoa_id} value={user.pessoa_id}>{user.nome}</option>
+                                        ))}
+                                    </select>
+                                    <i>Mecânico</i>
+                                </div>
                             }
 
                             {formData.itens.map((item, index) => (
-                                <div key={index} className={styleCadOs.itemContainer}>
-                                    <div className={styleCadOs.inputBox}>
-                                        <select
-                                            name="id_produto"
-                                            value={item.id_produto}
-                                            onChange={(e) => handleItemChange(index, e)}
-                                            required
-                                        >
-                                            <option value="">Selecione uma peça</option>
-                                            {produtos.map(produto => (
-                                                <option key={produto.id} value={produto.id}>{produto.nome_produto}</option>
-                                            ))}
-                                        </select>
-                                        <i>Produto</i>
+                                <div key={index} className={styleCadOs.itemCard}>
+                                    <div className={styleCadOs.itemInfo}>
+                                        <div className={styleCadOs.inputBox}>
+                                            <input
+                                                type="text"
+                                                className={styleCadOs.inputField}
+                                                name="produto"
+                                                value={produtos.find(produto => produto.id === item.id_produto)?.nome_produto || "Produto Selecionado"}
+                                                readOnly
+                                            />
+                                            <i className="inputIcon">Produto</i>
+                                        </div>
+
+                                        <div className={styleCadOs.inputBox}>
+                                            <button
+                                                type="button"
+                                                className={styleCadOs.buttonQuantity}
+                                                onClick={() => handleQuantityChange(index, -1)}
+                                            >
+                                                -
+                                            </button>
+                                            <input
+                                                type="text"
+                                                className={styleCadOs.inputField}
+                                                name="quantidade"
+                                                value={item.quantidade}
+                                                readOnly
+                                            />
+                                            <button
+                                                type="button"
+                                                className={styleCadOs.buttonQuantity}
+                                                onClick={() => handleQuantityChange(index, 1)}
+                                            >
+                                                +
+                                            </button>
+                                            <i className="inputIcon">Quantidade</i>
+                                        </div>
+
+                                        <div className={styleCadOs.inputBox}>
+                                            <input
+                                                type="text"
+                                                className={styleCadOs.inputField}
+                                                value={(parseFloat(item.valor) * parseInt(item.quantidade || 1)).toFixed(2)}
+                                                readOnly
+                                            />
+                                            <i className="inputIcon">Total</i>
+                                        </div>
                                     </div>
-                                    <div className={styleCadOs.inputBox}>
-                                        <button type="button" onClick={() => handleQuantityChange(index, -1)}>-</button>
-                                        <input
-                                            type="text"
-                                            name="quantidade"
-                                            value={item.quantidade}
-                                            readOnly
-                                        />
-                                        <button type="button" onClick={() => handleQuantityChange(index, 1)}>+</button>
-                                        <i>Quantidade</i>
-                                    </div>
-                                    <div className={styleCadOs.inputBox}>
-                                        <input
-                                            type="text"
-                                            name="valor"
-                                            value={item.valor}
-                                            readOnly
-                                        />
-                                        <i>Valor</i>
-                                    </div>
+
+                                    <button
+                                        type="button"
+                                        className={styleCadOs.removeButton}
+                                        onClick={() => removeItem(index)}
+                                    >
+                                        Remover
+                                    </button>
                                 </div>
                             ))}
+
+                            <button type="button" onClick={() => setModalAberto(true)}>Adicionar Peça</button>
                             <div className={styleCadOs.total}>
                                 <h3>Total: R$ {total.toFixed(2)}</h3>
                             </div>
                             <div className={styleCadOs.buttonCad}>
                                 <input type="submit" value="Cadastrar" />
                             </div>
+
+                            {/* Modal usando React Modal */}
+                            <Modal
+                                isOpen={modalAberto}
+                                onRequestClose={() => setModalAberto(false)}
+                                contentLabel="Selecionar Peça"
+                                overlayClassName="modalOverlay"
+                                className={styleCadOs.modalContent}
+                            >
+                                <motion.div transition={{ duration: 0.3 }}>
+                                    <h3>Selecione as Peças</h3>
+                                    <ul>
+                                        {produtos.map(produto => (
+                                            <li
+                                                key={produto.id}
+                                                onClick={() => handleItemClick(produto)}
+                                                style={{
+                                                    cursor: 'pointer',
+                                                    padding: '5px',
+                                                    border: '1px solid #ccc',
+                                                    marginBottom: '5px',
+                                                    backgroundColor: produtosSelecionados.find(item => item.id === produto.id) ? '#d3f9d8' : 'white'
+                                                }}
+                                            >
+                                                {produto.nome_produto} - R$ {produto.valor_produto}
+                                            </li>
+                                        ))}
+                                    </ul>
+
+                                    {produtosSelecionados.length > 0 && (
+                                        <div>
+                                            <h4>Itens Selecionados:</h4>
+                                            <ul>
+                                                {produtosSelecionados.map(produto => (
+                                                    <li key={produto.id}>
+                                                        {produto.nome_produto} - R$ {produto.valor_produto}
+                                                        <button onClick={() => removeItemSelecionado(produto)}>Remover</button>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+
+                                    <button onClick={addItens}>Confirmar</button>
+                                    <button onClick={() => setModalAberto(false)}>Fechar</button>
+                                </motion.div>
+                            </Modal>
                         </form>
                     </div>
                 </div>
