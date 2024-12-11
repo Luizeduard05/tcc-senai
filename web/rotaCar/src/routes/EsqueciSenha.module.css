@@ -1,0 +1,86 @@
+.RecuperaSenha {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+    padding: 2rem;
+    color: #fff;
+    height: 100vh;
+}
+
+.Title {
+    color: #fff; /* Branco */
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.ContainerRecuperarSenha {
+    background-color: #111; /* Preto um pouco mais claro */
+    border-radius: 8px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5); /* Sombra vermelha */
+}
+
+.Form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.Label {
+    font-size: 1rem;
+    color: #fff; /* Branco */
+}
+
+.Input {
+    padding: 0.75rem;
+    border: 2px solid #fff; /* Borda branca */
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: #222; /* Fundo preto mais claro */
+    color: #fff; /* Texto branco */
+}
+
+.Input:focus {
+    border-color: #ff0000; /* Foco com borda vermelha */
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.Button {
+    padding: 0.75rem;
+    font-size: 1.2rem;
+    color: #fff;
+    background-color: #202020; /* Vermelho */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.Button:hover {
+    background-color: #cc0000; /* Vermelho mais escuro */
+}
+
+.Message {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    text-align: center;
+    width: 100%;
+}
+
+.Success {
+    background-color: #0f0; /* Verde */
+    color: #000; /* Preto */
+}
+
+.Error {
+    background-color: #ff0000; /* Vermelho */
+    color: #fff; /* Branco */
+}

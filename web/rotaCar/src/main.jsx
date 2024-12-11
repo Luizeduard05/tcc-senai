@@ -17,6 +17,7 @@ import CadastroAgendamento from './routes/CadastroAgendamentos.jsx'
 import Pecas from './routes/Pecas.jsx'
 import Perfil from './routes/Perfil.jsx'
 import HistoricoMEC from './routes/HistoricoMEC.jsx'
+import EsqueciSenha from './routes/EsqueciSenha.jsx'
 
 // import Agendamento from './routes/historico.jsx'
 
@@ -41,6 +42,7 @@ const router = createBrowserRouter([
       { path: "/cadastroAgendamento", element: <CadastroAgendamento/> },
       { path: "/pecas", element: <Pecas/> },
       { path: "/perfil", element: <Perfil/> },
+      { path: "/esqueci-senha", element: <EsqueciSenha/> },
       
 
 
