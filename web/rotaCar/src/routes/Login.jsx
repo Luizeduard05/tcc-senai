@@ -326,6 +326,7 @@ const Login = () => {
                             </div>
                             <div className={styleLogin.loginLinks}>
                                 <Link to={"/cadastro"}>Cadastre-se</Link>
+                                <Link to={"/esqueci-senha"}>Esqueci minha senha</Link>
                             </div>
                             <div className={styleLogin.inputWrapper}>
                                 <input type="submit" value='Entrar' onClick={hendleSubmit} />
