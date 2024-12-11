@@ -17,7 +17,26 @@ const Historico = () => {
         2: "Reprovado",
     };
 
-    // Função para buscar os dados de orçamentos
+    const fetchVeiculoData = async (idVeiculo) => {
+        try {
+            const response = await api.get(`/veiculos/${idVeiculo}`, {
+                headers: { Authorization: `Token ${token}` },
+            });
+    
+            // Verifique se 'person' existe e contém dados
+            if (response.data?.person && response.data.person.length > 0) {
+                return response.data.person[0]; // Retorna o primeiro objeto no array 'person'
+            } else {
+                console.warn(`Nenhum dado encontrado para o veículo (ID: ${idVeiculo})`);
+                return null; // Retorna nulo se não houver dados
+            }
+        } catch (error) {
+            console.error(`Erro ao buscar dados do veículo (ID: ${idVeiculo}):`, error);
+            return null; // Retorna nulo em caso de erro
+        }
+    };
+    
+
     const fetchUserData = async () => {
         try {
             let ordensServico = [];
@@ -46,9 +65,24 @@ const Historico = () => {
                     headers: { Authorization: `Token ${token}` },
                 });
                 ordensServico = responseOs.data.ordensServico;
-            }
 
-            setOs(ordensServico);
+                // Buscar informações adicionais dos veículos
+                const updatedOrdensServico = await Promise.all(
+                    ordensServico.map(async (ordem) => {
+                        const veiculo = await fetchVeiculoData(ordem.id_veiculo);
+                        return {
+                            ...ordem,
+                            modelo: veiculo?.modelo || "Modelo não disponível",
+                            placa: veiculo?.placa || "Placa não disponível",
+                        };
+                    })
+                );
+                
+
+                setOs(updatedOrdensServico);
+            } else {
+                setOs(ordensServico);
+            }
         } catch (error) {
             console.error("Erro ao buscar dados do usuário:", error);
         }
@@ -68,14 +102,13 @@ const Historico = () => {
         }
     };
 
-    // Função para buscar o prontuário do orçamento clicado
     const handleProntuarioClick = async (id_os) => {
         try {
             const response = await api.get(`/osPecas/${id_os}`, {
                 headers: { Authorization: `Token ${token}` },
             });
-            setProntuario(response.data.rows); // Salva os dados do prontuário
-            setShowProntuario(true); // Exibe o modal
+            setProntuario(response.data.rows);
+            setShowProntuario(true);
         } catch (error) {
             console.error("Erro ao buscar prontuário:", error);
         }
@@ -110,15 +143,15 @@ const Historico = () => {
                         {Array.isArray(Os) && Os.length > 0 ? (
                             Os.map((ordem, index) => (
                                 <tr key={index}>
-                                    <td>{ordem.modelo || "Modelo não disponível"}</td>
-                                    <td>{ordem.placa || "Placa não disponível"}</td>
+                                    <td>{ordem.modelo}</td>
+                                    <td>{ordem.placa}</td>
                                     <td>{ordem.total || "N/A"}</td>
                                     <td>{statusMap[ordem.status] || "Desconhecido"}</td>
                                     <td>{ordem.data ? formatDate(ordem.data) : "Data não disponível"}</td>
                                     {tipo !== "CLI" && <td>{nomeMap[ordem.id_pessoa] || "N/A"}</td>}
                                     <td>
                                         <button
-                                            onClick={() => handleProntuarioClick(ordem.id_os)}
+                                            onClick={() => handleProntuarioClick(ordem.id)}
                                             className={stylesH.iconButton}
                                             title="Ver Prontuário"
                                         >

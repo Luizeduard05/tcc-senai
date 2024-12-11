@@ -100,6 +100,21 @@ class Login {
             throw new Error(`Erro ao selecionar: ${error.message}`);
         }
     };
+
+    selecionarLogin = async () => {
+        const con = await conectarBancoDeDados();
+        try {
+            const [rows] = await con.query(`SELECT id FROM tbl_login WHERE login = ?`, [this.Login]);
+            
+            if (rows.length === 0) {
+                return null; // Retorna null se o usuário não for encontrado
+            }
+            
+            return rows[0].id; // Retorna apenas o ID da primeira linha encontrada
+        } catch (error) {
+            throw new Error(`Erro ao selecionar: ${error.message}`);
+        }
+    };
 }
 
 export default Login;
