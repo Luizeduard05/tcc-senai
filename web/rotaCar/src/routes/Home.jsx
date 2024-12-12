@@ -89,9 +89,9 @@ const Home = () => {
                 <section className="marcas">
 
                     <div className="container">
-                        <div className="alinhaHome">
-                            <div className="dec-iconh">
-                                <i class="fa-solid fa-gears"></i>
+                    <div className="alinhaHome">
+                            <div className="dec-icon-marcas">
+                                <i className="fa-solid fa-star"></i>
                             </div>
                             <h1 className="texto2">Trabalhando com Procedência</h1>
                         </div>
@@ -130,10 +130,11 @@ const Home = () => {
                 </section>
 
                 <section className="outrosServicos">
-                    <div>
-
+                <div className="alinhaHome">
+                        <div className="dec-icon-marcas">
+                            <i className="fa-solid fa-wrench"></i>
+                        </div>
                         <h1 className="texto2">Outros Serviços</h1>
-
                     </div>
 
                     <div className="container1">
