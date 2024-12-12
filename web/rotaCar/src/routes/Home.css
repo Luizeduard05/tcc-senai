@@ -600,7 +600,7 @@ section.outrosServicos {
     height: 100vh;
 }
 .texto2 {
-    margin-left: 5rem;
+    margin-left: 2rem;
     font-weight: 500;
     color: white;
     font-size: 1.8em;
@@ -674,4 +674,73 @@ section.outrosServicos {
     line-height: 24px;
     padding-bottom: 10px;
     font-weight: 400;
+}
+
+
+/* Ícones das marcas */
+
+.alinhaHome {
+    display: flex
+;
+    margin-left: 2rem;
+}
+
+.dec-icon-marcas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   
+}
+
+.dec-icon-marcas i {
+    font-size: 2rem;
+    color: #800000; /* Vermelho escuro */
+    animation: bounce 1.5s infinite;
+}
+
+/* Ícones de outros serviços */
+.dec-icon-outros {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.dec-icon-outros i {
+    font-size: 2.5rem;
+    color: #000; /* Preto */
+    animation: rotate 2s linear infinite;
+}
+
+/* Ícone de serviço individual */
+.content-back .dec-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.content-back .dec-icon i {
+    font-size: 3rem;
+    color: #800000; /* Vermelho escuro */
+}
+
+/* Animações */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
