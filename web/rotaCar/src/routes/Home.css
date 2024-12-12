@@ -337,7 +337,7 @@ section.outrosServicos {
     height: 100vh;
     gap: 1rem;
     flex-direction: column;
-    height: 105vh;
+    height: 126vh;
     background-color: black;
 }
 
@@ -596,6 +596,16 @@ section.outrosServicos {
     bottom: 12px;
 }
 
+.PrincipalContent{
+    height: 100vh;
+}
+.texto2 {
+    margin-left: 5rem;
+    font-weight: 500;
+    color: white;
+    font-size: 1.8em;
+}
+
 .dec-icon:before,
 .dec-icon:after {
     content: "";
@@ -606,9 +616,30 @@ section.outrosServicos {
     background: rgba(255, 255, 255, .1);
 }
 
-.dec-icon i {
+.dec-iconh i {
     color: #C19D60;
     z-index: 3;
+}
+.dec-iconh:before,
+.dec-iconh:after {
+    content: "";
+    position: absolute;
+    width: 60px;
+    height: 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .1);
+}
+
+.dec-iconh i {
+    color: #C19D60;
+    z-index: 3;
+}
+
+.dec-iconh {
+    position: relative;
+    display: inline-table;
+    width: 47px;
+    height: 80px;
 }
 
 .content-back i {
